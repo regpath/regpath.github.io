@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>생성형 AI 기술 스택 인포그래픽</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Oceanic Blues -->
+    <!-- Narrative Plan: The infographic follows a learning journey narrative, starting from the entry point (API) and progressing to advanced customization (Fine-Tuning). It visually tells the story of evolving from a user to a builder of AI. Sections are organized to first introduce a concept (e.g., RAG), then show its process (flowchart), explain its limitations, and finally present the advanced solution (Advanced RAG), creating a logical and educational flow. Key comparisons (RAG vs. Fine-tuning, VRAM costs) are placed strategically to reinforce understanding. -->
+    <!-- Visualization Choices: 
+        - Data Point: RAG vs. Fine-tuning -> Goal: Compare -> Viz: HTML/CSS Comparison Boxes -> Justification: A direct side-by-side textual comparison is most effective for these conceptual differences. -> Method: HTML/Tailwind.
+        - Data Point: Basic RAG Pipeline -> Goal: Organize/Process -> Viz: HTML/CSS Flowchart -> Justification: A visual flowchart is superior to a text list for explaining a multi-step process, making it intuitive and easy to follow. -> Method: HTML/Tailwind Grid.
+        - Data Point: Fine-Tuning VRAM Requirements -> Goal: Compare/Rank -> Viz: Bar Chart -> Justification: A bar chart provides an immediate, powerful visual comparison of quantitative differences, making the impact of QLoRA instantly clear. -> Library: Chart.js.
+        - Data Point: GPT-4 vs GPT-3.5 -> Goal: Compare -> Viz: Styled HTML Table -> Justification: For a small number of key-value comparisons, a clear, well-styled table is highly readable and efficient. -> Method: HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #F0F8FF; }
+        .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05); transition: all 0.3s ease-in-out; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .accent-text { color: #00A8E8; }
+        .primary-text { color: #007EA7; }
+        .dark-text { color: #003459; }
+        .accent-bg { background-color: #00A8E8; }
+        .primary-bg { background-color: #007EA7; }
+        .dark-bg { background-color: #003459; }
+        .section-title { font-weight: 900; letter-spacing: -0.05em; }
+        .stat-number { font-weight: 900; color: #00A8E8; }
+        .flowchart-step { border: 2px solid #E0E7FF; background-color: #F9FAFB; padding: 1rem; border-radius: 0.5rem; text-align: center; }
+        .flowchart-arrow { display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #9CA3AF; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 350px; max-height: 450px; }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+    </style>
+</head>
+<body class="dark-text">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+
+        <header class="text-center mb-16 md:mb-24">
+            <h1 class="text-4xl md:text-6xl font-black dark-text section-title">생성형 AI 모델링 마스터리</h1>
+            <p class="mt-4 text-lg md:text-xl text-gray-600">API 활용부터 모델 맞춤화까지: 핵심 기술 스택 인포그래픽</p>
+        </header>
+
+        <section id="journey" class="mb-16 md:mb-24">
+            <h2 class="text-3xl md:text-4xl text-center section-title mb-12">학습 여정: <span class="primary-text">AI 빌더로의 진화</span></h2>
+            <div class="relative">
+                <div class="absolute left-1/2 h-full w-1 bg-blue-200 rounded-full" style="transform: translateX(-50%);"></div>
+                <div class="space-y-16">
+                    <div class="relative flex items-center">
+                        <div class="w-1/2 pr-8 text-right">
+                            <h3 class="text-2xl font-bold primary-text">1. API 연동</h3>
+                            <p class="text-gray-600 mt-1">사전 훈련된 모델의 강력한 기능을 사용하는 첫걸음</p>
+                        </div>
+                        <div class="absolute left-1/2 w-8 h-8 rounded-full primary-bg border-4 border-white" style="transform: translateX(-50%);"></div>
+                        <div class="w-1/2 pl-8"></div>
+                    </div>
+                    <div class="relative flex items-center">
+                        <div class="w-1/2 pr-8"></div>
+                        <div class="absolute left-1/2 w-8 h-8 rounded-full accent-bg border-4 border-white" style="transform: translateX(-50%);"></div>
+                        <div class="w-1/2 pl-8 text-left">
+                            <h3 class="text-2xl font-bold accent-text">2. RAG</h3>
+                            <p class="text-gray-600 mt-1">외부 지식으로 모델의 한계를 극복하는 기술</p>
+                        </div>
+                    </div>
+                    <div class="relative flex items-center">
+                        <div class="w-1/2 pr-8 text-right">
+                            <h3 class="text-2xl font-bold primary-text">3. 미세조정</h3>
+                            <p class="text-gray-600 mt-1">모델의 행동을 특정 목적에 맞게 근본적으로 맞춤화</p>
+                        </div>
+                        <div class="absolute left-1/2 w-8 h-8 rounded-full primary-bg border-4 border-white" style="transform: translateX(-50%);"></div>
+                        <div class="w-1/2 pl-8"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="rag" class="mb-16 md:mb-24">
+            <h2 class="text-3xl md:text-4xl text-center section-title mb-12">지식 확장: <span class="primary-text">검색 증강 생성 (RAG)</span></h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                <div class="card p-6 lg:col-span-1">
+                    <h3 class="text-xl font-bold dark-text mb-4">왜 RAG가 필요한가?</h3>
+                    <p class="text-gray-600 mb-6">LLM은 훈련 데이터 시점 이후의 정보를 모르고, 때로는 사실이 아닌 내용을 생성합니다 (환각). RAG는 외부의 최신/신뢰성 있는 데이터를 참조하여 이 문제를 해결합니다.</p>
+                    <div class="chart-container" style="height: 250px; max-height: 250px;">
+                        <canvas id="rag-motivation-chart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-2">LLM 활용 사례의 대다수는 외부 데이터 연동이 필수적입니다.</p>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <h3 class="text-xl font-bold dark-text mb-4 text-center">기본 RAG 파이프라인 6단계</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="flowchart-step"><strong>1. 로딩</strong><p class="text-sm text-gray-500 mt-1">문서(PDF, TXT)를 시스템으로 가져옵니다.</p></div>
+                        <div class="flowchart-arrow max-sm:rotate-90">→</div>
+                        <div class="flowchart-step"><strong>2. 분할</strong><p class="text-sm text-gray-500 mt-1">긴 문서를 검색에 용이한 작은 '청크'로 나눕니다.</p></div>
+                        <div class="hidden sm:block"></div>
+                        <div class="flowchart-arrow rotate-90 sm:rotate-0">↓</div>
+                        <div class="hidden sm:block"></div>
+                        <div class="flowchart-step"><strong>4. 저장</strong><p class="text-sm text-gray-500 mt-1">임베딩 벡터를 '벡터 저장소'에 색인합니다.</p></div>
+                        <div class="flowchart-arrow max-sm:rotate-90">←</div>
+                        <div class="flowchart-step"><strong>3. 임베딩</strong><p class="text-sm text-gray-500 mt-1">텍스트 청크를 의미를 담은 숫자 벡터로 변환합니다.</p></div>
+                        <div class="flowchart-arrow rotate-90 sm:rotate-0">↓</div>
+                        <div class="hidden sm:block"></div>
+                        <div class="hidden sm:block"></div>
+                        <div class="flowchart-step"><strong>5. 검색</strong><p class="text-sm text-gray-500 mt-1">질문과 가장 유사한 청크를 벡터 저장소에서 찾습니다.</p></div>
+                        <div class="flowchart-arrow max-sm:rotate-90">→</div>
+                        <div class="flowchart-step"><strong>6. 생성</strong><p class="text-sm text-gray-500 mt-1">검색된 정보와 질문을 함께 LLM에 전달해 답변을 만듭니다.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="advanced-rag" class="mb-16 md:mb-24">
+            <h2 class="text-3xl md:text-4xl text-center section-title mb-12">RAG 레벨 업: <span class="primary-text">고급 아키텍처</span></h2>
+            <p class="text-center text-gray-600 max-w-3xl mx-auto mb-10">기본 RAG의 검색 정확도와 컨텍스트 이해도를 높이기 위한 핵심 전략입니다.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold primary-text mb-3">상위 문서 리트리버</h3>
+                    <p class="text-gray-500 font-medium mb-4">"작은 것으로 검색하고, 큰 것으로 이해한다"</p>
+                    <p class="text-gray-700">작은 텍스트 조각(하위 청크)으로 정확하게 검색한 뒤, LLM에게는 해당 조각이 포함된 더 큰 원본 문단(상위 청크)을 제공하여 풍부한 맥락 속에서 답변을 생성하게 하는 기법입니다.</p>
+                </div>
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold primary-text mb-3">재순위화 (Re-ranking)</h3>
+                    <p class="text-gray-500 font-medium mb-4">"가장 관련성 높은 정보만 걸러낸다"</p>
+                    <p class="text-gray-700">초기 검색에서 찾은 여러 후보 문서들을 더 정교한 '재순위화 모델'로 다시 평가합니다. 이를 통해 노이즈를 제거하고 질문과 가장 밀접한 문서만 선별하여 LLM에 전달합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="finetuning" class="mb-16 md:mb-24">
+            <h2 class="text-3xl md:text-4xl text-center section-title mb-12">궁극의 맞춤화: <span class="primary-text">미세조정 (Fine-Tuning)</span></h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div class="card p-8">
+                    <h3 class="text-xl font-bold dark-text mb-4">언제 미세조정을 사용할까?</h3>
+                    <div class="flex flex-col space-y-4">
+                        <div class="border-l-4 border-blue-300 p-4 bg-blue-50 rounded-r-lg">
+                            <h4 class="font-bold text-lg primary-text">지식(Knowledge) 주입이 필요할 때 → 🧠 RAG</h4>
+                            <p class="text-gray-600">모델이 특정 도메인의 최신 정보를 '알게' 해야 할 경우.</p>
+                        </div>
+                        <div class="border-l-4 border-teal-300 p-4 bg-teal-50 rounded-r-lg">
+                            <h4 class="font-bold text-lg accent-text">기술/스타일(Skill/Style) 학습이 필요할 때 → 🛠️ 미세조정</h4>
+                            <p class="text-gray-600">모델의 '행동'을 바꿔 특정 말투나 출력 형식을 따르게 할 경우.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-8">
+                    <h3 class="text-xl font-bold dark-text mb-4">미세조정의 혁신: QLoRA</h3>
+                     <p class="text-gray-600 mb-6">QLoRA는 거대 모델의 가중치를 압축(양자화)하여, 소비자용 GPU에서도 미세조정이 가능하게 만든 혁신적인 기술입니다. VRAM 요구사항이 극적으로 감소합니다.</p>
+                    <div class="chart-container">
+                        <canvas id="vram-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="conclusion" class="text-center">
+             <h2 class="text-3xl md:text-4xl text-center section-title mb-8">당신의 다음 단계는?</h2>
+             <p class="text-gray-600 max-w-2xl mx-auto mb-8">이 인포그래픽에서 다진 기초 위에, 다음과 같은 첨단 주제들을 탐구하며 생성형 AI 전문가로 성장해 나가세요.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <span class="bg-white text-primary-text font-semibold py-2 px-4 rounded-full shadow-sm">에이전트 워크플로우</span>
+                <span class="bg-white text-primary-text font-semibold py-2 px-4 rounded-full shadow-sm">고급 검색 전략</span>
+                <span class="bg-white text-primary-text font-semibold py-2 px-4 rounded-full shadow-sm">RLAIF</span>
+                <span class="bg-white text-primary-text font-semibold py-2 px-4 rounded-full shadow-sm">멀티모달 RAG</span>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        function wrapText(text, charLimit) {
+            if (typeof text !== 'string' || text.length <= charLimit) {
+                return text;
+            }
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).trim().length > charLimit && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            });
+            if (currentLine.length > 0) {
+                lines.push(currentLine);
+            }
+            return lines;
+        }
+
+        const universalTooltipConfig = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        };
+
+        const ragMotivationCtx = document.getElementById('rag-motivation-chart');
+        if (ragMotivationCtx) {
+            new Chart(ragMotivationCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['외부 데이터 연동 필요', '일반 지식으로 충분'],
+                    datasets: [{
+                        label: 'LLM 활용 사례',
+                        data: [85, 15],
+                        backgroundColor: ['#007EA7', '#B3D4E0'],
+                        borderColor: ['#FFFFFF'],
+                        borderWidth: 2,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        ...universalTooltipConfig.plugins,
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        const vramCtx = document.getElementById('vram-chart');
+        if (vramCtx) {
+            const originalLabels = ['Full Fine-Tuning', 'PEFT/LoRA', 'PEFT/QLoRA'];
+            const wrappedLabels = originalLabels.map(label => wrapText(label, 16));
+
+            new Chart(vramCtx, {
+                type: 'bar',
+                data: {
+                    labels: wrappedLabels,
+                    datasets: [{
+                        label: '필요 VRAM (GB, 예시)',
+                        data: [80, 24, 12],
+                        backgroundColor: ['#003459', '#007EA7', '#00A8E8'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: {
+                                display: false
+                            },
+                             ticks: {
+                                callback: function(value) {
+                                    return value + ' GB'
+                                }
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                         ...universalTooltipConfig.plugins,
+                         legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
