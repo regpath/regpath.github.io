@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21세기 NFL 보정 승수 순위 인포그래픽</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #00A6FB, #DC0073);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center my-8 md:my-12">
+            <h1 class="text-4xl md:text-6xl font-black gradient-text">위대한 순위 재정렬</h1>
+            <p class="mt-4 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">승리 그 이상의 가치: 21세기 NFL의 진정한 강자는 누구인가? '보정 승수'로 다시 쓴 NFL 계급도</p>
+        </header>
+
+        <section id="intro" class="my-12">
+            <div class="bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8 max-w-4xl mx-auto text-center">
+                <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">모든 승리는 동등하지 않다</h2>
+                <p class="text-gray-300 leading-relaxed">단순 승패 기록은 이야기의 절반에 불과합니다. 이 분석은 팀의 실제 승수에 상대팀의 전력, 즉 '대진운(Strength of Schedule, SoS)'을 반영한 <b class="text-[#FFBC0A]">'보정 승수'</b>라는 새로운 잣대를 제시합니다. 어려운 상대를 이겨낸 승리에 가산점을, 쉬운 상대를 꺾은 승리에 감점을 부여하여 2000년부터 2023년까지의 팀 성과를 재평가합니다.</p>
+                <div class="mt-6 bg-gray-900 inline-block px-6 py-3 rounded-lg font-mono text-lg text-white">
+                    <span class="text-[#00A6FB]">보정 승수</span> = <span class="text-gray-400">실제 승수</span> + <span class="text-[#DC0073]">대진운(SoS)</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="main-rankings" class="my-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">21세기 NFL 계급도 (2000-2023)</h2>
+            <div class="overflow-x-auto bg-gray-800 rounded-2xl shadow-lg">
+                <table class="min-w-full text-sm text-left">
+                    <thead class="bg-gray-700 text-xs text-gray-300 uppercase tracking-wider">
+                        <tr>
+                            <th scope="col" class="px-4 py-3 text-center">순위</th>
+                            <th scope="col" class="px-4 py-3">팀</th>
+                            <th scope="col" class="px-4 py-3 text-center" title="보정 승수 총합">보정 승수</th>
+                            <th scope="col" class="px-4 py-3 text-center" title="실제 승수 총합">실제 승수</th>
+                            <th scope="col" class="px-4 py-3 text-center" title="누적 대진운">누적 SoS</th>
+                            <th scope="col" class="px-4 py-3 text-center" title="실제 순위 대비 변화">순위 변화</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankings-table-body" class="divide-y divide-gray-700">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="rank-changes" class="my-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">가장 과소/과대평가된 팀은?</h2>
+            <p class="text-center text-gray-400 max-w-2xl mx-auto mb-8">대진운(SoS)은 팀의 순위를 극적으로 바꿉니다. 험난한 길을 걸어온 '진정한 강자'와 상대적으로 쉬운 길을 걸어온 '숨은 약자'를 확인하세요.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 rounded-2xl shadow-2xl p-6">
+                    <h3 class="text-2xl font-bold text-center mb-4 text-green-400">순위 상승 TOP 5 🚀</h3>
+                    <div class="chart-container" style="height: 300px; max-height: 40vh;"><canvas id="risersChart"></canvas></div>
+                </div>
+                <div class="bg-gray-800 rounded-2xl shadow-2xl p-6">
+                    <h3 class="text-2xl font-bold text-center mb-4 text-red-400">순위 하락 TOP 5 🔻</h3>
+                    <div class="chart-container" style="height: 300px; max-height: 40vh;"><canvas id="fallersChart"></canvas></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="division-strength" class="my-16">
+             <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">21세기 '죽음의 조'는 어디였나?</h2>
+             <p class="text-center text-gray-400 max-w-2xl mx-auto mb-8">지구 내 경쟁은 팀의 운명을 좌우합니다. 2002년 지구 재편 이후, 어떤 지구가 가장 치열한 전쟁터였는지 누적 SoS 합계로 확인해 보세요.</p>
+            <div class="bg-gray-800 rounded-2xl shadow-2xl p-6">
+                <div class="chart-container"><canvas id="divisionSoSChart"></canvas></div>
+            </div>
+        </section>
+
+        <section id="top-seasons" class="my-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">역사에 남을 시즌들</h2>
+            <p class="text-center text-gray-400 max-w-2xl mx-auto mb-8">보정 승수로 다시 평가한 21세기 최고의 단일 시즌과 최악의 단일 시즌입니다.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 rounded-2xl p-6 shadow-2xl">
+                    <h3 class="text-2xl font-bold text-center mb-4 text-amber-300">🏆 최고의 시즌 TOP 5</h3>
+                    <ul id="best-seasons-list" class="space-y-3"></ul>
+                </div>
+                <div class="bg-gray-800 rounded-2xl p-6 shadow-2xl">
+                    <h3 class="text-2xl font-bold text-center mb-4 text-blue-300">🥶 최악의 시즌 TOP 5</h3>
+                    <ul id="worst-seasons-list" class="space-y-3"></ul>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center mt-16 py-8 border-t border-gray-700">
+            <p class="text-gray-500">데이터 출처: Pro-Football-Reference.com (2000-2023 시즌)</p>
+            <p class="text-gray-600 text-sm mt-2">이 인포그래픽은 제공된 데이터를 기반으로 생성되었으며, SVG 또는 Mermaid.js를 사용하지 않았습니다.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const rankingData = [
+            { rank: 1, team: "New England Patriots", adjWins: 269.8, actualWins: 284, sos: -14.2, change: 0 },
+            { rank: 2, team: "Pittsburgh Steelers", adjWins: 258.9, actualWins: 247, sos: 11.9, change: 1 },
+            { rank: 3, team: "Baltimore Ravens", adjWins: 249.2, actualWins: 235, sos: 14.2, change: 2 },
+            { rank: 4, team: "Green Bay Packers", adjWins: 247.9, actualWins: 248, sos: -0.1, change: -2 },
+            { rank: 5, team: "Indianapolis Colts", adjWins: 239.5, actualWins: 240, sos: -0.5, change: -1 },
+            { rank: 6, team: "Philadelphia Eagles", adjWins: 230.1, actualWins: 229, sos: 1.1, change: 1 },
+            { rank: 7, team: "New Orleans Saints", adjWins: 224.2, actualWins: 221, sos: 3.2, change: 3 },
+            { rank: 8, team: "Kansas City Chiefs", adjWins: 222.8, actualWins: 224, sos: -1.2, change: 0 },
+            { rank: 9, team: "Seattle Seahawks", adjWins: 219.0, actualWins: 217, sos: 2.0, change: 2 },
+            { rank: 10, team: "Dallas Cowboys", adjWins: 218.4, actualWins: 222, sos: -3.6, change: -3 },
+            { rank: 11, team: "Denver Broncos", adjWins: 210.8, actualWins: 211, sos: -0.2, change: 1 },
+            { rank: 12, team: "San Francisco 49ers", adjWins: 201.2, actualWins: 192, sos: 9.2, change: 4 },
+            { rank: 13, team: ["San Diego", "/ LA Chargers"], adjWins: 195.9, actualWins: 196, sos: -0.1, change: 1 },
+            { rank: 14, team: "Atlanta Falcons", adjWins: 193.3, actualWins: 195, sos: -1.7, change: -3 },
+            { rank: 15, team: "Minnesota Vikings", adjWins: 192.4, actualWins: 196, sos: -3.6, change: -2 },
+            { rank: 16, team: "Tennessee Titans", adjWins: 189.6, actualWins: 195, sos: -5.4, change: -3 },
+            { rank: 17, team: "Miami Dolphins", adjWins: 182.2, actualWins: 188, sos: -5.8, change: -1 },
+            { rank: 18, team: "New York Giants", adjWins: 181.7, actualWins: 189, sos: -7.3, change: -1 },
+            { rank: 19, team: "Chicago Bears", adjWins: 175.7, actualWins: 180, sos: -4.3, change: -1 },
+            { rank: 20, team: "Carolina Panthers", adjWins: 174.4, actualWins: 176, sos: -1.6, change: 0 },
+            { rank: 21, team: "Tampa Bay Buccaneers", adjWins: 171.7, actualWins: 173, sos: -1.3, change: 1 },
+            { rank: 22, team: "Cincinnati Bengals", adjWins: 171.6, actualWins: 165, sos: 6.6, change: 2 },
+            { rank: 23, team: "Houston Texans", adjWins: 162.7, actualWins: 160, sos: 2.7, change: 1 },
+            { rank: 24, team: ["St. Louis", "/ LA Rams"], adjWins: 161.7, actualWins: 166, sos: -4.3, change: -3 },
+            { rank: 25, team: "Arizona Cardinals", adjWins: 159.2, actualWins: 158, sos: 1.2, change: 2 },
+            { rank: 26, team: "Washington Commanders", adjWins: 157.0, actualWins: 162, sos: -5.0, change: -2 },
+            { rank: 27, team: "Las Vegas Raiders", adjWins: 154.5, actualWins: 160, sos: -5.5, change: -2 },
+            { rank: 28, team: "Jacksonville Jaguars", adjWins: 149.3, actualWins: 154, sos: -4.7, change: -1 },
+            { rank: 29, team: "New York Jets", adjWins: 148.8, actualWins: 161, sos: -12.2, change: -6 },
+            { rank: 30, team: "Buffalo Bills", adjWins: 148.6, actualWins: 167, sos: -18.4, change: -7 },
+            { rank: 31, team: "Detroit Lions", adjWins: 134.1, actualWins: 140, sos: -5.9, change: 0 },
+            { rank: 32, team: "Cleveland Browns", adjWins: 127.7, actualWins: 125, sos: 2.7, change: 0 }
+        ];
+
+        const bestSeasons = [
+            { rank: 1, year: 2007, team: "New England Patriots", adjWins: 17.8 },
+            { rank: 2, year: 2004, team: "Pittsburgh Steelers", adjWins: 16.4 },
+            { rank: 3, year: 2020, team: "Baltimore Ravens", adjWins: 15.1 },
+            { rank: 4, year: 2005, team: "Pittsburgh Steelers", adjWins: 15.0 },
+            { rank: 5, year: 2019, team: "Baltimore Ravens", adjWins: 14.6 },
+        ];
+        
+        const worstSeasons = [
+            { rank: 1, year: 2009, team: "St. Louis Rams", adjWins: -16.4 },
+            { rank: 2, year: 2008, team: "Detroit Lions", adjWins: -13.1 },
+            { rank: 3, year: 2008, team: "St. Louis Rams", adjWins: -13.1 },
+            { rank: 4, year: 2004, team: "San Francisco 49ers", adjWins: -11.6 },
+            { rank: 5, year: 2017, team: "Cleveland Browns", adjWins: -11.0 },
+        ];
+
+        const divisionSoSData = {
+            labels: ['AFC North', 'NFC West', 'AFC West', 'NFC South', 'NFC North', 'AFC South', 'NFC East', 'AFC East'],
+            datasets: [{
+                label: '누적 SoS 합계',
+                data: [35.4, 8.1, -5.7, -5.9, -10.6, -12.1, -14.8, -39.2],
+                backgroundColor: ['#DC0073', '#8931EF', '#00A6FB', '#FFBC0A', '#4ade80', '#fb923c', '#f87171', '#60a5fa'],
+                borderColor: '#4b5563',
+                borderWidth: 1
+            }]
+        };
+
+        function formatTeamName(team) {
+            return Array.isArray(team) ? team.join('') : team;
+        }
+        
+        function wrapLabel(label, maxLength = 16) {
+            if (typeof label !== 'string' || label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + word).length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        const chartTooltipCallback = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            return Array.isArray(label) ? label.join(' ') : label;
+                        }
+                    }
+                },
+                legend: {
+                    display: false
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tableBody = document.getElementById('rankings-table-body');
+            rankingData.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-700 transition-colors duration-200';
+                
+                let changeColor = 'text-gray-400';
+                let changeIcon = '●';
+                if (item.change > 0) {
+                    changeColor = 'text-green-400';
+                    changeIcon = `▲ ${item.change}`;
+                } else if (item.change < 0) {
+                    changeColor = 'text-red-400';
+                    changeIcon = `▼ ${Math.abs(item.change)}`;
+                }
+
+                row.innerHTML = `
+                    <td class="px-4 py-3 font-bold text-center text-lg">${item.rank}</td>
+                    <td class="px-4 py-3 font-bold text-white">${formatTeamName(item.team)}</td>
+                    <td class="px-4 py-3 text-center text-lg font-mono text-[#FFBC0A]">${item.adjWins.toFixed(1)}</td>
+                    <td class="px-4 py-3 text-center font-mono text-gray-400">${item.actualWins}</td>
+                    <td class="px-4 py-3 text-center font-mono ${item.sos > 0 ? 'text-green-400' : 'text-red-400'}">${item.sos.toFixed(1)}</td>
+                    <td class="px-4 py-3 text-center font-bold ${changeColor}">${changeIcon}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            const bestList = document.getElementById('best-seasons-list');
+            bestSeasons.forEach(s => {
+                const li = document.createElement('li');
+                li.className = 'flex items-baseline justify-between bg-gray-700/50 p-3 rounded-lg';
+                li.innerHTML = `
+                    <span class="font-bold text-white">${s.rank}. ${s.year} ${s.team}</span>
+                    <span class="font-mono text-[#FFBC0A] font-bold">${s.adjWins.toFixed(1)}</span>
+                `;
+                bestList.appendChild(li);
+            });
+
+            const worstList = document.getElementById('worst-seasons-list');
+            worstSeasons.forEach(s => {
+                const li = document.createElement('li');
+                li.className = 'flex items-baseline justify-between bg-gray-700/50 p-3 rounded-lg';
+                li.innerHTML = `
+                    <span class="font-bold text-white">${s.rank}. ${s.year} ${s.team}</span>
+                    <span class="font-mono text-red-400 font-bold">${s.adjWins.toFixed(1)}</span>
+                `;
+                worstList.appendChild(li);
+            });
+
+
+            const risers = [...rankingData].filter(t => t.change > 0).sort((a, b) => b.change - a.change).slice(0, 5);
+            const fallers = [...rankingData].filter(t => t.change < 0).sort((a, b) => a.change - b.change).slice(0, 5);
+
+            new Chart(document.getElementById('risersChart'), {
+                type: 'bar',
+                data: {
+                    labels: risers.map(t => wrapLabel(formatTeamName(t.team))),
+                    datasets: [{
+                        label: '순위 상승폭',
+                        data: risers.map(t => t.change),
+                        backgroundColor: 'rgba(74, 222, 128, 0.6)',
+                        borderColor: 'rgba(74, 222, 128, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: { ...chartTooltipCallback, indexAxis: 'y', maintainAspectRatio: false, scales: { x: { ticks: { color: '#d1d5db' } }, y: { ticks: { color: '#d1d5db' } } } }
+            });
+
+            new Chart(document.getElementById('fallersChart'), {
+                type: 'bar',
+                data: {
+                    labels: fallers.map(t => wrapLabel(formatTeamName(t.team))),
+                    datasets: [{
+                        label: '순위 하락폭',
+                        data: fallers.map(t => t.change),
+                        backgroundColor: 'rgba(248, 113, 113, 0.6)',
+                        borderColor: 'rgba(248, 113, 113, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: { ...chartTooltipCallback, indexAxis: 'y', maintainAspectRatio: false, scales: { x: { ticks: { color: '#d1d5db' } }, y: { ticks: { color: '#d1d5db' } } } }
+            });
+
+            new Chart(document.getElementById('divisionSoSChart'), {
+                type: 'bar',
+                data: divisionSoSData,
+                options: {
+                    ...chartTooltipCallback,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { 
+                            beginAtZero: false, 
+                            title: { display: true, text: '누적 SoS 합계', color: '#d1d5db'},
+                            ticks: { color: '#d1d5db' }
+                        },
+                        x: {
+                            title: { display: true, text: '지구', color: '#d1d5db'},
+                            ticks: { color: '#d1d5db' }
+                        }
+                    },
+                    plugins: {
+                         ...chartTooltipCallback.plugins,
+                         title: {
+                             display: true,
+                             text: '지구별 경쟁력 지수 (2002-2023)',
+                             color: '#ffffff',
+                             font: { size: 18 }
+                         }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
