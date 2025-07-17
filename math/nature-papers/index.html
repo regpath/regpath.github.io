@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수학의 새로운 지평: 계산, 추측, 그리고 증명</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: 이 애플리케이션은 네이처 논문 4개를 '새로운 계산 도구(AI, 양자컴퓨터)가 어떻게 현대 수학의 난제를 해결하고 새로운 발견을 이끌어내는가'라는 단일한 내러티브로 엮어 설계되었습니다. 사용자는 다음의 순서로 콘텐츠를 탐색하게 됩니다: 1. 개요: 전체 주제를 소개하고 빠른 이동 링크를 제공합니다. 2. 랭글랜즈 프로그램: 순수 수학의 거대한 목표를 제시하여 문제의 스케일을 보여줍니다. 3. AI와 수학의 만남: AI가 어떻게 매듭 이론과 같은 구체적인 분야에서 패턴을 발견하고 새로운 추측을 생성하는지 상호작용적인 차트와 다이어그램으로 보여줍니다. 4. 양자 컴퓨팅의 등장: 또 다른 혁신적 도구인 양자컴퓨터가 수학 문제 해결에 어떻게 기여하는지 시각적으로 비교합니다. 5. 종합 및 미래: 인간과 기계의 협력이 만들어갈 수학의 미래를 조망하며 마무리합니다. 이 구조는 거대한 이론적 배경에서 시작하여 구체적인 기술 적용 사례로 점차 깊이 들어간 뒤, 다시 미래에 대한 큰 그림으로 마무리되어 사용자가 복잡한 주제를 점진적이고 직관적으로 이해하도록 돕습니다. -->
+    <!-- Visualization & Content Choices: 1. 랭글랜즈 프로그램(정보 전달 목표): HTML/Tailwind를 이용한 다이어그램으로 수학 분야 간의 '다리'를 시각화하고, 클릭 시 설명이 나타나도록 하여 복잡한 개념을 쉽게 소개합니다. 2. AI의 매듭 이론 분석(관계 탐색 목표): Chart.js 산점도를 사용하여 AI가 발견할 수 있는 '매듭 불변량' 간의 숨겨진 관계를 시각화합니다. 사용자가 'AI 분석 시작' 버튼을 누르면 데이터 포인트가 동적으로 그려져 AI의 분석 과정을 체험하는 듯한 느낌을 줍니다. 3. 매듭 종류별 특성(비교 목표): 매듭 이미지를 클릭하면 해당 매듭의 '교차수'와 같은 기하학적 특성과 AI가 발견한 대수적 특성을 Chart.js 방사형 차트로 보여줍니다. 이는 여러 매듭의 다차원적 특성을 직관적으로 비교하게 해줍니다. 4. 고전 vs 양자 계산(비교 목표): Chart.js 막대 차트를 사용하여 문제 복잡도 증가에 따른 계산량 차이를 극명하게 보여줌으로써 양자 컴퓨팅의 잠재력을 효과적으로 전달합니다. 모든 시각화는 상호작용을 통해 사용자의 참여를 유도하고, 텍스트 설명을 동적으로 업데이트하여 이해를 돕도록 설계되었습니다. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .knot-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .knot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <div class="container mx-auto px-4 py-8 md:py-16">
+
+        <header class="text-center mb-16 section-fade-in">
+            <h1 class="text-4xl md:text-5xl font-bold text-teal-600 mb-4">수학의 새로운 지평</h1>
+            <p class="text-lg md:text-xl text-stone-600">계산, 추측, 그리고 증명: AI와 양자 컴퓨터가 열어가는 수학의 미래</p>
+        </header>
+
+        <nav class="sticky top-0 bg-stone-50/80 backdrop-blur-sm z-10 py-4 mb-12 border-b section-fade-in">
+            <ul class="flex justify-center space-x-4 md:space-x-8 text-sm md:text-base">
+                <li><a href="#intro" class="text-stone-600 hover:text-teal-600 font-medium">개요</a></li>
+                <li><a href="#langlands" class="text-stone-600 hover:text-teal-600 font-medium">거대 이론</a></li>
+                <li><a href="#ai-math" class="text-stone-600 hover:text-teal-600 font-medium">AI의 발견</a></li>
+                <li><a href="#quantum-math" class="text-stone-600 hover:text-teal-600 font-medium">양자의 계산</a></li>
+                <li><a href="#future" class="text-stone-600 hover:text-teal-600 font-medium">미래</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="intro" class="mb-20 section-fade-in">
+                <h2 class="text-3xl font-bold text-center mb-8">새로운 파트너의 등장</h2>
+                <div class="max-w-3xl mx-auto text-stone-700 space-y-4 text-left md:text-lg">
+                    <p>수학은 오랫동안 인간 지성의 최전선에서 순수한 논리와 직관의 영역으로 여겨져 왔습니다. 그러나 최근 몇 년 사이, 이 전통적인 영역에 강력한 파트너가 등장했습니다. 바로 인공지능(AI)과 양자 컴퓨터입니다. 이들은 기존 방식으로는 불가능했던 방대한 계산을 수행하고, 인간이 미처 발견하지 못했던 복잡한 데이터 속 패턴을 찾아내며 수학 연구의 패러다임을 바꾸고 있습니다.</p>
+                    <p>이곳에서는 4개의 Nature 논문을 바탕으로, 현대 수학의 가장 흥미로운 두 분야인 '랭글랜즈 프로그램'과 '매듭 이론'을 중심으로 어떻게 새로운 컴퓨팅 기술이 수학자들의 직관을 돕고, 새로운 추측을 생성하며, 궁극적으로 증명의 길을 열어주는지 탐험합니다. 인간의 창의성과 기계의 분석력이 결합하여 만들어내는 수학의 경이로운 미래를 함께 살펴보시죠.</p>
+                </div>
+            </section>
+
+            <section id="langlands" class="mb-20 py-12 bg-white rounded-xl shadow-md section-fade-in">
+                <h2 class="text-3xl font-bold text-center mb-4">수학의 대통일 이론: 랭글랜즈 프로그램</h2>
+                <p class="text-center text-stone-600 mb-10 max-w-2xl mx-auto px-4">서로 멀리 떨어져 있다고 생각했던 수학의 섬들을 연결하는 거대한 다리를 놓는 작업입니다.</p>
+                
+                <div class="max-w-4xl mx-auto px-4">
+                    <p class="text-stone-700 mb-8 md:text-lg">랭글랜즈 프로그램은 1967년 수학자 로버트 랭글랜즈가 제안한 '추측들의 집합'으로, 수학의 매우 다른 두 분야인 '정수론'과 '조화 해석학(표현 이론)' 사이에 깊은 연관성이 있을 것이라고 예측했습니다. 이는 마치 물리학자들이 모든 자연의 힘을 하나의 이론으로 설명하려는 '대통일 이론'과 같아서, '수학의 대통일 이론'으로 불립니다. 최근 기하학적 랭글랜즈 추측의 증명은 이 거대한 비전이 옳았음을 보여주는 중요한 이정표이며, 이 증명 자체도 수많은 수학자들의 오랜 협력과 컴퓨터의 도움이 있었기에 가능했습니다.</p>
+
+                    <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 text-center">
+                        <div class="p-6 bg-blue-100 rounded-lg shadow w-full md:w-auto">
+                            <h3 class="text-xl font-semibold text-blue-800">정수론</h3>
+                            <p class="text-blue-700 mt-2">소수, 방정식의 정수해 등 숫자의 성질을 연구</p>
+                        </div>
+                        <div id="bridge-icon" class="text-3xl font-bold text-teal-500 transform md:-rotate-90">+</div>
+                        <div class="p-6 bg-purple-100 rounded-lg shadow w-full md:w-auto">
+                            <h3 class="text-xl font-semibold text-purple-800">표현 이론</h3>
+                            <p class="text-purple-700 mt-2">대칭성을 함수와 벡터 공간으로 표현하여 연구</p>
+                        </div>
+                    </div>
+                     <p class="text-center mt-6 text-stone-600 font-medium">랭글랜즈 프로그램은 이 두 세계를 연결합니다.</p>
+                </div>
+            </section>
+
+            <section id="ai-math" class="mb-20 section-fade-in">
+                <h2 class="text-3xl font-bold text-center mb-4">AI, 수학자에게 새로운 질문을 던지다</h2>
+                <p class="text-center text-stone-600 mb-10 max-w-2xl mx-auto px-4">AI는 정답을 알려주기보다, 어디를 봐야 할지 알려주는 '현미경'이나 '나침반'과 같습니다.</p>
+                
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <h3 class="text-2xl font-semibold mb-4">사례 연구: 매듭 이론의 비밀을 푸는 AI</h3>
+                        <p class="text-stone-700 mb-6">매듭 이론은 끈이 얽힌 다양한 형태를 수학적으로 분류하는 분야입니다. 겉보기엔 단순하지만, 두 매듭이 같은지 다른지 구분하는 것은 매우 어려운 문제입니다. 딥마인드의 AI는 수많은 매듭의 기하학적 특성(예: 교차점 수)과 대수적 특성(예: 존스 다항식 같은 불변량) 사이의 숨겨진 관계를 발견하여, 수학자들이 새로운 추측을 세우는 데 결정적인 도움을 주었습니다.</p>
+                        <div class="chart-container h-64 md:h-80">
+                            <canvas id="aiPatternChart"></canvas>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button id="runAiButton" class="bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition">AI 분석 시작</button>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <h3 class="text-2xl font-semibold mb-4">상호작용: 매듭 탐험하기</h3>
+                        <p class="text-stone-700 mb-6">아래 매듭들을 클릭하여 각 매듭의 기하학적 특성과 대수적 특성이 어떻게 다른지 확인해보세요. AI는 이런 복잡한 특성들 사이의 미묘한 패턴을 찾아냅니다.</p>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                           <div id="knot-trefoil" class="knot-card cursor-pointer p-4 border-2 border-transparent rounded-lg text-center bg-stone-100">
+                                <img src="https://placehold.co/100x100/e5e7eb/4b5563?text=Trefoil\n(3_1)" alt="Trefoil Knot" class="mx-auto rounded-md">
+                                <p class="mt-2 font-semibold">세잎매듭</p>
+                            </div>
+                            <div id="knot-figure-eight" class="knot-card cursor-pointer p-4 border-2 border-transparent rounded-lg text-center bg-stone-100">
+                                <img src="https://placehold.co/100x100/e5e7eb/4b5563?text=Figure-Eight\n(4_1)" alt="Figure-Eight Knot" class="mx-auto rounded-md">
+                                <p class="mt-2 font-semibold">8자매듭</p>
+                            </div>
+                        </div>
+
+                        <div id="knot-info" class="mt-4 p-4 bg-stone-50 rounded-lg">
+                            <h4 id="knot-name" class="text-lg font-bold text-center">매듭을 선택하세요</h4>
+                            <div id="knot-chart-container" class="chart-container h-56 md:h-64 mt-2">
+                                <canvas id="knotDetailChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quantum-math" class="mb-20 py-12 bg-white rounded-xl shadow-md section-fade-in">
+                <h2 class="text-3xl font-bold text-center mb-4">양자 컴퓨터, 수학의 난제를 계산하다</h2>
+                <p class="text-center text-stone-600 mb-10 max-w-2xl mx-auto px-4">고전 컴퓨터가 수백만 년 걸릴 계산을 단 몇 시간 만에 해낼 수 있는 잠재력을 가집니다.</p>
+
+                <div class="max-w-4xl mx-auto px-4">
+                    <p class="text-stone-700 mb-8 md:text-lg">매듭 이론의 핵심 과제 중 하나는 '매듭 불변량'을 계산하는 것입니다. 이는 매듭을 변형시켜도 변하지 않는 고유한 값으로, 매듭들을 구별하는 '지문'과 같습니다. 하지만 매듭이 복잡해질수록 이 계산은 기하급수적으로 어려워집니다. 최근 연구에서는 양자 컴퓨터가 이 불변량(특히 존스 다항식)을 훨씬 효율적으로 계산할 수 있음을 보여주었습니다. 이는 양자 컴퓨터가 단순히 계산 속도만 빠른 것이 아니라, 특정 종류의 수학 문제에 근본적으로 더 적합한 도구일 수 있음을 시사합니다.</p>
+                
+                    <div class="chart-container h-80 md:h-96">
+                        <canvas id="quantumComparisonChart"></canvas>
+                    </div>
+                    <p class="text-center mt-4 text-stone-600">매듭의 교차 수가 증가할수록 고전 컴퓨터의 계산량은 폭발적으로 늘어납니다.</p>
+                </div>
+            </section>
+
+            <section id="future" class="text-center section-fade-in">
+                <h2 class="text-3xl font-bold mb-8">인간과 기계의 협업: 수학의 미래</h2>
+                 <div class="max-w-3xl mx-auto text-stone-700 space-y-4 text-left md:text-lg">
+                    <p>우리가 살펴본 4개의 논문은 하나의 공통된 미래상을 제시합니다. 그것은 바로 '인간 수학자와 지능형 기계의 협력'입니다. AI는 방대한 데이터에서 인간이 놓치기 쉬운 패턴을 찾아내 새로운 '질문(추측)'을 던져주고, 양자 컴퓨터는 인간의 능력으로는 불가능한 계산을 수행하여 그 질문을 검증할 '단서(계산 결과)'를 제공합니다. </p>
+                    <p>궁극적으로 창의적인 아이디어를 내고, 아름다운 증명을 완성하는 것은 여전히 수학자의 몫입니다. 하지만 이제 수학자들은 인류 역사상 가장 강력한 조수와 함께 미지의 세계를 탐험하게 되었습니다. 이러한 협력을 통해 랭글랜즈 프로그램과 같은 거대한 이론이 완성되고, 매듭 이론처럼 깊은 미스터리가 풀리는 등 수학의 발전은 더욱 가속화될 것입니다.</p>
+                </div>
+
+                <div class="mt-12 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 text-lg">
+                    <div class="p-4 bg-white rounded-lg shadow-md"><span>방대한 데이터 / 복잡한 구조</span></div>
+                    <div class="text-2xl text-teal-500 font-bold">&rarr;</div>
+                    <div class="p-4 bg-teal-100 rounded-lg shadow-md font-semibold"><span>AI / 양자컴퓨터 분석</span></div>
+                    <div class="text-2xl text-teal-500 font-bold">&rarr;</div>
+                    <div class="p-4 bg-white rounded-lg shadow-md"><span>새로운 추측 / 통찰력</span></div>
+                    <div class="text-2xl text-teal-500 font-bold">&rarr;</div>
+                     <div class="p-4 bg-blue-100 rounded-lg shadow-md font-semibold"><span>인간 수학자의 증명</span></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section-fade-in');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+                section.classList.add('visible');
+            });
+
+            // Smooth scrolling for nav links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            let aiPatternChartInstance;
+            const runAiButton = document.getElementById('runAiButton');
+
+            function createAiPatternChart(animated = false) {
+                const ctx = document.getElementById('aiPatternChart').getContext('2d');
+                if (aiPatternChartInstance) {
+                    aiPatternChartInstance.destroy();
+                }
+
+                const dataPoints = [
+                    {x: 1, y: 1.2}, {x: 1.5, y: 1.8}, {x: 2, y: 2.1}, {x: 2.2, y: 2.5}, {x: 3, y: 3.3},
+                    {x: 3.5, y: 4.1}, {x: 4, y: 4.2}, {x: 4.1, y: 4.8}, {x: 5, y: 5.3}, {x: 5.5, y: 6.1}
+                ];
+
+                const data = {
+                    datasets: [{
+                        label: 'AI가 발견한 패턴',
+                        data: animated ? [] : dataPoints,
+                        backgroundColor: 'rgba(20, 184, 166, 0.6)',
+                        borderColor: 'rgba(13, 148, 136, 1)',
+                        borderWidth: 1,
+                        pointRadius: 5,
+                        pointHoverRadius: 8
+                    }]
+                };
+
+                aiPatternChartInstance = new Chart(ctx, {
+                    type: 'scatter',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                title: { display: true, text: '기하학적 불변량 (예: 쌍곡선 부피)' },
+                                beginAtZero: true
+                            },
+                            y: {
+                                title: { display: true, text: '대수적 불변량 (예: 존스 다항식 계수)' },
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ` (기하: ${context.parsed.x}, 대수: ${context.parsed.y})`;
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'AI 발견: 매듭 특성 간의 숨겨진 상관관계',
+                                font: {
+                                    size: 16
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                if (animated) {
+                    runAiButton.disabled = true;
+                    runAiButton.textContent = '분석 중...';
+                    let i = 0;
+                    const interval = setInterval(() => {
+                        if (i < dataPoints.length) {
+                            aiPatternChartInstance.data.datasets[0].data.push(dataPoints[i]);
+                            aiPatternChartInstance.update();
+                            i++;
+                        } else {
+                            clearInterval(interval);
+                             runAiButton.disabled = false;
+                             runAiButton.textContent = 'AI 분석 다시하기';
+                        }
+                    }, 200);
+                }
+            }
+            
+            createAiPatternChart(false);
+            runAiButton.addEventListener('click', () => createAiPatternChart(true));
+            
+            const knotData = {
+                trefoil: {
+                    name: '세잎매듭 (Trefoil Knot)',
+                    crossings: 3,
+                    signature: -2,
+                    volume: 0,
+                    genus: 1,
+                },
+                'figure-eight': {
+                    name: '8자 매듭 (Figure-Eight Knot)',
+                    crossings: 4,
+                    signature: 0,
+                    volume: 2.029,
+                    genus: 1,
+                }
+            };
+
+            let knotDetailChartInstance;
+            
+            function createKnotDetailChart(knot) {
+                const ctx = document.getElementById('knotDetailChart').getContext('2d');
+                const data = knotData[knot];
+
+                if (knotDetailChartInstance) {
+                    knotDetailChartInstance.destroy();
+                }
+
+                document.getElementById('knot-name').textContent = data.name;
+
+                knotDetailChartInstance = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['교차 수', '종수(Genus)', '시그니처(절대값)', '쌍곡선 부피'],
+                        datasets: [{
+                            label: data.name,
+                            data: [data.crossings, data.genus, Math.abs(data.signature), data.volume],
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                pointLabels: {
+                                    font: {
+                                        size: 14
+                                    }
+                                },
+                                ticks: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const knotCards = document.querySelectorAll('.knot-card');
+            knotCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    knotCards.forEach(c => c.classList.remove('border-teal-500'));
+                    card.classList.add('border-teal-500');
+                    const knotId = card.id.replace('knot-', '');
+                    createKnotDetailChart(knotId);
+                });
+            });
+
+            const quantumCtx = document.getElementById('quantumComparisonChart').getContext('2d');
+            new Chart(quantumCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['교차 5개', '교차 10개', '교차 15개', '교차 20개'],
+                    datasets: [
+                        {
+                            label: '고전 컴퓨터 계산량',
+                            data: [32, 1024, 32768, 1048576],
+                            backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                            borderColor: 'rgba(220, 38, 38, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '양자 컴퓨터 계산량',
+                            data: [25, 100, 225, 400],
+                            backgroundColor: 'rgba(34, 197, 94, 0.6)',
+                            borderColor: 'rgba(22, 163, 74, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            type: 'logarithmic',
+                            title: {
+                                display: true,
+                                text: '계산량 (로그 스케일)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '매듭의 복잡도 (교차 수)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '계산 복잡도 비교: 고전 vs 양자',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
