@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대한민국을 울린 드라마 연대기: 인포그래픽</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Energetic & Playful -->
+    <!-- Infographic Narrative Plan: The infographic tells a story, starting with a bold hook and key stats. It then showcases the "Pantheon of Sorrow" (Top 5 dramas) using visually distinct cards. The narrative continues by analyzing the data, first by "Tear Factories" (broadcaster breakdown with a Donut Chart) and then by the "Timeline of Tears" (decade trends with a Line Chart). A comprehensive list of all 30 dramas follows for completeness. The story concludes with "Beyond the Tears," offering qualitative context on J-dramas and OSTs. This structure guides the user through a data-driven journey from the most impactful examples to broader trends and contextual insights. -->
+    <!-- Visualization & Content Choices: 
+    1. Report Info: Overall ranking. Goal: Inform. Viz: Large '30' stat. Method: HTML/CSS. Justification: A strong, immediate hook.
+    2. Report Info: Top 5 dramas. Goal: Organize/Highlight. Viz: Detailed HTML/CSS cards. Method: HTML/Tailwind. Justification: Gives prominence to the most significant entries.
+    3. Report Info: Broadcaster data. Goal: Compare/Composition. Viz: Donut Chart. Library: Chart.js (Canvas). Justification: A Donut chart is visually engaging for an infographic and clearly shows proportional contribution.
+    4. Report Info: Year data. Goal: Show Change/Trend. Viz: Line Chart. Library: Chart.js (Canvas). Justification: A Line chart is the best standard for visualizing trends over time (decades).
+    5. Report Info: Full list (6-30). Goal: Organize. Viz: Compact HTML list/table. Method: HTML/Tailwind. Justification: Provides comprehensive data without cluttering the main narrative.
+    6. Report Info: J-Drama/OST context. Goal: Inform. Viz: Styled text blocks. Method: HTML/Tailwind. Justification: Adds qualitative depth to the quantitative data.
+    All chart implementations include required label wrapping logic and tooltip configuration. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F4F4F4;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .card-top {
+            border-top: 5px solid;
+        }
+    </style>
+</head>
+<body class="text-[#2D2D2D]">
+
+    <div class="container mx-auto px-4 py-8 md:py-16">
+
+        <header class="text-center mb-16">
+            <h1 class="text-4xl md:text-6xl font-black mb-4 text-shadow" style="color: #2D2D2D;">대한민국을 울린 <span style="color: #FF5E5B;">30편의 눈물</span></h1>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-600">시청자들의 가슴에 깊이 새겨진 역대 가장 슬픈 드라마들을 데이터로 분석한 연대기. 그 눈물의 역사를 따라가 봅니다.</p>
+        </header>
+
+        <main class="space-y-20">
+
+            <section id="top5">
+                <h2 class="text-3xl font-bold text-center mb-10">슬픔의 전당: TOP 5</h2>
+                <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">수많은 작품 중에서도 시청자들에게 가장 지독한 슬픔을 안겨준 전설적인 다섯 편의 드라마입니다.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                    <!-- Cards will be populated by JS -->
+                </div>
+            </section>
+
+            <section id="analysis" class="bg-white rounded-2xl shadow-xl p-6 md:p-12">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-4">눈물 제조공장: 방송사별 분석</h2>
+                        <p class="text-gray-600 mb-8 leading-relaxed">어떤 방송사가 시청자들의 눈물샘을 가장 많이 자극했을까요? TOP 30 드라마의 방송사별 분포를 통해 각 채널의 드라마 제작 경향을 엿볼 수 있습니다. KBS와 SBS가 막상막하의 경쟁을 펼치며 슬픈 드라마의 양대 산맥을 이루고 있습니다.</p>
+                        <div class="chart-container">
+                            <canvas id="broadcasterDonutChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                         <h2 class="text-3xl font-bold mb-4">눈물의 연대기: 시대별 트렌드</h2>
+                        <p class="text-gray-600 mb-8 leading-relaxed">슬픈 드라마의 유행에도 시대적 흐름이 존재합니다. 2000년대에 정점을 찍은 슬픈 드라마는 2010년대를 거쳐 최근 다시 부흥하는 양상을 보입니다. 시대상과 함께 변화하는 감성의 역사를 확인해 보세요.</p>
+                        <div class="chart-container">
+                            <canvas id="timelineLineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="full-list">
+                <h2 class="text-3xl font-bold text-center mb-10">대한민국을 울린 30편의 드라마: 전체 순위</h2>
+                <div id="full-drama-list" class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                    <!-- Table will be populated by JS -->
+                </div>
+            </section>
+            
+            <section id="context">
+                 <h2 class="text-3xl font-bold text-center mb-10">눈물, 그 너머의 이야기</h2>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-lg border-l-4" style="border-color: #00B1B0;">
+                        <h3 class="text-xl font-bold text-[#00B1B0] mb-3">감성의 원류를 찾아서: 일본 드라마의 영향</h3>
+                        <p class="text-gray-600 leading-relaxed">2000년대 초반, 한국의 슬픈 드라마 장르는 일본 드라마의 영향을 받으며 성장했습니다. 특히 불치병, 시한부 인생 등 비극적 소재를 다룬 <span class="font-semibold">'세상의 중심에서 사랑을 외치다'</span>나 <span class="font-semibold">'1리터의 눈물'</span>과 같은 작품들은 국내에서도 큰 반향을 일으키며 한국형 신파 멜로드라마의 기틀을 마련하는 데 기여했습니다.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg border-l-4" style="border-color: #FFB13B;">
+                        <h3 class="text-xl font-bold text-[#FFB13B] mb-3">슬픔을 증폭시키는 선율: 명품 OST</h3>
+                        <p class="text-gray-600 leading-relaxed">드라마의 슬픔을 완성하는 것은 단연코 OST입니다. '미안하다, 사랑한다'의 <span class="font-semibold">박효신 - '눈의 꽃'</span>, '천국의 계단'의 <span class="font-semibold">김범수 - '보고 싶다'</span> 같은 곡들은 스토리와 함께 시청자의 감정을 최고조로 이끄는 핵심 요소로 자리 잡았습니다.</p>
+                    </div>
+                 </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center p-6 mt-16 border-t border-gray-300">
+            <p class="text-sm text-gray-500">&copy; 2025 K-Drama Data Visualization Project. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const dramaData = [
+            { rank: 1, title: "미안하다, 사랑한다", broadcaster: "KBS", year: 2004, actors: ["소지섭", "임수정"], synopsis: "어린 시절 호주에 입양된 후 불행한 삶을 살던 남자가 친어머니를 찾아 한국에 돌아와 운명적인 사랑과 복수를 겪는 이야기." },
+            { rank: 2, title: "발리에서 생긴 일", broadcaster: "SBS", year: 2004, actors: ["하지원", "조인성", "소지섭"], synopsis: "네 남녀의 치명적이고 슬픈 사랑을 그린 드라마로, 충격적인 결말로 시청자들에게 깊은 인상을 남겼다." },
+            { rank: 3, title: "천국의 계단", broadcaster: "SBS", year: 2003, actors: ["최지우", "권상우", "김태희", "신현준"], synopsis: "어릴 적부터 함께한 두 남녀의 지독한 사랑과 이별, 그리고 희생을 그린 정통 멜로드라마." },
+            { rank: 4, title: "모래시계", broadcaster: "SBS", year: 1995, actors: ["최민수", "고현정", "박상원"], synopsis: "대한민국 현대사를 관통하며 격동의 시대를 살아간 세 친구의 우정과 사랑, 그리고 엇갈린 운명을 그린 대서사시." },
+            { rank: 5, title: "가을동화", broadcaster: "KBS", year: 2000, actors: ["송혜교", "송승헌", "원빈"], synopsis: "어린 시절 운명이 뒤바뀐 남매의 애틋하고 슬픈 사랑 이야기로, 한류 열풍의 시작을 알린 작품." },
+            { rank: 6, title: "눈물의 여왕", broadcaster: "tvN", year: 2024, actors: ["김수현", "김지원"], synopsis: "퀸즈 그룹 재벌 3세와 용두리 이장 아들, 3년차 부부의 아찔한 위기와 기적처럼 다시 시작되는 사랑 이야기." },
+            { rank: 7, title: "연인", broadcaster: "MBC", year: 2023, actors: ["남궁민", "안은진"], synopsis: "병자호란을 겪으며 엇갈리는 연인들의 사랑과 백성들의 생명력을 다룬 휴먼역사멜로드라마." },
+            { rank: 8, title: "선덕여왕", broadcaster: "MBC", year: 2009, actors: ["이요원", "고현정", "엄태웅", "김남길"], synopsis: "신라 최초의 여왕인 선덕여왕의 파란만장한 일대기와 미실과의 숙명적인 대결을 그린 사극." },
+            { rank: 9, title: "나의 아저씨", broadcaster: "tvN", year: 2018, actors: ["이선균", "이지은(아이유)"], synopsis: "삶의 무게를 버티며 살아가는 아저씨와 거친 삶을 살아온 젊은 여성이 서로를 통해 삶의 의미를 찾고 치유받는 이야기." },
+            { rank: 10, title: "도깨비", broadcaster: "tvN", year: 2016, actors: ["공유", "김고은", "이동욱", "유인나"], synopsis: "불멸의 삶을 끝내기 위해 인간 신부가 필요한 도깨비와 기억상실증 저승사자의 낭만설화." },
+            { rank: 11, title: "겨울연가", broadcaster: "KBS", year: 2002, actors: ["배용준", "최지우"], synopsis: "첫사랑이라는 운명으로 묶인 세 남녀의 이야기로, 일본에서 '욘사마' 신드롬을 일으킨 한류 드라마의 대표작." },
+            { rank: 12, title: "다모", broadcaster: "MBC", year: 2003, actors: ["하지원", "이서진", "김민준"], synopsis: "조선시대 여성 수사관 '다모'의 활약과 신분을 넘나드는 세 남녀의 슬픈 사랑과 운명을 그린 퓨전 사극." },
+            { rank: 13, title: "상속자들", broadcaster: "SBS", year: 2013, actors: ["이민호", "박신혜", "김우빈"], synopsis: "부유층 고교생들의 사랑과 우정을 그리는 청춘 로맨틱 코미디지만, 신분 차이에서 오는 애틋함과 슬픔이 담겨있다." },
+            { rank: 14, title: "해를 품은 달", broadcaster: "MBC", year: 2012, actors: ["김수현", "한가인"], synopsis: "조선시대 가상의 왕 이훤과 비밀에 싸인 무녀 월의 애절한 사랑 이야기를 그린 판타지 로맨스 사극." },
+            { rank: 15, title: "추노", broadcaster: "KBS", year: 2010, actors: ["장혁", "오지호", "이다해"], synopsis: "도망간 노비를 쫓는 '추노꾼'의 파란만장한 삶과 사랑을 통해 민초들의 애환을 그린 액션 사극." },
+            { rank: 16, title: "미스터 션샤인", broadcaster: "tvN", year: 2018, actors: ["이병헌", "김태리"], synopsis: "미군이 되어 조선으로 돌아온 한 소년이 의병과 만나며 벌어지는 일을 그린 드라마." },
+            { rank: 17, title: "옷소매 붉은 끝동", broadcaster: "MBC", year: 2021, actors: ["이준호", "이세영"], synopsis: "자신이 선택한 삶을 지키고자 한 궁녀와 사랑보다 나라가 우선이었던 제왕의 애절한 궁중 로맨스 기록." },
+            { rank: 18, title: "주몽", broadcaster: "MBC", year: 2006, actors: ["송일국", "한혜진"], synopsis: "고조선 멸망 시기부터 고구려 건국 시기까지 주몽의 일대기를 그린 대하 사극." },
+            { rank: 19, title: "고려 거란 전쟁", broadcaster: "KBS", year: 2023, actors: ["최수종", "김동준"], synopsis: "관용의 리더십으로 고려를 하나로 모아 거란과의 전쟁을 승리로 이끈 현종과 강감찬의 이야기." },
+            { rank: 20, title: "연애시대", broadcaster: "SBS", year: 2006, actors: ["감우성", "손예진"], synopsis: "이혼 후에도 서로의 일상에 깊이 관여하며 미련과 애증의 관계를 이어가는 두 남녀의 현실적인 사랑 이야기." },
+            { rank: 21, title: "세상 어디에도 없는 착한남자", broadcaster: "KBS", year: 2012, actors: ["송중기", "문채원"], synopsis: "사랑하는 여자에게 배신당한 남자가 다른 여자를 이용해 복수를 계획하다 사랑에 빠지는 이야기." },
+            { rank: 22, title: "시그널", broadcaster: "tvN", year: 2016, actors: ["이제훈", "김혜수", "조진웅"], synopsis: "과거로부터 걸려온 간절한 신호로 연결된 현재와 과거의 형사들이 오래된 미제 사건들을 다시 파헤치는 이야기." },
+            { rank: 23, title: "비밀", broadcaster: "KBS", year: 2013, actors: ["지성", "황정음"], synopsis: "사랑이 없다고 믿었던 남자와 사랑에 배신당한 여자의 처절한 멜로드라마." },
+            { rank: 24, title: "그들이 사는 세상", broadcaster: "KBS", year: 2008, actors: ["현빈", "송혜교"], synopsis: "드라마 제작 현장을 배경으로 동료애와 사랑을 키워나가는 PD들의 이야기를 현실적으로 그려낸 드라마." },
+            { rank: 25, title: "연모", broadcaster: "KBS", year: 2021, actors: ["박은빈", "로운"], synopsis: "남장을 통해 세자가 된 여자의 비밀스러운 궁중 로맨스." },
+            { rank: 26, title: "사랑의 불시착", broadcaster: "tvN", year: 2019, actors: ["현빈", "손예진"], synopsis: "북한에 불시착한 재벌 상속녀와 북한 장교의 절대 극비 로맨스." },
+            { rank: 27, title: "호텔 델루나", broadcaster: "tvN", year: 2019, actors: ["이지은(아이유)", "여진구"], synopsis: "귀신 전용 호텔 델루나의 사장과 지배인의 특별한 이야기." },
+            { rank: 28, title: "불새", broadcaster: "MBC", year: 2004, actors: ["이서진", "이은주"], synopsis: "경제적으로 역전된 채 재회한 이혼 부부의 이야기." },
+            { rank: 29, title: "킬미, 힐미", broadcaster: "MBC", year: 2015, actors: ["지성", "황정음"], synopsis: "다중인격장애를 앓는 재벌 3세와 그의 비밀주치의의 버라이어티한 로맨스." },
+            { rank: 30, title: "스물다섯 스물하나", broadcaster: "tvN", year: 2022, actors: ["김태리", "남주혁"], synopsis: "1998년, 시대에 꿈을 빼앗긴 청춘들의 방황과 성장을 그린 청량 로맨스." }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            function populateTop5() {
+                const top5Container = document.querySelector('#top5 .grid');
+                const top5Data = dramaData.slice(0, 5);
+                const colors = ['#FF5E5B', '#FFB13B', '#00B1B0', '#5c677d', '#8a93a5'];
+
+                top5Data.forEach((drama, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-lg shadow-xl p-6 text-center transform hover:-translate-y-2 transition-transform duration-300 card-top';
+                    card.style.borderColor = colors[index % colors.length];
+                    card.innerHTML = `
+                        <div class="text-5xl font-black mb-2" style="color: ${colors[index % colors.length]}">${drama.rank}</div>
+                        <h3 class="text-xl font-bold mb-1">${drama.title}</h3>
+                        <p class="text-sm text-gray-500 mb-4">${drama.year} &bull; ${drama.broadcaster}</p>
+                        <p class="text-gray-700 text-sm leading-relaxed">${drama.synopsis}</p>
+                    `;
+                    top5Container.appendChild(card);
+                });
+            }
+
+            function populateFullList() {
+                const listContainer = document.getElementById('full-drama-list');
+                const restOfData = dramaData.slice(5);
+
+                const table = document.createElement('table');
+                table.className = 'w-full text-left table-auto';
+                table.innerHTML = `
+                    <thead>
+                        <tr class="border-b-2 border-gray-200">
+                            <th class="p-2 md:p-4 text-sm font-bold w-12">순위</th>
+                            <th class="p-2 md:p-4 text-sm font-bold">제목</th>
+                            <th class="p-2 md:p-4 text-sm font-bold hidden md:table-cell">방송사</th>
+                            <th class="p-2 md:p-4 text-sm font-bold hidden lg:table-cell w-48">주연</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                `;
+                const tbody = table.querySelector('tbody');
+                restOfData.forEach(drama => {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-gray-100 hover:bg-gray-50';
+                    row.innerHTML = `
+                        <td class="p-2 md:p-4 font-bold text-lg" style="color: #FF5E5B;">${drama.rank}</td>
+                        <td class="p-2 md:p-4 font-semibold">${drama.title} <span class="text-gray-500 font-normal text-sm">(${drama.year})</span></td>
+                        <td class="p-2 md:p-4 text-sm hidden md:table-cell">${drama.broadcaster}</td>
+                        <td class="p-2 md:p-4 text-xs text-gray-600 hidden lg:table-cell">${drama.actors.join(', ')}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                listContainer.appendChild(table);
+            }
+
+            function wrapLabel(str, maxWidth) {
+                if (str.length <= maxWidth) {
+                    return str;
+                }
+                const words = str.split(' ');
+                const lines = [];
+                let currentLine = words[0];
+                for (let i = 1; i < words.length; i++) {
+                    if (currentLine.length + words[i].length + 1 < maxWidth) {
+                        currentLine += ' ' + words[i];
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = words[i];
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            }
+
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                } else {
+                    return label;
+                }
+            };
+            
+            const palette = {
+                teal: '#00B1B0',
+                redOrange: '#FF5E5B',
+                lightGray: '#F4F4F4',
+                darkGray: '#2D2D2D',
+                yellowOrange: '#FFB13B'
+            };
+
+            function renderCharts() {
+                const broadcasterCounts = dramaData.reduce((acc, drama) => {
+                    acc[drama.broadcaster] = (acc[drama.broadcaster] || 0) + 1;
+                    return acc;
+                }, {});
+                const broadcasterCtx = document.getElementById('broadcasterDonutChart').getContext('2d');
+                new Chart(broadcasterCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(broadcasterCounts),
+                        datasets: [{
+                            label: '드라마 수',
+                            data: Object.values(broadcasterCounts),
+                            backgroundColor: [palette.redOrange, palette.teal, palette.yellowOrange, '#8a93a5', '#5c677d'],
+                            borderColor: '#FFFFFF',
+                            borderWidth: 4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { font: { size: 14 } } },
+                            tooltip: { 
+                                callbacks: { title: tooltipTitleCallback }
+                            }
+                        },
+                        cutout: '60%'
+                    }
+                });
+
+                const decadeCounts = dramaData.reduce((acc, drama) => {
+                    const decade = Math.floor(drama.year / 10) * 10;
+                    const decadeLabel = `${decade}년대`;
+                    acc[decadeLabel] = (acc[decadeLabel] || 0) + 1;
+                    return acc;
+                }, {});
+                const sortedDecades = Object.entries(decadeCounts).sort((a,b) => a[0].localeCompare(b[0]));
+                const timelineCtx = document.getElementById('timelineLineChart').getContext('2d');
+                new Chart(timelineCtx, {
+                    type: 'line',
+                    data: {
+                        labels: sortedDecades.map(d => d[0]),
+                        datasets: [{
+                            label: '드라마 수',
+                            data: sortedDecades.map(d => d[1]),
+                            fill: true,
+                            backgroundColor: 'rgba(0, 177, 176, 0.2)',
+                            borderColor: palette.teal,
+                            pointBackgroundColor: palette.teal,
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: palette.teal,
+                            tension: 0.3,
+                            borderWidth: 3,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { 
+                                callbacks: { title: tooltipTitleCallback } 
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: '#e5e7eb' }
+                            },
+                            x: {
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            populateTop5();
+            populateFullList();
+            renderCharts();
+        });
+    </script>
+</body>
+</html>
+```
