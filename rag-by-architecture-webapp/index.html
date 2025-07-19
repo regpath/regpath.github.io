@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent로 완성하는 RAG: 인터랙티브 교재</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Blue -->
+    <!-- Application Structure Plan: The SPA is designed as an interactive learning dashboard with four main thematic sections: 1. Overview, 2. Core Principles, 3. Real-world Architectures, and 4. Evaluation & Ops. This structure was chosen over the original linear chapter format to allow for non-linear, topic-based exploration, which is more effective for learning complex technical concepts. Users can jump to any section via a sticky navigation bar. Key interactions include clickable diagrams to reveal details (progressive disclosure), tabbed interfaces to compare scenarios, and accordions for code snippets to keep the UI clean. This user flow encourages exploration and active learning rather than passive reading. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: LLM limitations & RAG concept (CH 01). Goal: Inform. Viz/Method: Interactive cards (HTML/CSS/JS) to show "Problem" vs. "Solution". Justification: Engages user immediately.
+        - Report Info: RAG pipeline steps (CH 03). Goal: Organize/Process. Viz/Method: Clickable flowchart (HTML/CSS/JS). Justification: Visually breaks down a complex process into manageable, explorable steps.
+        - Report Info: RAG evolution (CH 02). Goal: Change/Compare. Viz/Method: A simple timeline component. Justification: Clearly shows the progression from simple to advanced RAG.
+        - Report Info: Scenario comparison (CH 04). Goal: Compare. Viz/Method: Chart.js Horizontal Bar Chart comparing data complexity, accuracy needs, etc. Justification: Provides a quick, scannable visual comparison of challenges across different domains.
+        - Report Info: Data-specific architectures (CH 04). Goal: Organize. Viz/Method: Tabbed interface with accordions for code. Justification: Organizes a large amount of detailed information cleanly, allowing users to focus on one scenario at a time.
+        - Report Info: RAGAS evaluation metrics (CH 05). Goal: Inform/Compare. Viz/Method: Chart.js Radar Chart showing hypothetical scores. Justification: Makes abstract evaluation metrics tangible and easy to compare.
+        - Library/Method: All diagrams are built with HTML/Tailwind. All charts use Chart.js Canvas.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8fafc; }
+        .tab-active { border-color: #2563eb; color: #2563eb; background-color: #eff6ff; }
+        .tab-inactive { border-color: transparent; color: #475569; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .code-block { position: relative; }
+        .copy-button { position: absolute; top: 0.5rem; right: 0.5rem; background-color: #475569; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; cursor: pointer; opacity: 0.5; transition: opacity 0.2s; }
+        .code-block:hover .copy-button { opacity: 1; }
+        .diagram-step { cursor: pointer; transition: all 0.2s ease-in-out; }
+        .diagram-step:hover { transform: translateY(-4px); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+        .arrow { display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #9ca3af; margin: 0 0.5rem; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-blue-600">RAG 인터랙티브 교재</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview" class="text-slate-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">개요</a>
+                        <a href="#principles" class="text-slate-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">핵심 원리</a>
+                        <a href="#architectures" class="text-slate-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">실전 아키텍처</a>
+                        <a href="#evaluation" class="text-slate-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">평가 및 운영</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900">Agent로 완성하는 RAG</h1>
+            <p class="mt-4 text-lg text-slate-600">데이터 별 아키텍처 설계를 중심으로 한 인터랙티브 학습 경험</p>
+        </div>
+
+        <section id="overview" class="mb-24 scroll-mt-16">
+            <h2 class="text-3xl font-bold text-slate-900 border-b-4 border-blue-500 pb-2 mb-8">1. 개요: 왜 RAG가 필요한가?</h2>
+            <p class="text-slate-600 mb-8">
+                거대 언어 모델(LLM)은 텍스트 생성, 요약, 번역 등 놀라운 능력을 보여주지만, 두 가지 근본적인 한계를 가집니다. 바로 '환각(Hallucination)'과 '지식 단절(Knowledge Cut-off)'입니다. 이 섹션에서는 LLM의 한계를 살펴보고, RAG(Retrieval-Augmented Generation)가 어떻게 이 문제에 대한 강력한 해결책이 되는지 알아봅니다.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold text-red-600 mb-4">LLM의 한계 😥</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-bold text-lg">환각 (Hallucination)</h4>
+                            <p class="text-slate-600">학습 데이터에 없는 내용에 대해 그럴듯한 거짓 정보를 생성하는 문제입니다. 이는 LLM이 통계적 패턴에 기반하기 때문입니다.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">지식 단절 (Knowledge Cut-off)</h4>
+                            <p class="text-slate-600">특정 시점까지의 데이터로만 학습되어 최신 정보나 기업 내부 데이터에 대해 알지 못합니다.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold text-green-600 mb-4">RAG의 해결책 ✨</h3>
+                    <p class="text-slate-600 mb-4">RAG는 LLM이 답변을 생성하기 전, 외부 데이터 소스에서 관련 정보를 검색하여 LLM에게 '오픈북'처럼 제공합니다. 이를 통해 답변의 정확성과 신뢰도를 획기적으로 높입니다.</p>
+                    <div class="border-2 border-dashed border-slate-300 rounded-lg p-4 text-center">
+                        <p class="font-semibold">"LLM의 지능 + 외부 데이터의 정확성 = 신뢰할 수 있는 AI"</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="principles" class="mb-24 scroll-mt-16">
+            <h2 class="text-3xl font-bold text-slate-900 border-b-4 border-blue-500 pb-2 mb-8">2. 핵심 원리: RAG 파이프라인과 진화</h2>
+             <p class="text-slate-600 mb-8">
+                가장 기본적인 RAG 시스템은 여러 단계를 거쳐 작동합니다. 이 섹션에서는 RAG의 핵심 파이프라인인 'Extract - Transform - Load' 과정을 단계별로 알아봅니다. 각 단계를 클릭하여 상세 설명과 관련 코드를 확인하고, RAG 기술이 어떻게 더 정교하게 진화하고 있는지 살펴보세요.
+            </p>
+
+            <div class="bg-white p-8 rounded-lg shadow-lg mb-12">
+                <h3 class="text-2xl font-bold text-slate-800 mb-6 text-center">기본 RAG 파이프라인 (클릭하여 확인)</h3>
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                    <div id="step-extract" class="diagram-step bg-sky-100 text-sky-800 p-4 rounded-lg shadow-sm text-center w-full md:w-auto">
+                        <h4 class="font-bold">1. Extract</h4><p class="text-sm">문서 로드</p>
+                    </div>
+                    <div class="arrow">&rarr;</div>
+                    <div id="step-transform" class="diagram-step bg-amber-100 text-amber-800 p-4 rounded-lg shadow-sm text-center w-full md:w-auto">
+                        <h4 class="font-bold">2. Transform</h4><p class="text-sm">텍스트 분할 (Chunking)</p>
+                    </div>
+                    <div class="arrow">&rarr;</div>
+                    <div id="step-load" class="diagram-step bg-emerald-100 text-emerald-800 p-4 rounded-lg shadow-sm text-center w-full md:w-auto">
+                        <h4 class="font-bold">3. Load</h4><p class="text-sm">임베딩 및 저장</p>
+                    </div>
+                </div>
+                <div id="pipeline-details" class="mt-8"></div>
+            </div>
+            
+            <div class="bg-white p-8 rounded-lg shadow-lg">
+                <h3 class="text-2xl font-bold text-slate-800 mb-6 text-center">RAG의 진화</h3>
+                <div class="relative border-l-4 border-blue-200 ml-4 pl-8 py-4">
+                    <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-[10px] top-6 border-4 border-white"></div>
+                    <h4 class="text-xl font-bold mb-1">Naive RAG</h4>
+                    <p class="text-slate-600">단순한 '검색 &rarr; 생성' 파이프라인.</p>
+                    
+                    <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-[10px] top-1/2 -translate-y-1/2 border-4 border-white"></div>
+                    <h4 class="text-xl font-bold mt-8 mb-1">Modular & Agentic RAG</h4>
+                    <p class="text-slate-600">쿼리 변환, 리랭킹 등 모듈을 추가하거나, LLM이 스스로 판단하고 행동하는 에이전트 형태로 발전.</p>
+
+                    <div class="absolute w-4 h-4 bg-blue-500 rounded-full -left-[10px] bottom-6 border-4 border-white"></div>
+                    <h4 class="text-xl font-bold mt-8 mb-1">Advanced RAG (Graph, Multimodal)</h4>
+                    <p class="text-slate-600">데이터 간의 '관계'를 활용하는 Graph RAG나 이미지, 표까지 이해하는 Multimodal RAG로 확장.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="architectures" class="mb-24 scroll-mt-16">
+            <h2 class="text-3xl font-bold text-slate-900 border-b-4 border-blue-500 pb-2 mb-8">3. 실전 아키텍처: 데이터 유형별 설계</h2>
+            <p class="text-slate-600 mb-8">
+                실제 비즈니스 환경의 데이터는 형태와 특성이 매우 다양합니다. 따라서 성공적인 RAG 시스템을 구축하려면 데이터의 특성을 정확히 이해하고 그에 맞는 아키텍처를 설계해야 합니다. 이 섹션에서는 금융, 커머스, 의료 세 가지 시나리오를 통해 각 데이터 유형의 도전 과제를 시각적으로 비교하고, 최적의 RAG 아키텍처 설계 방법을 알아봅니다.
+            </p>
+            
+            <div class="bg-white p-8 rounded-lg shadow-lg mb-12">
+                 <h3 class="text-2xl font-bold text-slate-800 mb-6 text-center">시나리오별 도전 과제 비교</h3>
+                 <div class="chart-container relative h-[400px] w-full max-w-2xl mx-auto">
+                    <canvas id="scenario-chart"></canvas>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="border-b border-slate-200">
+                    <nav class="-mb-px flex space-x-4 px-6" aria-label="Tabs">
+                        <button class="scenario-tab tab-active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-target="finance">📈 금융</button>
+                        <button class="scenario-tab tab-inactive whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-target="commerce">👕 커머스</button>
+                        <button class="scenario-tab tab-inactive whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-target="medical">🩺 의료</button>
+                    </nav>
+                </div>
+                <div class="p-6 md:p-8">
+                    <div id="finance-content" class="content-section active"></div>
+                    <div id="commerce-content" class="content-section"></div>
+                    <div id="medical-content" class="content-section"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="evaluation" class="scroll-mt-16">
+            <h2 class="text-3xl font-bold text-slate-900 border-b-4 border-blue-500 pb-2 mb-8">4. 평가 및 운영: 신뢰할 수 있는 시스템 만들기</h2>
+             <p class="text-slate-600 mb-8">
+                훌륭한 RAG 시스템은 만드는 것에서 끝나지 않습니다. 시스템의 성능을 객관적으로 측정하고, 지속적으로 개선하는 과정이 필수적입니다. 이 섹션에서는 RAG 시스템을 평가하는 핵심 지표들을 알아보고, RAGAS와 LangSmith 같은 도구를 활용해 시스템을 정량적으로 평가하고 디버깅하는 방법을 실습합니다.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 text-center">RAG 성능 평가 지표</h3>
+                    <div class="chart-container relative h-[400px] w-full max-w-lg mx-auto">
+                        <canvas id="ragas-chart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6">평가 및 운영 도구</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-lg">RAGAS</h4>
+                            <p class="text-slate-600 mb-4">RAG 시스템 평가를 위한 프레임워크. Faithfulness, Answer Relevancy 등 주요 지표를 정량적으로 측정합니다.</p>
+                            <h5 class="font-semibold mt-4 mb-2">RAGAS 평가 실행 코드</h5>
+                            <div class="code-block">
+                                <pre class="bg-slate-800 text-white p-4 rounded-md text-sm overflow-x-auto"><code class="language-python">from ragas import evaluate
+from ragas.metrics import faithfulness, answer_relevancy, context_relevancy
+from datasets import Dataset
+
+eval_data = {
+    'question': ["..."], 'answer': ["..."],
+    'contexts': [["..."]], 'ground_truth': ["..."]
+}
+dataset = Dataset.from_dict(eval_data)
+
+result = evaluate(
+    dataset=dataset,
+    metrics=[context_relevancy, faithfulness, answer_relevancy],
+)
+print(result)</code></pre>
+                            </div>
+                        </div>
+                         <div>
+                            <h4 class="font-semibold text-lg">LangSmith</h4>
+                            <p class="text-slate-600 mb-4">LLM 애플리케이션의 동작을 시각적으로 추적하고 디버깅하는 MLOps 플랫폼입니다.</p>
+                             <h5 class="font-semibold mt-4 mb-2">LangSmith 연동 코드</h5>
+                            <div class="code-block">
+                                <pre class="bg-slate-800 text-white p-4 rounded-md text-sm overflow-x-auto"><code class="language-bash"># 환경 변수 설정만으로 자동 연동
+export LANGCHAIN_TRACING_V2="true"
+export LANGCHAIN_API_KEY="YOUR_LANGSMITH_API_KEY"
+export LANGCHAIN_PROJECT="My RAG Project"</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const pipelineDetails = {
+        extract: {
+            title: "1. Extract: 문서에서 텍스트 추출",
+            description: "PDF, Word, PPT, CSV 등 다양한 형식의 문서에서 순수한 텍스트를 추출하는 첫 단계입니다. LlamaParse와 같은 전문 파서를 사용하면 표나 복잡한 레이아웃을 가진 문서도 효과적으로 처리할 수 있습니다.",
+            code: `import llama_parse
+
+parser = llama_parse.LlamaParse(result_as_markdown=True)
+documents = await parser.aload_data("./data/sample_report.pdf")
+print(documents[0].get_content())`
+        },
+        transform: {
+            title: "2. Transform: 의미 단위로 텍스트 분할 (Chunking)",
+            description: "추출된 긴 텍스트를 LLM이 처리하기 용이한 작은 덩어리(chunk)로 나눕니다. 문장이나 단락의 의미를 최대한 보존하는 RecursiveCharacterTextSplitter 방식이 널리 사용됩니다.",
+            code: `from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200,
+)
+chunks = text_splitter.split_text(documents[0].get_content())
+print(f"Split into {len(chunks)} chunks.")`
+        },
+        load: {
+            title: "3. Load: 벡터 변환 및 DB 저장",
+            description: "분할된 텍스트 청크들을 임베딩 모델을 사용해 숫자 벡터로 변환(임베딩)하고, Qdrant와 같은 Vector DB에 저장합니다. 이 과정을 통해 의미적으로 유사한 텍스트를 빠르게 검색할 수 있습니다.",
+            code: `from langchain_openai import OpenAIEmbeddings
+from langchain_qdrant import Qdrant
+
+embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+qdrant_store = Qdrant.from_texts(
+    texts=chunks,
+    embedding=embeddings,
+    collection_name="my_document_collection",
+    host="qdrant",
+    port=6333
+)`
+        }
+    };
+
+    const scenarioContents = {
+        finance: `
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">금융 공시 보고서 Q&A</h3>
+            <p class="text-slate-600 mb-6"><strong>데이터 특성:</strong> 반정형 데이터로, 복잡한 표, 재무제표, 텍스트가 혼재되어 있습니다. 정확한 숫자와 맥락 파악이 매우 중요합니다.</p>
+            
+            <h4 class="font-semibold text-lg mt-6 mb-2">아키텍처 설계</h4>
+            <div class="bg-slate-50 p-4 rounded-lg">
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li><strong>파싱 강화:</strong> LlamaParse, Upstage Document AI 등을 사용하여 PDF 내 표와 텍스트를 Markdown 형식으로 정확하게 변환합니다.</li>
+                    <li><strong>멀티 벡터 검색:</strong> 작은 청크로 유사도를 검색하고, LLM에게는 맥락 파악이 용이한 더 큰 원본 청크(부모 청크)를 함께 전달합니다(Parent Document Retriever).</li>
+                    <li><strong>에이전트 활용:</strong> '매출 성장률 계산'과 같이 다단계 추론이 필요한 질문은 LangGraph 기반 에이전트로 해결합니다.</li>
+                </ul>
+            </div>
+
+            <h4 class="font-semibold text-lg mt-6 mb-2">대체 데이터셋 코드 (SEC EDGAR)</h4>
+            <div class="code-block"><pre class="bg-slate-800 text-white p-4 rounded-md text-sm overflow-x-auto"><code class="language-python"># pip install sec-api
+from sec_api import QueryApi
+
+queryApi = QueryApi(api_key="YOUR_API_KEY")
+
+query = {
+  "query": { "query_string": { "query": "ticker:AAPL AND formType:\\"10-K\\"" } },
+  "from": "0", "size": "1",
+  "sort": [{ "filedAt": { "order": "desc" } }]
+}
+filings = queryApi.get_filings(query)
+# 이후 보고서 URL을 다운로드하여 파싱</code></pre></div>
+        `,
+        commerce: `
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">멀티모달 의류 검색</h3>
+            <p class="text-slate-600 mb-6"><strong>데이터 특성:</strong> 이미지와 텍스트(상품 설명, 카테고리, 속성)가 결합된 멀티모달 데이터입니다.</p>
+
+            <h4 class="font-semibold text-lg mt-6 mb-2">아키텍처 설계</h4>
+            <div class="bg-slate-50 p-4 rounded-lg">
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li><strong>멀티모달 임베딩:</strong> CLIP 같은 모델로 이미지와 텍스트를 동일한 벡터 공간에 임베딩하여 "파란색 반팔 티셔츠" 같은 텍스트로 이미지를 검색할 수 있게 합니다.</li>
+                    <li><strong>메타데이터 필터링:</strong> '카테고리: 상의', '색상: 파랑' 같은 속성을 메타데이터로 저장하고, 벡터 검색과 메타데이터 필터링을 결합하여 검색 정확도를 높입니다.</li>
+                </ul>
+            </div>
+
+            <h4 class="font-semibold text-lg mt-6 mb-2">대체 데이터셋 코드 (Kaggle Fashion)</h4>
+            <div class="code-block"><pre class="bg-slate-800 text-white p-4 rounded-md text-sm overflow-x-auto"><code class="language-python"># pip install opendatasets
+import opendatasets as od
+import pandas as pd
+
+dataset_url = 'https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-dataset'
+od.download(dataset_url) # Kaggle API 설정 필요
+
+df_styles = pd.read_csv('./fashion-product-images-dataset/styles.csv', on_bad_lines='skip')
+# 이후 이미지 경로와 메타데이터를 결합하여 멀티모달 임베딩 진행</code></pre></div>
+        `,
+        medical: `
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">의료 Q&A</h3>
+            <p class="text-slate-600 mb-6"><strong>데이터 특성:</strong> 전문 용어가 많고, 정확성이 극도로 중요합니다. 신뢰할 수 있는 소스(논문, 교과서) 기반의 답변이 필수적입니다.</p>
+            
+            <h4 class="font-semibold text-lg mt-6 mb-2">아키텍처 설계</h4>
+            <div class="bg-slate-50 p-4 rounded-lg">
+                <ul class="list-disc list-inside space-y-2 text-slate-700">
+                    <li><strong>하이브리드 검색:</strong> 의미 기반의 벡터 검색과 용어 정확도를 위한 키워드 검색을 결합합니다.</li>
+                    <li><strong>리랭킹 모델 적용:</strong> 검색된 여러 문서를 질문과의 관련성이 높은 순으로 다시 정렬하여 LLM에게 가장 중요한 정보를 우선적으로 제공합니다.</li>
+                    <li><strong>답변 검증 및 출처 제시:</strong> 생성된 답변의 근거가 된 문서를 반드시 출처(Citation)로 함께 제시하여 신뢰도를 높입니다.</li>
+                </ul>
+            </div>
+
+            <h4 class="font-semibold text-lg mt-6 mb-2">대체 데이터셋 코드 (PubMedQA)</h4>
+            <div class="code-block"><pre class="bg-slate-800 text-white p-4 rounded-md text-sm overflow-x-auto"><code class="language-python"># pip install datasets
+from datasets import load_dataset
+
+dataset = load_dataset("pubmed_qa", "pqa_labeled")
+
+# 'context'를 Vector DB에 저장하고, 'question'으로 검색
+print(dataset['train'][0])</code></pre></div>
+        `
+    };
+
+    document.getElementById('finance-content').innerHTML = scenarioContents.finance;
+    document.getElementById('commerce-content').innerHTML = scenarioContents.commerce;
+    document.getElementById('medical-content').innerHTML = scenarioContents.medical;
+
+    function createCodeBlockHTML(code) {
+        return `<div class="code-block mt-4"><button class="copy-button">Copy</button><pre class="bg-slate-800 text-white p-4 rounded-md text-sm overflow-x-auto"><code>${code.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre></div>`;
+    }
+
+    document.querySelectorAll('.diagram-step').forEach(step => {
+        step.addEventListener('click', (e) => {
+            const stepId = e.currentTarget.id.split('-')[1];
+            const details = pipelineDetails[stepId];
+            const detailContainer = document.getElementById('pipeline-details');
+            
+            detailContainer.innerHTML = `
+                <div class="bg-slate-100 p-6 rounded-lg border-l-4 border-blue-500">
+                    <h4 class="text-xl font-bold mb-2">${details.title}</h4>
+                    <p class="text-slate-700 mb-4">${details.description}</p>
+                    ${createCodeBlockHTML(details.code)}
+                </div>
+            `;
+            initCopyButtons();
+        });
+    });
+
+    document.querySelectorAll('.scenario-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.scenario-tab').forEach(t => {
+                t.classList.remove('tab-active');
+                t.classList.add('tab-inactive');
+            });
+            tab.classList.remove('tab-inactive');
+            tab.classList.add('tab-active');
+
+            document.querySelectorAll('.content-section').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tab.dataset.target + '-content').classList.add('active');
+            initCopyButtons();
+        });
+    });
+    
+    function initAccordions() {
+        // 이 함수는 원래 아코디언(클릭 시 펼쳐지는 메뉴) 기능을 구현하는 부분이었으나,
+        // 요청에 따라 모든 내용이 기본적으로 보이도록 수정되었습니다.
+        // 아래 주석 처리된 코드가 원래의 아코디언 기능 구현 방식입니다.
+
+        /*
+        // 1. '.accordion-trigger' 클래스를 가진 모든 HTML 요소를 선택합니다.
+        //    이 요소들은 사용자가 클릭할 수 있는 '버튼' 역할을 합니다.
+        document.querySelectorAll('.accordion-trigger').forEach(button => {
+            
+            // 2. 각 버튼(trigger)에 'onclick' 이벤트 리스너를 추가합니다.
+            button.onclick = () => {
+
+                // 3. 클릭 이벤트가 발생하면, 해당 버튼의 바로 다음 형제 요소('.accordion-content')를 찾습니다.
+                //    이것이 바로 펼쳐지거나 접힐 내용 부분입니다.
+                const content = button.nextElementSibling;
+
+                // 4. 내용(content)의 'maxHeight' CSS 스타일 값을 확인합니다.
+                if (content.style.maxHeight) {
+                    //    - 'maxHeight' 값이 있으면 (즉, 내용이 펼쳐져 있으면) 'null'로 만들어 접습니다.
+                    //      CSS에서 'max-height: 0'으로 설정된 초기 상태로 돌아가게 됩니다.
+                    content.style.maxHeight = null;
+                } else {
+                    //    - 'maxHeight' 값이 없으면 (즉, 내용이 접혀 있으면) 내용의 실제 전체 높이(scrollHeight)만큼
+                    //      'maxHeight' 값을 설정하여 내용을 부드럽게 펼칩니다.
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            }
+        });
+        */
+    }
+
+    function initCopyButtons() {
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.onclick = () => {
+                const code = button.nextElementSibling.querySelector('code').innerText;
+                navigator.clipboard.writeText(code).then(() => {
+                    button.innerText = 'Copied!';
+                    setTimeout(() => { button.innerText = 'Copy'; }, 2000);
+                });
+            }
+        });
+    }
+
+    initAccordions();
+    initCopyButtons();
+
+    const scenarioCtx = document.getElementById('scenario-chart').getContext('2d');
+    new Chart(scenarioCtx, {
+        type: 'bar',
+        data: {
+            labels: ['금융 (Finance)', '커머스 (Commerce)', '의료 (Medical)'],
+            datasets: [{
+                label: '데이터 복잡성',
+                data: [9, 6, 8],
+                backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 1
+            }, {
+                label: '정확성 요구사항',
+                data: [8, 5, 10],
+                backgroundColor: 'rgba(239, 68, 68, 0.5)',
+                borderColor: 'rgba(239, 68, 68, 1)',
+                borderWidth: 1
+            }, {
+                label: '멀티모달 필요성',
+                data: [2, 9, 4],
+                backgroundColor: 'rgba(16, 185, 129, 0.5)',
+                borderColor: 'rgba(16, 185, 129, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 10,
+                    title: { display: true, text: '상대적 점수 (10점 만점)' }
+                }
+            },
+            plugins: {
+                title: { display: true, text: '시나리오별 RAG 아키텍처 도전 과제', font: { size: 16 } },
+                tooltip: { mode: 'index', intersect: false }
+            }
+        }
+    });
+
+    const ragasCtx = document.getElementById('ragas-chart').getContext('2d');
+    new Chart(ragasCtx, {
+        type: 'radar',
+        data: {
+            labels: ['Faithfulness', 'Answer Relevancy', 'Context Precision', 'Context Recall', 'Answer Correctness'],
+            datasets: [{
+                label: 'RAG 시스템 평가 점수',
+                data: [0.95, 0.98, 0.90, 0.92, 0.88],
+                fill: true,
+                backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                borderColor: 'rgb(37, 99, 235)',
+                pointBackgroundColor: 'rgb(37, 99, 235)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(37, 99, 235)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 1,
+                    min: 0,
+                    ticks: { stepSize: 0.2 }
+                }
+            },
+            plugins: {
+                title: { display: true, text: 'RAGAS 평가 지표 예시', font: { size: 16 } }
+            }
+        }
+    });
+
+});
+</script>
+</body>
+</html>
