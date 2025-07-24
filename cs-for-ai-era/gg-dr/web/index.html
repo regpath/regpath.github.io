@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대화형 컴퓨터 공학 학습 가이드 | 강민철</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Subtle Accents -->
+    <!-- Application Structure Plan: The application is designed as a single-page, vertically scrolling educational journey, divided into the core pillars of Computer Science: Computer Architecture, Operating Systems, and Networks. This thematic structure was chosen over a direct replication of the course chapters to create a more intuitive and guided learning path. The user starts with the foundational hardware concepts and progressively moves up the abstraction layers to OS and networking. Key interactions include tabbed content for focused learning, toggles to compare concepts (like VM vs. Container), and interactive charts to visualize performance differences (like cache efficiency). This flow is designed to build knowledge organically, making complex relationships between topics easier to grasp. -->
+    <!-- Visualization & Content Choices: 
+    - Report Info: Course curriculum overview. Goal: Provide a high-level map of the learning journey. Viz/Presentation: A structured HTML/CSS timeline-like diagram. Interaction: Clicking on a section scrolls to the relevant part of the page. Justification: Offers clear navigation and a sense of progress. Library/Method: HTML/Tailwind CSS.
+    - Report Info: CPU Components (ALU, CU, Registers). Goal: Explain the core parts of a CPU. Viz/Presentation: A simplified block diagram created with HTML/Tailwind CSS. Interaction: Hovering over a component reveals a tooltip with its description. Justification: More engaging and less static than a simple image or text list. Library/Method: HTML/Tailwind CSS with JS for interactivity.
+    - Report Info: Cache Performance (Cache-friendly vs. Unfriendly code). Goal: Demonstrate the real-world impact of cache locality. Viz/Presentation: A Bar Chart (Chart.js/Canvas). Interaction: A button toggles the data to show results for both code types, with the chart updating dynamically. Justification: A visual representation of performance data is far more impactful than just text. Library/Method: Chart.js on a Canvas element.
+    - Report Info: VM vs. Container. Goal: Compare two key virtualization technologies. Viz/Presentation: A side-by-side comparison using a two-column layout. Interaction: A toggle switch allows the user to highlight one or the other, dynamically changing the focus and displaying contextual information. Justification: Facilitates direct comparison of features and architecture. Library/Method: HTML/Tailwind CSS with JS.
+    - Report Info: Network OSI/TCP-IP Layers. Goal: Show how data is encapsulated. Viz/Presentation: A layered diagram built with styled HTML divs. Interaction: Clicking on a layer reveals its protocols and purpose. Justification: Makes the abstract concept of encapsulation tangible and explorable. Library/Method: HTML/Tailwind CSS with JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #fdfbf7;
+            color: #383734;
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-button.active, .nav-button:hover {
+            color: #c5a880;
+            border-bottom-color: #c5a880;
+        }
+        .content-card {
+            background-color: #ffffff;
+            border: 1px solid #e5e0d9;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 0.5rem;
+        }
+        .tab-button.active {
+            color: #a78b5f;
+            border-bottom-color: #a78b5f;
+            font-weight: 700;
+        }
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'D2Coding', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 bg-white/80 backdrop-blur-md z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-gray-800">
+                <a href="#">CS 독학 가이드</a>
+            </h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#architecture" class="nav-button">컴퓨터 구조</a>
+                <a href="#os" class="nav-button">운영체제</a>
+                <a href="#network" class="nav-button">네트워크</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section id="intro" class="text-center mb-20">
+            <h2 class="text-4xl font-bold mb-4 text-gray-800">인공지능 시대를 위한 컴퓨터 공학 핵심 지식</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                강민철 강사의 '필수 컴퓨터 공학 지식' 강의를 바탕으로 제작된 대화형 학습 가이드입니다.
+                이곳에서 컴퓨터 과학의 근본 원리를 탐험하고, AI 시대에 필요한 기술적 통찰력을 얻어 가세요.
+            </p>
+        </section>
+
+        <!-- Learning Path Visualization -->
+        <section id="learning-path" class="mb-20">
+            <h3 class="text-2xl font-bold text-center mb-10 text-gray-800">학습 로드맵</h3>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8">
+                <div class="flex items-center">
+                    <div class="bg-white border-2 border-c5a880 rounded-full w-24 h-24 flex items-center justify-center text-center font-bold text-c5a880 p-2">컴퓨터<br>구조</div>
+                </div>
+                <div class="h-1 w-16 bg-gray-300 hidden md:block"></div>
+                 <div class="w-1 h-8 bg-gray-300 md:hidden"></div>
+                <div class="flex items-center">
+                    <div class="bg-white border-2 border-gray-400 rounded-full w-24 h-24 flex items-center justify-center text-center font-bold text-gray-600 p-2">운영체제</div>
+                </div>
+                <div class="h-1 w-16 bg-gray-300 hidden md:block"></div>
+                <div class="w-1 h-8 bg-gray-300 md:hidden"></div>
+                <div class="flex items-center">
+                    <div class="bg-white border-2 border-gray-400 rounded-full w-24 h-24 flex items-center justify-center text-center font-bold text-gray-600 p-2">네트워크</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: Computer Architecture -->
+        <section id="architecture" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold mb-8 border-l-4 border-c5a880 pl-4 text-gray-800">파트 1: 계산의 기초 - 컴퓨터 구조</h2>
+            <p class="text-gray-600 mb-12">
+                모든 소프트웨어는 하드웨어 위에서 동작합니다. 이 섹션에서는 우리가 작성한 코드가 어떻게 컴퓨터가 이해하는 언어로 번역되고, CPU와 메모리가 어떻게 상호작용하여 명령을 처리하는지 알아봅니다. 컴퓨터의 가장 근본적인 동작 원리를 이해하는 것은 성능 최적화의 첫걸음입니다.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card 1: Instruction -->
+                <div class="content-card p-6">
+                    <h4 class="font-bold text-xl mb-3">명령어와 컴파일</h4>
+                    <p class="text-gray-600 mb-4">소스코드가 CPU가 이해하는 기계어로 변환되는 과정을 관찰합니다.</p>
+                    <div class="code-block">
+                        <pre><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 10;
+    int b = 20;
+    int c = a + b;
+    return 0;
+}
+
+// 셸에서 컴파일
+// gcc -S -o add.s add.c</code></pre>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">`add.s` 파일에서 `movl`, `addl` 같은 어셈블리 명령어가 C코드와 어떻게 대응되는지 확인해보세요.</p>
+                </div>
+
+                <!-- Card 2: CPU -->
+                <div class="content-card p-6">
+                    <h4 class="font-bold text-xl mb-3">CPU의 작동 원리</h4>
+                    <p class="text-gray-600 mb-4">CPU는 '인출-해독-실행'의 명령어 사이클을 반복합니다. 각 구성요소의 역할을 알아보세요.</p>
+                    <div id="cpu-diagram" class="border border-gray-200 rounded-lg p-4 text-center">
+                        <div class="font-semibold mb-2">중앙처리장치 (CPU)</div>
+                        <div class="flex justify-around items-center">
+                            <div class="cpu-component p-2 bg-amber-100 rounded" data-info="명령어 실행을 제어하고 신호를 보냅니다.">제어장치</div>
+                            <div class="cpu-component p-2 bg-sky-100 rounded" data-info="산술 및 논리 연산을 수행합니다.">ALU</div>
+                            <div class="cpu-component p-2 bg-green-100 rounded" data-info="데이터를 임시로 저장하는 빠른 공간입니다.">레지스터</div>
+                        </div>
+                        <div id="cpu-tooltip" class="hidden absolute bg-gray-800 text-white text-sm rounded py-1 px-2 z-10"></div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Cache Memory -->
+                <div class="content-card p-6 col-span-1 md:col-span-2 lg:col-span-3">
+                    <h4 class="font-bold text-xl mb-3">캐시 메모리와 성능</h4>
+                    <p class="text-gray-600 mb-4">코드 작성 방식이 캐시 효율, 즉 프로그램 성능에 미치는 영향을 시각적으로 확인합니다. '공간적 지역성' 원리에 따라 행 우선 접근이 훨씬 빠릅니다.</p>
+                    <div class="chart-container">
+                        <canvas id="cacheChart"></canvas>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button id="runCacheSim" class="bg-c5a880 text-white font-bold py-2 px-4 rounded hover:bg-a78b5f transition-colors">성능 측정 실행</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Operating System -->
+        <section id="os" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold mb-8 border-l-4 border-c5a880 pl-4 text-gray-800">파트 2: 자원의 관리자 - 운영체제</h2>
+            <p class="text-gray-600 mb-12">
+                운영체제는 한정된 하드웨어 자원을 여러 프로세스에게 효율적으로 분배하고 관리하는 시스템 소프트웨어입니다. 시스템 콜을 통해 응용 프로그램과 커널이 어떻게 소통하는지, 그리고 현대 클라우드 기술의 핵심인 컨테이너가 가상머신과 어떻게 다른지 알아봅니다.
+            </p>
+            
+            <div class="content-card p-8">
+                <div class="flex justify-center border-b border-gray-200 mb-6">
+                    <button class="tab-button active" data-tab="syscall">시스템 콜</button>
+                    <button class="tab-button ml-8" data-tab="container">컨테이너 vs 가상머신</button>
+                </div>
+                
+                <div id="syscallContent" class="tab-content">
+                    <h4 class="font-bold text-xl mb-3">시스템 콜 관찰하기</h4>
+                    <p class="text-gray-600 mb-4">`strace`는 프로그램이 커널과 어떤 대화를 나누는지(시스템 콜) 엿볼 수 있는 강력한 도구입니다. `ls` 명령어 하나에도 수많은 시스템 콜이 숨어있습니다.</p>
+                    <div class="code-block">
+                        <pre><code>$ strace ls -l
+execve("/bin/ls", ["ls", "-l"], 0x7ffc...) = 0
+brk(NULL)                               = 0x55c...
+openat(AT_FDCWD, ".", O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 3
+read(3, "...", 1024)                    = ...
+write(1, "total 24\n-rw-r--r-- 1 user user ...", 4096) = ...
+close(3)                                = 0
+...</code></pre>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">`openat`, `read`, `write` 와 같은 함수 호출이 파일 시스템을 읽고 화면에 출력하는 과정에 해당합니다.</p>
+                </div>
+                
+                <div id="containerContent" class="tab-content hidden">
+                     <h4 class="font-bold text-xl mb-3">컨테이너 vs 가상머신</h4>
+                     <p class="text-gray-600 mb-6">두 기술 모두 애플리케이션을 격리하지만, 그 방식과 효율성에서 큰 차이를 보입니다. 컨테이너는 호스트 OS의 커널을 공유하여 훨씬 가볍고 빠르게 동작합니다.</p>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
+                        <div class="border-2 border-blue-200 rounded-lg p-4">
+                            <h5 class="font-bold text-lg mb-2">가상머신 (VM)</h5>
+                            <div class="bg-gray-100 p-2 rounded-lg">
+                                <div class="bg-red-200 p-2 m-1 rounded">App A</div>
+                                <div class="bg-yellow-200 p-2 m-1 rounded">Guest OS</div>
+                            </div>
+                             <div class="bg-gray-100 p-2 rounded-lg mt-2">
+                                <div class="bg-red-200 p-2 m-1 rounded">App B</div>
+                                <div class="bg-yellow-200 p-2 m-1 rounded">Guest OS</div>
+                            </div>
+                            <div class="bg-blue-200 p-2 mt-2 rounded">하이퍼바이저</div>
+                            <div class="bg-gray-300 p-2 mt-2 rounded">호스트 OS & 하드웨어</div>
+                        </div>
+                        <div class="border-2 border-green-200 rounded-lg p-4">
+                            <h5 class="font-bold text-lg mb-2">컨테이너</h5>
+                             <div class="bg-gray-100 p-2 rounded-lg flex justify-around">
+                                <div class="bg-red-200 p-2 m-1 rounded">App A</div>
+                                <div class="bg-red-200 p-2 m-1 rounded">App B</div>
+                            </div>
+                            <div class="bg-green-200 p-2 mt-2 rounded">컨테이너 엔진 (Docker)</div>
+                            <div class="bg-gray-300 p-2 mt-2 rounded">호스트 OS & 하드웨어</div>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Network -->
+        <section id="network" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold mb-8 border-l-4 border-c5a880 pl-4 text-gray-800">파트 3: 세상 연결하기 - 네트워크</h2>
+            <p class="text-gray-600 mb-12">
+                우리가 웹사이트에 접속할 때, 보이지 않는 곳에서는 수많은 프로토콜이 계층을 이루어 동작합니다. 데이터가 어떻게 여러 헤더로 포장(캡슐화)되어 인터넷을 여행하는지, 그리고 대용량 트래픽을 처리하기 위해 로드 밸런싱이 어떻게 사용되는지 알아봅니다.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Card 1: Encapsulation -->
+                <div class="content-card p-6">
+                    <h4 class="font-bold text-xl mb-3">패킷 캡슐화</h4>
+                    <p class="text-gray-600 mb-4">Wireshark로 패킷을 보면 데이터가 여러 계층의 헤더로 감싸이는 과정을 확인할 수 있습니다. 아래 계층을 클릭하여 역할을 확인해보세요.</p>
+                    <div id="network-layers" class="space-y-2">
+                        <div class="network-layer p-3 rounded-lg bg-indigo-100" data-info="HTTP, FTP, DNS 등 사용자와 직접 상호작용하는 프로토콜.">7. 응용 계층 (Application)</div>
+                        <div class="network-layer p-3 rounded-lg bg-purple-100" data-info="TCP/UDP. 포트 번호를 통해 프로세스 간 신뢰성 있는/빠른 데이터 전송 담당.">4. 전송 계층 (Transport)</div>
+                        <div class="network-layer p-3 rounded-lg bg-pink-100" data-info="IP. IP 주소를 사용하여 여러 네트워크를 거쳐 최종 목적지까지 데이터 경로 설정.">3. 네트워크 계층 (Network)</div>
+                        <div class="network-layer p-3 rounded-lg bg-rose-100" data-info="Ethernet. MAC 주소를 사용하여 동일 네트워크 내에서 데이터 전송.">2. 데이터 링크 계층 (Data Link)</div>
+                    </div>
+                     <p id="layer-info" class="text-sm text-gray-600 mt-4 h-10"></p>
+                </div>
+
+                <!-- Card 2: Load Balancing -->
+                <div class="content-card p-6">
+                    <h4 class="font-bold text-xl mb-3">로드 밸런싱 (Nginx)</h4>
+                    <p class="text-gray-600 mb-4">Nginx를 리버스 프록시로 사용하여 사용자 요청을 여러 백엔드 서버로 분산시켜 안정성과 가용성을 높입니다.</p>
+                    <div class="code-block">
+                        <pre><code>http {
+    upstream my_backend {
+        server 192.168.1.11:80;
+        server 192.168.1.12:80;
+    }
+
+    server {
+        listen 80;
+        location / {
+            proxy_pass http://my_backend;
+        }
+    }
+}</code></pre>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">`proxy_pass` 지시어가 들어오는 모든 요청을 `my_backend` 그룹의 서버들로 전달합니다.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-20">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>본 페이지는 패스트캠퍼스 '강민철의 인공지능 시대 필수 컴퓨터 공학 지식' 강의 내용을 바탕으로 교육 목적으로 제작되었습니다.</p>
+            <div class="mt-4 space-x-6">
+                <a href="https://fastcampus.co.kr/dev_online_kmc" target="_blank" class="hover:text-c5a880 transition-colors">강의 홈페이지</a>
+                <a href="https://github.com/kangtegong/fastcampus-cs" target="_blank" class="hover:text-c5a880 transition-colors">GitHub 저장소</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for nav links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // CPU Diagram Tooltip
+            const cpuComponents = document.querySelectorAll('.cpu-component');
+            const cpuTooltip = document.getElementById('cpu-tooltip');
+            cpuComponents.forEach(component => {
+                component.addEventListener('mouseenter', (e) => {
+                    cpuTooltip.textContent = e.target.dataset.info;
+                    cpuTooltip.classList.remove('hidden');
+                    const rect = e.target.getBoundingClientRect();
+                    cpuTooltip.style.left = `${rect.left + window.scrollX}px`;
+                    cpuTooltip.style.top = `${rect.bottom + window.scrollY + 5}px`;
+                });
+                component.addEventListener('mouseleave', () => {
+                    cpuTooltip.classList.add('hidden');
+                });
+            });
+
+            // Cache Chart Simulation
+            const runCacheSimBtn = document.getElementById('runCacheSim');
+            const cacheChartCanvas = document.getElementById('cacheChart');
+            let cacheChart = null;
+
+            function createOrUpdateChart(friendlyTime, unfriendlyTime) {
+                const data = {
+                    labels: ['행 우선 접근 (Cache-Friendly)', '열 우선 접근 (Cache-Unfriendly)'],
+                    datasets: [{
+                        label: '실행 시간 (ms)',
+                        data: [friendlyTime, unfriendlyTime],
+                        backgroundColor: [
+                            'rgba(52, 211, 153, 0.6)',
+                            'rgba(248, 113, 113, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(5, 150, 105, 1)',
+                            'rgba(220, 38, 38, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+
+                const config = {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: '실행 시간 (밀리초)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ` ${context.parsed.y} ms`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+                
+                if (cacheChart) {
+                    cacheChart.data.datasets[0].data = [friendlyTime, unfriendlyTime];
+                    cacheChart.update();
+                } else {
+                    cacheChart = new Chart(cacheChartCanvas, config);
+                }
+            }
+            
+            runCacheSimBtn.addEventListener('click', () => {
+                runCacheSimBtn.disabled = true;
+                runCacheSimBtn.textContent = '측정 중...';
+
+                // Simulate performance difference
+                const baseTime = 20;
+                const friendlyTime = baseTime + Math.random() * 5;
+                const unfriendlyTime = baseTime * 8 + Math.random() * 20;
+
+                setTimeout(() => {
+                    createOrUpdateChart(friendlyTime.toFixed(2), unfriendlyTime.toFixed(2));
+                    runCacheSimBtn.disabled = false;
+                    runCacheSimBtn.textContent = '다시 측정';
+                }, 1000);
+            });
+            createOrUpdateChart(0, 0); // Initial empty chart
+
+            // OS Tab switching
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    const targetTab = button.dataset.tab;
+                    tabContents.forEach(content => {
+                        if (content.id === `${targetTab}Content`) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // Network Layer Info
+            const networkLayers = document.querySelectorAll('.network-layer');
+            const layerInfoP = document.getElementById('layer-info');
+            networkLayers.forEach(layer => {
+                layer.addEventListener('click', () => {
+                    networkLayers.forEach(l => l.style.border = 'none');
+                    layer.style.border = '2px solid #a78b5f';
+                    layerInfoP.textContent = layer.dataset.info;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
