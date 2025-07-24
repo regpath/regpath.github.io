@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인포그래픽: AI 시대 필수 컴퓨터 공학 지식</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Energetic & Playful -->
+    <!-- Application Structure Plan: The infographic follows the narrative of the source document, structured into three core sections: Computer Architecture, Operating Systems, and Networks. This creates a logical learning path, starting from the hardware foundations and moving up the abstraction layers. The introduction uses large numbers and a donut chart to provide a high-level overview and hook the user. Each section then uses a mix of visualizations (bar charts for comparison, HTML/CSS diagrams for processes) and concise text to explain key concepts and practical exercises mentioned in the guide, such as cache performance and network encapsulation. This structure tells a coherent story, making the dense CS knowledge more digestible. -->
+    <!-- Visualization & Content Choices: 
+        - Data Point: Curriculum Overview (5 modules, 50 interview questions). Goal: Inform. Chosen Visualization: Large stat numbers and a Donut Chart (Chart.js). Justification: Quickly conveys the scope and scale of the course. Library/Method: HTML/Tailwind for stats, Chart.js/Canvas for the chart.
+        - Data Point: Instruction Cycle (Fetch-Decode-Execute). Goal: Organize. Chosen Visualization: A flowchart-style diagram. Justification: Clearly shows the process flow of the CPU's core operation. Library/Method: Structured HTML/CSS with Tailwind.
+        - Data Point: Cache-Friendly vs. Unfriendly Code Performance. Goal: Compare. Chosen Visualization: Bar Chart (Chart.js). Justification: Visually represents the dramatic performance difference, making the concept of data locality impactful. Library/Method: Chart.js/Canvas.
+        - Data Point: VM vs. Container Architecture. Goal: Compare. Chosen Visualization: Side-by-side diagrams. Justification: Highlights the key architectural difference (Guest OS vs. Shared Kernel) for easy comparison. Library/Method: Structured HTML/CSS with Tailwind.
+        - Data Point: Network Encapsulation (OSI/TCP-IP Layers). Goal: Organize. Chosen Visualization: A layered diagram. Justification: Effectively illustrates the concept of data being wrapped in headers at each network layer. Library/Method: Structured HTML/CSS with Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #FDF0D5; /* Cream */
+            color: #333333;
+        }
+        .header-bg {
+            background-color: #003049; /* Dark Blue */
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05), 0 6px 6px rgba(0,0,0,0.07);
+            border: 1px solid #EAEAEA;
+        }
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #D62828; /* Red */
+            line-height: 1;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #003049; /* Dark Blue */
+            border-bottom: 5px solid #F77F00; /* Orange */
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+        .flowchart-step {
+            background-color: #EAEAEA;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 700;
+            position: relative;
+        }
+        .flowchart-arrow {
+            font-size: 2rem;
+            color: #F77F00; /* Orange */
+            line-height: 1;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+         @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <header class="header-bg text-white p-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-black mb-2">인공지능 시대, 컴퓨터 공학은 왜 필수일까?</h1>
+        <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-300">강민철의 '필수 컴퓨터 공학 지식' 가이드를 한 장으로 요약정리!</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-6 md:p-12">
+
+        <!-- Introduction Section -->
+        <section class="mb-20">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="card flex flex-col justify-center items-center">
+                    <span class="stat-number">5</span>
+                    <p class="text-2xl font-bold mt-2 text-gray-700">핵심 모듈</p>
+                    <p class="text-gray-500">컴퓨터 구조부터 데이터베이스까지</p>
+                </div>
+                <div class="card flex flex-col justify-center items-center">
+                    <span class="stat-number">50+</span>
+                    <p class="text-2xl font-bold mt-2 text-gray-700">기술 면접 질문</p>
+                    <p class="text-gray-500">실전 대비를 위한 최종 관문</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-4 text-gray-700">학습 영역 분포</h3>
+                    <div class="chart-container h-64 md:h-auto">
+                        <canvas id="curriculumChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: Computer Architecture -->
+        <section class="mb-20">
+            <h2 class="section-title mb-10">PART 1. 컴퓨터 구조: 모든 계산의 시작</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-4">CPU의 명령어 사이클</h3>
+                    <p class="mb-6 text-gray-600">CPU는 '인출-해독-실행' 과정을 끊임없이 반복하며 명령을 처리합니다. 이는 컴퓨터의 가장 기본적인 동작 원리입니다.</p>
+                    <div class="flex items-center justify-around">
+                        <div class="flowchart-step">인출<br>(Fetch)</div>
+                        <div class="flowchart-arrow">→</div>
+                        <div class="flowchart-step">해독<br>(Decode)</div>
+                        <div class="flowchart-arrow">→</div>
+                        <div class="flowchart-step">실행<br>(Execute)</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-4">캐시 메모리의 힘: 코드 최적화</h3>
+                    <p class="mb-6 text-gray-600">데이터 '지역성'을 활용하는 캐시 친화적 코드는 그렇지 않은 코드보다 압도적으로 빠릅니다. 이 차이를 직접 확인해보세요.</p>
+                    <div class="chart-container">
+                        <canvas id="cacheChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Operating System -->
+        <section class="mb-20">
+            <h2 class="section-title mb-10">PART 2. 운영체제: 자원의 효율적 관리자</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-4">시스템 콜: 커널과의 대화</h3>
+                    <p class="mb-6 text-gray-600">우리가 실행하는 모든 프로그램은 운영체제(커널)의 도움이 필요합니다. 이 통신 창구가 바로 '시스템 콜'입니다. `strace` 명령어로 이 대화를 엿볼 수 있습니다.</p>
+                    <div class="bg-gray-800 text-white p-4 rounded-lg font-mono text-sm">
+                        <p>&gt; strace ls -l</p>
+                        <p class="text-green-400">execve("/bin/ls", ...)</p>
+                        <p class="text-yellow-400">openat(AT_FDCWD, ".", ...)</p>
+                        <p class="text-cyan-400">write(1, "total 24...", ...)</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-4">컨테이너 vs 가상머신</h3>
+                    <p class="mb-6 text-gray-600">두 기술 모두 격리된 환경을 제공하지만, 컨테이너는 OS 커널을 공유하여 훨씬 가볍고 효율적입니다.</p>
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div>
+                            <p class="font-bold mb-2">가상머신 (VM)</p>
+                            <div class="border-2 border-dashed border-red-400 p-2 rounded-lg">
+                                <div class="bg-red-100 p-1 rounded mb-1">App</div>
+                                <div class="bg-red-200 p-1 rounded font-semibold">Guest OS</div>
+                            </div>
+                            <div class="bg-gray-300 p-1 mt-1 rounded">하이퍼바이저</div>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2">컨테이너</p>
+                            <div class="border-2 border-dashed border-blue-400 p-2 rounded-lg">
+                                <div class="bg-blue-100 p-1 rounded">App</div>
+                            </div>
+                            <div class="bg-gray-300 p-1 mt-1 rounded">컨테이너 엔진</div>
+                        </div>
+                        <div class="col-span-2 bg-gray-400 text-white p-2 mt-1 rounded font-semibold">Host OS & 하드웨어</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Network -->
+        <section>
+            <h2 class="section-title mb-10">PART 3. 네트워크: 세상을 연결하는 기술</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-4">데이터 캡슐화 과정</h3>
+                    <p class="mb-6 text-gray-600">데이터는 인터넷을 통해 이동할 때, 각 네트워크 계층을 지나며 헤더 정보로 포장(캡슐화)됩니다. 이는 마치 소포를 보내는 과정과 같습니다.</p>
+                    <div class="space-y-2 text-center font-bold">
+                        <div class="p-3 bg-orange-200 rounded-lg">HTTP 데이터</div>
+                        <div class="p-3 bg-yellow-200 rounded-lg"><span class="bg-yellow-400 px-2 py-1 rounded-l-md">TCP 헤더</span> + [이전 계층]</div>
+                        <div class="p-3 bg-green-200 rounded-lg"><span class="bg-green-400 px-2 py-1 rounded-l-md">IP 헤더</span> + [이전 계층]</div>
+                        <div class="p-3 bg-blue-200 rounded-lg"><span class="bg-blue-400 px-2 py-1 rounded-l-md">이더넷 헤더</span> + [이전 계층]</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-4">TCP 혼잡 제어</h3>
+                    <p class="mb-6 text-gray-600">TCP는 네트워크가 혼잡할 때 데이터 전송량을 동적으로 조절하여 인터넷의 안정성을 유지합니다. 이 과정은 '느린 시작'과 '혼잡 회피' 단계로 이루어집니다.</p>
+                    <div class="chart-container">
+                        <canvas id="congestionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-20 py-8 text-center bg-gray-100">
+        <p class="text-gray-600">이 인포그래픽은 '강민철의 인공지능 시대 필수 컴퓨터 공학 지식' 가이드를 기반으로 제작되었습니다.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const FONT_COLOR = '#333333';
+            const BORDER_COLOR = '#DDDDDD';
+            
+            Chart.defaults.color = FONT_COLOR;
+            Chart.defaults.borderColor = BORDER_COLOR;
+            Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
+
+            const processLabel = (label) => {
+                if (label.length > 16) {
+                    const words = label.split(' ');
+                    const lines = [];
+                    let currentLine = '';
+                    for (const word of words) {
+                        if ((currentLine + word).length > 16) {
+                            lines.push(currentLine.trim());
+                            currentLine = '';
+                        }
+                        currentLine += word + ' ';
+                    }
+                    lines.push(currentLine.trim());
+                    return lines;
+                }
+                return label;
+            };
+            
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                  return label.join(' ');
+                }
+                return label;
+            };
+
+            // Curriculum Chart (Donut)
+            const curriculumCtx = document.getElementById('curriculumChart').getContext('2d');
+            new Chart(curriculumCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['컴퓨터 구조', '운영체제', '네트워크', '시스템 프로그래밍', '데이터베이스'],
+                    datasets: [{
+                        label: '학습 분량',
+                        data: [25, 25, 20, 15, 15],
+                        backgroundColor: [
+                            '#003049', // Dark Blue
+                            '#D62828', // Red
+                            '#F77F00', // Orange
+                            '#FCBF49', // Yellow
+                            '#EAE2B7'  // Light Yellow
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: { title: tooltipTitleCallback }
+                        }
+                    }
+                }
+            });
+
+            // Cache Performance Chart (Bar)
+            const cacheCtx = document.getElementById('cacheChart').getContext('2d');
+            new Chart(cacheCtx, {
+                type: 'bar',
+                data: {
+                    labels: [processLabel('캐시 친화적 코드 (행 우선)'), processLabel('캐시 비친화적 코드 (열 우선)')],
+                    datasets: [{
+                        label: '실행 시간 (ms)',
+                        data: [58, 850],
+                        backgroundColor: ['#003049', '#D62828'],
+                        barPercentage: 0.6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: { display: true, text: '실행 시간 (ms)' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: { title: tooltipTitleCallback }
+                        }
+                    }
+                }
+            });
+
+            // TCP Congestion Control Chart (Line)
+            const congestionCtx = document.getElementById('congestionChart').getContext('2d');
+            new Chart(congestionCtx, {
+                type: 'line',
+                data: {
+                    labels: ['1', '2', '3', '4', '5 (손실)', '6', '7', '8', '9', '10'],
+                    datasets: [{
+                        label: '혼잡 윈도우(cwnd)',
+                        data: [1, 2, 4, 8, 4, 5, 6, 7, 8, 9],
+                        borderColor: '#D62828',
+                        backgroundColor: 'rgba(214, 40, 40, 0.1)',
+                        fill: true,
+                        tension: 0.1
+                    }, {
+                        label: '임계값(ssthresh)',
+                        data: [8, 8, 8, 8, 4, 4, 4, 4, 4, 4],
+                        borderColor: '#F77F00',
+                        borderDash: [5, 5],
+                        fill: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: '윈도우 크기 (MSS)' }
+                        },
+                        x: {
+                            title: { display: true, text: '시간 (RTT)' }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: { title: tooltipTitleCallback }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
