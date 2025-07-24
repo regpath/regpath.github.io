@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강민철의 '인공지능 시대 필수 컴퓨터 공학 지식' 독학 가이드</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+       .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #212529;
+            line-height: 1.3;
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+        }
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        h2 {
+            font-size: 2rem;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 0.4rem;
+        }
+        h3 {
+            font-size: 1.75rem;
+        }
+        h4 {
+            font-size: 1.5rem;
+        }
+        p {
+            margin-bottom: 1rem;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f1f3f5;
+            font-weight: 600;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #f8f9fa;
+        }
+        pre {
+            background-color: #212529;
+            color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.875rem;
+        }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+        blockquote {
+            border-left: 4px solid #ced4da;
+            padding-left: 1rem;
+            margin-left: 0;
+            color: #6c757d;
+        }
+        ul, ol {
+            padding-left: 1.5rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>강민철의 '인공지능 시대 필수 컴퓨터 공학 지식' 독학 가이드</h1>
+
+        <h2>서론: 컴퓨터 공학 지식의 체계적인 독학을 위한 안내서</h2>
+        <p>본 가이드는 패스트캠퍼스의 '강민철의 인공지능 시대 필수 컴퓨터 공학 지식' 강의를 독학하는 학습자를 위해 설계된 종합 학습 자료입니다. 이 자료는 단순히 강의를 대체하는 것이 아니라, 이론적 기초부터 현대 AI 및 클라우드 시대의 실무적 적용까지 아우르는 체계적인 학습 경로를 제공하는 것을 목표로 합니다. 컴퓨터 공학의 지식은 개별적으로 존재하지 않고, 하드웨어의 가장 낮은 수준에서부터 운영체제, 네트워크, 그리고 응용 프로그램에 이르기까지 서로 긴밀하게 연결되어 있습니다. 본 가이드는 이러한 연결고리를 명확히 하여 학습자가 지식을 유기적으로 구축할 수 있도록 돕습니다.</p>
+
+        <h3>본 가이드 활용법</h3>
+        <p>효과적인 학습을 위해 다음의 단계를 따르기를 권장합니다.</p>
+        <ol>
+            <li><strong>체계적인 순서 준수:</strong> 본 가이드는 컴퓨터구조부터 시작하여 운영체제, 네트워크 순으로 구성되어 있습니다. 각 파트의 개념은 다음 파트의 기초가 되므로, 순서대로 학습하는 것이 매우 중요합니다.</li>
+            <li><strong>모든 학습 자료 활용:</strong> 아래에 제시된 '마스터 리소스 맵'은 각 학습 목표를 달성하기 위한 핵심적인 나침반 역할을 합니다. 본문의 개념 설명, GitHub의 실습 코드, 그리고 엄선된 보충 영상 자료들을 유기적으로 넘나들며 학습 효과를 극대화해야 합니다.</li>
+            <li><strong>실습 중심의 학습:</strong> 컴퓨터 과학은 이론만으로 완성되지 않습니다. 각 파트에 포함된 <code>[실습]</code> 섹션은 학습 과정에서 가장 중요한 부분입니다. 코드를 직접 실행하고, 결과를 분석하며, 문제를 해결하는 과정을 통해 이론을 체화해야 합니다.</li>
+        </ol>
+
+        <h3>'AI 시대'라는 맥락의 중요성</h3>
+        <p>이 강의는 전통적인 컴퓨터 공학(CS) 지식이 오늘날 왜 더욱 중요해졌는지를 'AI 시대'라는 맥락 속에서 조명합니다.[1] 예를 들어, 과거에는 전문가의 영역으로 여겨졌던 GPU 구조에 대한 이해는 이제 머신러닝 프레임워크를 다루는 모든 개발자에게 필수적인 소양이 되었습니다.[2] 본 가이드는 이러한 시대적 요구를 반영하여, 고전적인 CS 이론이 현대 기술과 어떻게 접목되는지를 명확하게 설명할 것입니다.</p>
+
+        <h2>마스터 리소스 맵: 커리큘럼 및 학습 자료 통합표</h2>
+        <p>독학 과정에서 가장 큰 어려움 중 하나는 방대한 정보 속에서 체계적인 학습 경로를 찾는 것입니다. 아래의 표는 강의의 전체 커리큘럼과 각 주제에 필요한 학습 자료(GitHub 코드, 공식 영상, 심화 학습 영상)를 하나로 통합하여 명확하고 실행 가능한 학습 경로를 제시합니다. 이 표를 학습의 대시보드로 활용하여, 정보 탐색에 드는 시간을 줄이고 학습 자체에 집중할 수 있습니다.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>모듈</th>
+                    <th>챕터/주제</th>
+                    <th>핵심 개념 요약</th>
+                    <th>GitHub 위치 (추정)</th>
+                    <th>공식 영상 (빠른 시작)</th>
+                    <th>추천 심화 학습 자료</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>1. 컴퓨터구조</strong></td>
+                    <td>CH02. 명령어</td>
+                    <td>소스코드가 CPU가 이해하는 기계어 명령으로 변환되는 과정 이해</td>
+                    <td><code>arch/</code></td>
+                    <td><a href="https://www.youtube.com/watch?v=PbfhJEIRKJo" target="_blank">컴퓨터구조</a></td>
+                    <td>(<a href="http://www.kocw.net/home/cview.do?mty=p&kemId=1389263" target="_blank">http://www.kocw.net/home/cview.do?mty=p&kemId=1389263</a>)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>CH04. CPU의 작동 원리</td>
+                    <td>명령어 사이클(Fetch-Decode-Execute)과 인터럽트 처리 과정</td>
+                    <td><code>arch/</code></td>
+                    <td><a href="https://www.youtube.com/watch?v=PbfhJEIRKJo" target="_blank">컴퓨터구조</a></td>
+                    <td><a href="https://www.youtube.com/watch?v=sQpnRwI3EoQ" target="_blank">명령어 사이클 상세 분석</a> [3]</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>CH05. 캐시 메모리</td>
+                    <td>저장장치 계층 구조와 캐시 메모리의 지역성 원리 이해</td>
+                    <td><code>arch/</code></td>
+                    <td><a href="https://www.youtube.com/watch?v=PbfhJEIRKJo" target="_blank">컴퓨터구조</a></td>
+                    <td>(<a href="http://www.kocw.net/home/cview.do?mty=p&kemId=1349152" target="_blank">http://www.kocw.net/home/cview.do?mty=p&kemId=1349152</a>)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>CH07. GPU</td>
+                    <td>병렬성과 동시성의 차이 및 GPU의 SIMD 구조 이해</td>
+                    <td><code>arch/</code></td>
+                    <td><a href="https://www.youtube.com/watch?v=PbfhJEIRKJo" target="_blank">컴퓨터구조</a></td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td><strong>2. 운영체제</strong></td>
+                    <td>CH01. 시스템 콜</td>
+                    <td>사용자 프로그램이 커널의 서비스를 요청하는 인터페이스 관찰</td>
+                    <td><code>os/</code></td>
+                    <td><a href="https://www.youtube.com/watch?v=9O9fEpKD4uI" target="_blank">운영체제</a></td>
+                    <td><a href="https://www.youtube.com/watch?v=mBfurelWwPQ" target="_blank">strace 사용법</a> [4]</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>CH02. 프로세스와 스레드</td>
+                    <td>프로세스 생성, 상태 변화 및 스레드와의 차이점 이해</td>
+                    <td><code>os/</code></td>
+                    <td><a href="https://www.youtube.com/watch?v=9O9fEpKD4uI" target="_blank">운영체제</a></td>
+                    <td>(<a href="http://www.kocw.net/home/m/cview.do?cid=3646706b4347ef09" target="_blank">http://www.kocw.net/home/m/cview.do?cid=3646706b4347ef09</a>)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>CH04. 동기화와 교착상태</td>
+                    <td>경쟁 상태(Race Condition)와 이를 해결하기 위한 뮤텍스, 세마포어</td>
+                    <td><code>os/</code></td>
+                    <td><a href="https://www.youtube.com/watch?v=9O9fEpKD4uI" target="_blank">운영체제</a></td>
+                    <td><a href="https://www.youtube.com/watch?v=EnU7ycN0H24" target="_blank">세마포어 상세 설명</a> [5]</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>CH07. 컨테이너</td>
+                    <td>컨테이너 기술의 원리(네임스페이스, cgroups)와 가상머신과의 비교</td>
+                    <td><code>os/</code></td>
+                    <td><a href="https://www.youtube.com/watch?v=9O9fEpKD4uI" target="_blank">운영체제</a></td>
+                    <td><a href="https://www.youtube.com/playlist?list=PLtUgHNmvcs6rS5aNCRIZtVcyk3gRX2iOd" target="_blank">도커와 컨테이너 개념</a> [6]</td>
+                </tr>
+                <tr>
+                    <td><strong>3. 네트워크</strong></td>
+                    <td>CH01. 네트워크 개요</td>
+                    <td>프로토콜, 캡슐화 개념 및 Wireshark를 통한 패킷 분석</td>
+                    <td><code>net/</code></td>
+                    <td><a href="https://www.youtube.com/watch?v=yIK53Edt40w" target="_blank">네트워크</a></td>
+                    <td>(<a href="https://velog.io/@protect-me/%EC%BB%B4%ED%93%A8%ED%84%B0-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC" target="_blank">https://velog.io/@protect-me/%EC%BB%B4%ED%93%A8%ED%84%B0-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC</a>) [7]</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>CH04. 전송 계층</td>
+                    <td>TCP의 3-way handshake, 흐름 제어, 혼잡 제어 메커니즘</td>
+                    <td><code>net/</code></td>
+                    <td><a href="https://www.youtube.com/watch?v=yIK53Edt40w" target="_blank">네트워크</a></td>
+                    <td>(<a href="https://www.youtube.com/watch?v=R2dWNQTABcI" target="_blank">https://www.youtube.com/watch?v=R2dWNQTABcI</a>) [8]</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>CH05. 응용 계층</td>
+                    <td>HTTP, DNS, 쿠키, 캐시 등 웹 통신의 핵심 프로토콜</td>
+                    <td><code>net/</code></td>
+                    <td><a href="https://www.youtube.com/watch?v=yIK53Edt40w" target="_blank">네트워크</a></td>
+                    <td>(<a href="https://velog.io/@khs0415p/series/KOCW-%EC%BB%B4%ED%93%A8%ED%84%B0%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%EC%9D%B4%EC%84%9D%EB%B3%B5-%EA%B5%90%EC%88%98%EB%8B%98" target="_blank">https://velog.io/@khs0415p/series/KOCW-%EC%BB%B4%ED%93%A8%ED%84%B0%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%EC%9D%B4%EC%84%9D%EB%B3%B5-%EA%B5%90%EC%88%98%EB%8B%98</a>) [9]</td>
+                </tr>
+                <tr>
+                    <td><strong>4. 시스템 프로그래밍</strong></td>
+                    <td>CH02. 파일 다루기</td>
+                    <td>파일 디스크립터와 파일 포인터의 차이, 파일 입출력 시스템 콜</td>
+                    <td><code>sys/</code></td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td><strong>5. 데이터베이스</strong></td>
+                    <td>CH02. 데이터베이스 관리</td>
+                    <td>SQL을 이용한 데이터 생성, 조회, 수정, 삭제(CRUD)</td>
+                    <td><code>sql/</code></td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>CH04. NoSQL</td>
+                    <td>MongoDB, Redis와 같은 비관계형 데이터베이스의 특징과 사용법</td>
+                    <td><code>sql/</code></td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>파트 1: 계산의 기초 - 컴퓨터 구조</h2>
+        <p>컴퓨터 구조 파트는 강의의 전체적인 흐름을 보여주는 중요한 시작점입니다. 커리큘럼은 추상적인 '명령어'에서 시작하여 구체적인 하드웨어인 'CPU', '메모리', 그리고 'GPU'로 점차 파고드는 'zoom-in' 방식을 채택하고 있습니다.[2] 이는 컴퓨터가 실제로 동작하는 방식, 즉 물리적인 하드웨어가 논리적인 명령어를 실행하는 과정을 그대로 따라가는 효과적인 학습 전략입니다. 본 가이드 역시 이러한 흐름에 맞춰 각 추상화 계층이 어떻게 그 아래 계층을 기반으로 구축되는지 명확히 설명할 것입니다. 특히 AI 시대의 핵심인 GPU와 CUDA 프로그래밍의 포함은 이 강의가 가진 현대적인 관점을 잘 보여줍니다.[1]</p>
+
+        <h3>CH02. 명령어 (Instructions)</h3>
+        <h4>개념의 핵심</h4>
+        <p>컴퓨터 과학의 가장 근본적인 질문은 "우리가 작성한 코드를 컴퓨터는 어떻게 이해하는가?"입니다. 이 챕터는 C나 Python과 같은 고급 언어로 작성된 소스코드가 컴파일러와 어셈블러를 거쳐 CPU가 직접 해독하고 실행할 수 있는 0과 1의 나열, 즉 기계어 명령어로 변환되는 여정을 추적합니다. 명령어는 연산의 종류를 나타내는 '연산 부호(Opcode)'와 연산에 사용될 데이터나 그 위치를 나타내는 '오퍼랜드(Operand)'로 구성됩니다.</p>
+        <h4>[실습] 컴파일 - 명령어 관찰하기</h4>
+        <ul>
+            <li><strong>목표:</strong> 간단한 C 프로그램을 컴파일하여 생성된 어셈블리 코드를 직접 눈으로 확인하고, 소스코드와 어떻게 대응되는지 분석합니다.</li>
+            <li><strong>예상 코드:</strong> <code>kangtegong/fastcampus-cs</code> 저장소의 <code>arch/</code> 디렉토리에는 <code>add.c</code>와 같이 간단한 연산을 수행하는 C 코드 파일이 존재할 것으로 예상됩니다.[10]</li>
+            <li><strong>실습 과정:</strong>
+                <ol>
+                    <li>다음과 같은 간단한 C 코드를 작성합니다 (<code>add.c</code>).
+<pre><code>int main() {
+    int a = 10;
+    int b = 20;
+    int c = a + b;
+    return c;
+}</code></pre>
+                    </li>
+                    <li>터미널에서 GCC 컴파일러를 사용하여 어셈블리 파일을 생성합니다. <code>-S</code> 옵션은 컴파일 과정에서 어셈블리 코드 생성까지만 진행하도록 합니다.
+<pre><code>gcc -S -o add.s add.c</code></pre>
+                    </li>
+                    <li>생성된 <code>add.s</code> 파일을 텍스트 편집기로 열어 내용을 확인합니다. 파일 내에서 <code>main:</code> 레이블 아래의 어셈블리 명령어들(<code>movl</code>, <code>addl</code>, <code>ret</code> 등)이 C 코드의 변수 할당과 덧셈 연산에 어떻게 대응되는지 관찰합니다. 이 과정을 통해 고급 언어의 구문이 실제 하드웨어가 이해하는 저수준 명령어로 번역되는 구체적인 모습을 파악할 수 있습니다.</li>
+                </ol>
+            </li>
+        </ul>
+
+        <h3>CH04. CPU</h3>
+        <h4>개념의 핵심</h4>
+        <p>CPU는 컴퓨터의 '두뇌'로서, 모든 연산과 제어를 담당합니다. 이 챕터에서는 CPU의 핵심 구성 요소인 산술논리연산장치(ALU), 제어장치(Control Unit), 그리고 데이터를 임시로 저장하는 여러 레지스터들의 역할을 배웁니다.[2] 이 챕터의 정수는 바로 <strong>명령어 사이클(Instruction Cycle)</strong>입니다.</p>
+        <h4>심화 학습 - 명령어 사이클</h4>
+        <ul>
+            <li><strong>강의 내용:</strong> 강민철 강사의 공식 유튜브 영상은 명령어 사이클을 '인출(Fetch) - 해독(Decode) - 실행(Execute)'이라는 큰 틀에서 간결하게 소개하여 기본 개념을 잡는 데 도움을 줍니다.[11]</li>
+            <li><strong>학문적 접근:</strong> 더 깊은 이해를 위해서는 보충 자료를 활용하는 것이 좋습니다. 다른 대학 강의 영상들은 이 사이클을 클럭 주기($T_0, T_1, T_2,...$)와 연관된 마이크로 연산(micro-operation) 단위로 세분화하여 설명합니다.[3, 12] 예를 들어, 메모리에서 데이터를 가져오는 <code>LOAD</code> 명령어, ALU 연산을 수행하는 <code>ADD</code> 명령어, 프로그램의 실행 흐름을 바꾸는 <code>JUMP</code> 명령어는 각각 다른 실행 경로를 가지며, 완료되기까지 필요한 클럭 사이클의 수도 다릅니다.[3] 이러한 미시적인 관점은 CPU 성능 최적화 기법인 파이프라이닝(Pipelining)과 비순차적 명령어 처리(Out-of-Order Execution)의 원리를 이해하는 데 필수적인 배경지식이 됩니다.</li>
+        </ul>
+
+        <h3>CH05. 메인 메모리와 캐시 메모리</h3>
+        <h4>[실습] 캐시 친화적 코드</h4>
+        <ul>
+            <li><strong>목표:</strong> 코드 작성 방식에 따라 캐시 메모리의 효율이 어떻게 달라지는지, 그리고 이것이 프로그램 전체 성능에 얼마나 큰 영향을 미치는지 직접 측정하고 이해합니다.</li>
+            <li><strong>예상 코드:</strong> <code>arch/</code> 디렉토리에는 2차원 배열을 행 우선(row-major) 방식과 열 우선(column-major) 방식으로 순회하는 C 또는 C++ 코드가 있을 것입니다.[10]</li>
+            <li><strong>실습 과정:</strong>
+                <ol>
+                    <li><strong>개념 이해:</strong> 먼저 캐시의 '공간적 지역성(Spatial Locality)' 원리를 이해해야 합니다. 메모리에서 특정 데이터를 읽어올 때, 그 주변의 데이터도 함께 캐시에 가져오는 원리입니다. 따라서 메모리에 인접하게 저장된 데이터에 연속적으로 접근하면 캐시 히트(Cache Hit) 확률이 높아져 성능이 향상됩니다.</li>
+                    <li><strong>코드 실행 및 분석:</strong> 2차원 배열은 메모리에 행 우선 순서로 저장됩니다. 따라서 반복문이 배열을 행 단위로 순회(cache-friendly)할 때와 열 단위로 순회(cache-unfriendly)할 때의 실행 시간을 <code>time</code> 명령어로 측정합니다 (<code>time./cache_demo</code>).</li>
+                    <li><strong>결과 확인:</strong> 행 우선 접근 방식이 열 우선 방식보다 월등히 빠른 것을 확인할 수 있습니다. 이는 열 우선 접근 시 메모리의 불연속적인 위치에 계속 접근하게 되어 캐시 미스(Cache Miss)가 빈번하게 발생하기 때문입니다. 이 실습은 눈에 보이지 않는 하드웨어의 동작 원리가 소프트웨어 성능에 미치는 막대한 영향을 체감하게 해주는 훌륭한 예시입니다.</li>
+                </ol>
+            </li>
+        </ul>
+
+        <h3>CH07. GPU</h3>
+        <h4>개념의 핵심</h4>
+        <p>이 챕터는 전통적인 컴퓨터 구조와 현대 AI 기술 사이의 다리를 놓습니다. 먼저 병렬성(Parallelism, 여러 작업을 물리적으로 동시에 처리)과 동시성(Concurrency, 여러 작업을 번갈아 처리하여 동시에 처리되는 것처럼 보이게 함)의 차이를 명확히 하고, GPU가 수천 개의 코어를 활용하여 단일 명령을 다수의 데이터에 동시에 적용하는 SIMD(Single Instruction, Multiple Data) 방식의 대규모 병렬 처리 장치임을 설명합니다.[2]
+        </p>
+        <h4>[실습] CUDA GPU 프로그래밍</h4>
+        <ul>
+            <li><strong>목표:</strong> GPU에서 코드를 실행하는 CUDA 프로그래밍의 기초를 맛봅니다.</li>
+            <li><strong>예상 코드:</strong> <code>arch/</code> 디렉토리에는 간단한 벡터 덧셈을 수행하는 CUDA C 코드(<code>.cu</code> 확장자 파일)가 포함되어 있을 가능성이 높습니다.</li>
+            <li><strong>실습 과정:</strong>
+                <ol>
+                    <li><strong>핵심 개념:</strong> CUDA 프로그래밍의 기본 요소인 커널 함수(<code>__global__</code>), 스레드 계층 구조(Grid > Block > Thread), 그리고 CPU 메모리(Host)와 GPU 메모리(Device) 간의 데이터 전송(<code>cudaMalloc</code>, <code>cudaMemcpy</code>) 개념을 학습합니다.</li>
+                    <li><strong>코드 분석 및 컴파일:</strong> 제공된 벡터 덧셈 예제 코드를 분석합니다. C언어와 유사하지만, <code>&lt;&lt;&lt;...&gt;&gt;&gt;</code> 구문을 통해 수많은 스레드를 생성하여 병렬로 실행시키는 점이 다릅니다. 이 코드를 NVIDIA의 CUDA 컴파일러인 <code>nvcc</code>를 사용하여 컴파일합니다.</li>
+                    <li><strong>실행:</strong> 컴파일된 프로그램을 실행하면, 간단한 덧셈 연산이 수천 개의 GPU 코어에 의해 동시에 처리되는 것을 확인할 수 있습니다. 이는 대규모 행렬 연산이 필수적인 딥러닝에서 GPU가 왜 필수적인지를 직관적으로 보여줍니다.</li>
+                </ol>
+            </li>
+        </ul>
+
+        <h2>파트 2: 기계 관리 - 운영체제</h2>
+        <p>운영체제 파트는 그 핵심 역할인 프로세스 관리, 메모리 관리, 파일 시스템 관리를 중심으로 구성됩니다. 이 강의의 교육 방식에서 특히 주목할 점은, 이론 설명에 앞서 <code>strace</code>라는 실용적인 도구를 먼저 소개한다는 것입니다.[2] 이는 사용자 프로그램과 커널 사이에 끊임없이 오가는 대화, 즉 '시스템 콜'을 학습자에게 직접 보여줌으로써 운영체제라는 추상적인 개념을 구체적이고 관찰 가능한 현실로 만듭니다. 이러한 "실습 우선" 접근법은 학습의 몰입도를 높이고, 이후에 배우는 <code>fork</code>, <code>open</code>, <code>read</code>와 같은 개념들을 <code>strace</code>를 통해 직접 확인하며 깊이 있게 이해하도록 돕습니다.</p>
+
+        <h3>CH01. 오리엔테이션</h3>
+        <h4>[실습] strace 기반 시스템 콜 관찰하기</h4>
+        <ul>
+            <li><strong>목표:</strong> 리눅스 환경에서 특정 프로그램이 실행될 때 어떤 시스템 콜을 호출하는지 추적하는 방법을 익힙니다.</li>
+            <li><strong>실습 과정:</strong>
+                <ol>
+                    <li>터미널에서 <code>ls -l</code> 이라는 간단한 명령어를 <code>strace</code>를 통해 실행합니다.
+<pre><code>strace ls -l</code></pre>
+                    </li>
+                    <li>화면에 출력되는 수많은 텍스트가 바로 <code>ls</code> 프로그램이 커널에 요청하는 서비스, 즉 시스템 콜의 목록입니다. 이 출력을 분석하며 주요 시스템 콜의 역할을 파악합니다.
+                        <ul>
+                            <li><code>execve</code>: <code>ls</code>라는 새로운 프로그램을 실행하기 위해 호출됩니다.</li>
+                            <li><code>brk</code>: 프로그램 실행에 필요한 메모리를 커널로부터 할당받습니다.</li>
+                            <li><code>openat</code>, <code>read</code>: 현재 디렉토리와 그 안의 파일 정보를 읽기 위해 호출됩니다.</li>
+                            <li><code>write</code>: 파일 목록을 화면(표준 출력)에 출력하기 위해 호출됩니다.</li>
+                        </ul>
+                    </li>
+                    <li><code>strace</code>의 유용한 옵션들(<code>-o</code>로 결과 파일 저장, <code>-p</code>로 실행 중인 프로세스에 연결, <code>-e</code>로 특정 시스템 콜만 필터링)을 추가 자료를 통해 학습하면 [4, 13, 14], 디버깅 및 시스템 분석에 매우 강력한 도구로 활용할 수 있습니다.</li>
+                </ol>
+            </li>
+        </ul>
+
+        <h3>CH04. 동기화와 교착상태</h3>
+        <h4>개념의 핵심</h4>
+        <p>이 챕터는 운영체제 학습에서 가장 어렵지만 중요한 부분 중 하나입니다. 여러 스레드가 공유 자원에 동시에 접근할 때 발생하는 문제인 '경쟁 상태(Race Condition)'를 소개하고, 이를 해결하기 위한 핵심 도구인 뮤텍스(Mutex)와 세마포어(Semaphore)를 다룹니다.</p>
+        <h4>심화 학습 - 뮤텍스와 세마포어</h4>
+        <ul>
+            <li><strong>강의 내용:</strong> 강의에서는 두 동기화 기법의 개념과 사용법을 다룹니다.[2]</li>
+            <li><strong>학문적 접근:</strong> 보충 영상을 통해 더 명확한 구분을 할 수 있습니다. 뮤텍스는 상호 배제(Mutual Exclusion)를 위한 도구로, 오직 하나의 스레드만 임계 구역(Critical Section)에 진입하도록 허용하는 '열쇠'와 같습니다. 소유권 개념이 있어, 열쇠를 획득한 스레드만이 반납할 수 있습니다. 반면 세마포어는 정수 카운터를 사용하는 더 일반적인 '신호' 메커니즘입니다.[5, 15] 카운팅 세마포어는 예를 들어, N개의 자원이 있을 때 최대 N개의 스레드가 동시에 접근하도록 허용할 수 있습니다. 이는 화장실이 하나뿐인 상황(뮤텍스)과, 자전거가 N대 있는 공유 자전거 대여소(세마포어)의 차이로 비유할 수 있습니다.</li>
+        </ul>
+        <h4>[실습] 생산자와 소비자 문제</h4>
+        <ul>
+            <li><strong>목표:</strong> 동기화 프리미티브를 사용하여 고전적인 동시성 문제인 '생산자-소비자 문제'를 해결하는 코드를 작성합니다.</li>
+            <li><strong>예상 코드:</strong> <code>os/</code> 디렉토리에는 C/C++(pthreads) 또는 Python으로 작성된 생산자-소비자 패턴 구현 코드가 있을 것입니다.[10, 16]</li>
+            <li><strong>실습 과정:</strong>
+                <ol>
+                    <li><strong>문제 정의:</strong> 한 스레드(생산자)는 데이터를 생성하여 공유 버퍼에 넣고, 다른 스레드(소비자)는 버퍼에서 데이터를 꺼내 처리하는 시나리오입니다.</li>
+                    <li><strong>문제 발생:</strong> 먼저 동기화 장치 없이 코드를 실행해 봅니다. 생산자와 소비자가 버퍼 인덱스를 동시에 조작하여 데이터가 유실되거나 덮어쓰이는 경쟁 상태가 발생하는 것을 관찰할 수 있습니다.</li>
+                    <li><strong>문제 해결:</strong> 수정된 코드를 통해 해결 방법을 학습합니다. 이 코드에서는 뮤텍스를 사용하여 공유 버퍼 자체에 대한 접근을 보호하고(한 번에 하나만 접근), 조건 변수(Condition Variable)나 세마포어를 사용하여 버퍼가 '가득 찼을 때' 생산자가 기다리게 하고, '비었을 때' 소비자가 기다리게 하는 신호 메커니즘을 구현합니다. 각 동기화 장치가 어떤 역할을 하는지 정확히 이해하는 것이 핵심입니다.</li>
+                </ol>
+            </li>
+        </ul>
+
+        <h3>CH07. 컨테이너</h3>
+        <h4>개념의 핵심</h4>
+        <p>이 챕터는 운영체제의 고전적인 개념(프로세스, 파일 시스템, 네트워크 격리)이 어떻게 현대 데브옵스(DevOps)의 핵심 기술인 도커(Docker)와 같은 컨테이너 기술로 발전했는지 보여줍니다.</p>
+        <h4>심화 학습 - 컨테이너와 가상머신</h4>
+        <p>컨테이너는 종종 가상머신(Virtual Machine)과 비교됩니다. 보충 자료를 통해 두 기술의 근본적인 차이를 이해하는 것이 중요합니다.[6, 17, 18]</p>
+        <ul>
+            <li><strong>가상머신:</strong> 하이퍼바이저(Hypervisor) 위에서 완전한 게스트 운영체제(Guest OS)를 실행합니다. OS 전체를 포함하므로 오버헤드가 크고 시작 시간이 깁니다.</li>
+            <li><strong>컨테이너:</strong> 호스트 운영체제의 커널을 공유합니다. 리눅스의 네임스페이스(Namespace) 기술로 프로세스, 네트워크 등의 자원을 격리하고, cgroups 기술로 CPU나 메모리 사용량을 제한합니다. OS를 포함하지 않기 때문에 매우 가볍고 빠릅니다. 즉, 컨테이너는 본질적으로 '잘 격리된 프로세스'라고 할 수 있습니다. 이러한 차이점은 마이크로서비스 아키텍처(MSA)가 왜 컨테이너 기술을 선호하는지에 대한 답을 제공합니다.</li>
+        </ul>
+
+        <h2>파트 3: 세상 연결하기 - 네트워크</h2>
+        <p>네트워크 파트는 학습자가 이미 친숙한 웹 브라우징 경험에서 시작하여 그 기반 기술을 파헤쳐 내려가는 '하향식(Top-Down)' 접근법을 따릅니다. 이는 응용 계층(HTTP)에서 시작하여 전송 계층(TCP), 네트워크 계층(IP), 그리고 링크 계층으로 내려가는 방식으로, 각 계층이 바로 위 계층에 어떤 서비스를 제공하는지 명확하게 이해할 수 있어 매우 효과적인 학습 방법입니다. 본 가이드는 "HTTP는 신뢰성 있는 데이터 전송이 필요하고, 그래서 TCP를 사용한다. TCP는 인터넷을 통해 패킷을 전달해야 하고, 그래서 IP를 사용한다"와 같은 이야기 구조를 유지하여 계층 간의 관계를 명확히 할 것입니다.</p>
+
+        <h3>CH01. 오리엔테이션</h3>
+        <h4>[실습] 와이어샤크 (Wireshark)</h4>
+        <ul>
+            <li><strong>목표:</strong> 네트워크를 오가는 모든 데이터를 직접 들여다볼 수 있는 패킷 분석 도구인 와이어샤크의 기본 사용법을 익힙니다.</li>
+            <li><strong>실습 과정:</strong>
+                <ol>
+                    <li>와이어샤크를 설치하고 실행한 뒤, 현재 사용 중인 네트워크 인터페이스(예: Wi-Fi, Ethernet)를 선택하여 패킷 캡처를 시작합니다.</li>
+                    <li>웹 브라우저를 열어 특정 웹사이트(예: <code>google.com</code>)에 접속하는 간단한 행동을 수행합니다.</li>
+                    <li>와이어샤크에서 캡처를 중지하고, 필터 창에 <code>http</code> 또는 <code>dns</code>를 입력하여 수많은 패킷 중 원하는 프로토콜의 패킷만 걸러냅니다.</li>
+                    <li>하나의 HTTP 패킷을 선택하고 패킷 상세 정보 창을 분석합니다. 이 창에서 데이터가 어떻게 여러 계층의 헤더로 감싸여(캡슐화) 있는지 직접 확인할 수 있습니다: <code>Ethernet II Header</code> -> <code>Internet Protocol Version 4 Header</code> -> <code>Transmission Control Protocol Header</code> -> <code>Hypertext Transfer Protocol Data</code>. 이 실습은 네트워크 계층 모델이 단순한 이론이 아니라 실제 데이터 전송의 구조임을 보여줍니다.</li>
+                </ol>
+            </li>
+        </ul>
+
+        <h3>CH04. 전송 계층 (Transport Layer)</h3>
+        <h4>개념의 핵심</h4>
+        <p>이 챕터의 심장은 단연 TCP(Transmission Control Protocol)입니다. TCP는 연결 지향(Connection-oriented), 신뢰성 있는 데이터 전송(Reliable delivery), 그리고 흐름 제어 및 혼잡 제어(Flow & Congestion Control)라는 핵심적인 특징을 가집니다.</p>
+        <h4>심화 학습 - TCP 혼잡 제어</h4>
+        <ul>
+            <li><strong>강의 내용:</strong> 공식 영상은 TCP 혼잡 제어의 전반적인 개념을 소개합니다 [User Query].</li>
+            <li><strong>학문적 접근:</strong> 이 복잡한 메커니즘은 몇 가지 핵심 알고리즘으로 나눌 수 있으며, 상세한 튜토리얼을 통해 단계별로 이해하는 것이 효과적입니다.[8, 19]
+                <ol>
+                    <li><strong>느린 시작 (Slow Start):</strong> 네트워크 상태를 모르므로, 처음에는 혼잡 윈도우($cwnd$, 한 번에 보낼 수 있는 데이터의 양)를 1 MSS(Maximum Segment Size)에서 시작하여 매 RTT(Round Trip Time)마다 2배씩 지수적으로 증가시킵니다.</li>
+                    <li><strong>혼잡 회피 (Congestion Avoidance):</strong> $cwnd$가 미리 정해진 임계값($ssthresh$)에 도달하면, 네트워크가 혼잡해질 수 있다는 신호로 보고 $cwnd$를 매 RTT마다 1 MSS씩 선형적으로 증가시킵니다. 공격적인 증가를 멈추고 조심스럽게 양을 늘리는 단계입니다.</li>
+                    <li><strong>빠른 재전송/빠른 회복 (Fast Retransmit/Fast Recovery):</strong> 타임아웃이 발생하기 전에 동일한 ACK(Acknowledgement)가 3번 중복으로 수신되면, 이는 패킷 하나만 유실되었을 가능성이 높다고 판단합니다. 이 때 $ssthresh$를 현재 $cwnd$의 절반으로 줄이고, $cwnd$를 새로운 $ssthresh$ 값으로 설정한 뒤, 느린 시작 단계를 건너뛰고 바로 혼잡 회피 단계로 진입합니다. 이는 네트워크가 완전히 마비된 것이 아니라고 판단하여 전송 속도를 좀 더 낙관적으로 회복시키는 방법입니다.</li>
+                </ol>
+            </li>
+        </ul>
+        <p>보충 자료의 그래프들은 시간에 따라 $cwnd$가 어떻게 변화하는지를 시각적으로 보여주어 [8], 이 복잡한 알고리즘들의 상호작용을 이해하는 데 큰 도움을 줍니다.</p>
+
+        <h3>CH05. 응용 계층 (Application Layer)</h3>
+        <h4>[실습] Nginx로 구현하는 로드 밸런싱</h4>
+        <ul>
+            <li><strong>목표:</strong> 웹 서버 앞단에서 사용자의 요청을 여러 대의 백엔드 서버로 분산시켜주는 리버스 프록시(Reverse Proxy) 및 로드 밸런서(Load Balancer)를 직접 구축해 봅니다.</li>
+            <li><strong>예상 코드:</strong> <code>net/</code> 디렉토리에는 Nginx 설정 파일(<code>nginx.conf</code>) 예제가 포함되어 있을 것입니다.[10]</li>
+            <li><strong>실습 과정:</strong>
+                <ol>
+                    <li>먼저 Nginx를 설치하거나, 더 간편하게 Docker를 사용하여 Nginx 컨테이너를 실행합니다.</li>
+                    <li>요청을 처리할 간단한 백엔드 웹 서버를 두 개 이상 준비합니다. 예를 들어, Python의 내장 <code>http.server</code> 모듈을 사용하여 서로 다른 포트(예: 8001, 8002)에서 두 개의 서버를 실행합니다.</li>
+                    <li>Nginx 설정 파일(<code>nginx.conf</code>)을 열고 핵심 지시어를 수정합니다.
+                        <ul>
+                            <li><code>upstream</code> 블록: 여기에 백엔드 서버들의 주소와 포트 목록을 정의합니다.</li>
+                            <li><code>server</code> 블록 내의 <code>location</code> 블록: <code>proxy_pass</code> 지시어를 사용하여 요청을 위에서 정의한 <code>upstream</code> 그룹으로 전달하도록 설정합니다.</li>
+                        </ul>
+                    </li>
+                    <li>설정을 마친 Nginx 서버의 주소로 접속하여 페이지를 여러 번 새로고침하면, 요청이 두 백엔드 서버에 번갈아 가며 분산되는 것을 확인할 수 있습니다. 이 실습은 대규모 트래픽을 처리하는 현대 웹 서비스 아키텍처의 기본 원리를 체험하게 해줍니다.</li>
+                </ol>
+            </li>
+        </ul>
+
+        <h2>파트 4 & 5: 시스템 구축 - 시스템 프로그래밍과 데이터베이스</h2>
+        <p>이 파트들은 "시스템이 어떻게 동작하는가"에 대한 이해를 넘어, "시스템을 어떻게 만드는가"에 대한 실질적인 기술을 다룹니다. 특히 데이터베이스 섹션은 전통적인 관계형 데이터베이스(SQL)뿐만 아니라, 현대 기술 스택에서 매우 중요한 위치를 차지하는 MongoDB와 Redis 같은 NoSQL 솔루션까지 포괄하여 실용성을 극대화합니다.[2]</p>
+
+        <h3>파트 5, CH02. 데이터베이스 생성과 관리</h3>
+        <h4>[실습] 데이터 조회(SELECT) 및 CRUD 연산</h4>
+        <ul>
+            <li><strong>목표:</strong> 데이터베이스 관리의 가장 기본이 되는 SQL 질의어(Query) 작성법을 연습합니다.</li>
+            <li><strong>예상되는 요구사항:</strong> 실습을 위해서는 <code>customers</code>, <code>orders</code>와 같은 특정 테이블과 데이터가 미리 채워진 데이터베이스가 필요합니다. 강의에서는 보통 클라우드 드라이브를 통해 샘플 데이터가 담긴 <code>.sql</code> 덤프 파일을 제공할 수 있습니다.</li>
+        </ul>
+        <h4>데이터셋 다운로드 문제 해결 방안</h4>
+        <p>회사 보안 정책 등으로 클라우드 드라이브 접근이 차단된 경우, 다음의 대체 방법을 사용하여 실습 환경을 구축할 수 있습니다.</p>
+        <ol>
+            <li><strong>(가정) 원본 코드 실행:</strong> 만약 클라우드에서 <code>sample_data.sql</code> 파일을 다운로드할 수 있다면, 보통 다음 명령어로 데이터를 로드합니다.
+<pre><code># 이 방법은 클라우드 접근이 차단된 경우 사용할 수 없음
+mysql -u [사용자명] -p [데이터베이스명] < /path/to/downloaded/sample_data.sql</code></pre>
+            </li>
+            <li><strong>대체 방안 1: 공개 표준 데이터셋 활용</strong>
+                <p>가장 안정적인 방법은 공식적으로 배포되는 표준 샘플 데이터베이스를 사용하는 것입니다. MySQL은 <code>sakila</code>라는 영화 대여점 비즈니스 모델의 샘플 데이터베이스를 공식적으로 제공하며, 이는 차단될 염려가 없는 경로에서 다운로드할 수 있습니다.</p>
+                <ul>
+                    <li>(<a href="https://dev.mysql.com/doc/sakila/en/" target="_blank">https://dev.mysql.com/doc/sakila/en/</a>)에서 다운로드 링크를 찾을 수 있습니다.</li>
+                    <li>다운로드 후 압축을 풀고, 포함된 <code>.sql</code> 파일들을 사용하여 데이터베이스를 생성하고 데이터를 로드합니다.</li>
+                </ul>
+            </li>
+            <li><strong>대체 방안 2: 데이터 생성 스크립트 직접 실행 (가장 확실한 방법)</strong>
+                <p>네트워크 다운로드가 전혀 불가능한 환경을 위해, 필요한 데이터를 로컬에서 직접 생성하는 Python 스크립트를 제공합니다. 이 방법은 외부 라이브러리(<code>Faker</code>) 설치 외에는 어떠한 네트워크 접근도 필요로 하지 않습니다.</p>
+                <ul>
+                    <li><strong>사전 준비:</strong> 먼저 <code>Faker</code> 라이브러리를 설치합니다.
+<pre><code>pip install Faker</code></pre>
+                    </li>
+                    <li><strong>코드 블록: <code>generate_sample_db.py</code></strong>
+                        <p>아래 코드를 <code>generate_sample_db.py</code> 라는 이름의 파일로 저장합니다. 이 스크립트는 가상의 고객과 주문 데이터가 포함된 <code>sample_db.sql</code> 파일을 생성합니다.</p>
+<pre><code># generate_sample_db.py
+# 이 스크립트는 외부 다운로드 없이 가상의 데이터로 'sample_db.sql' 파일을 생성합니다.
+from faker import Faker
+import random
+import datetime
+
+fake = Faker('ko_KR') # 한국어 데이터 생성을 위해 'ko_KR' 사용
+
+# --- SQL 스키마 정의 ---
+create_customers_table = """
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS customers;
+CREATE TABLE customers (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    signup_date DATE
+);
+"""
+
+create_orders_table = """
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT,
+    order_date DATE,
+    amount DECIMAL(10, 2),
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+"""
+
+# --- 데이터 생성 및 파일 작성 ---
+with open("sample_db.sql", "w", encoding="utf-8") as f:
+    f.write(create_customers_table)
+    f.write(create_orders_table)
+    f.write("\n")
+
+    # 고객 데이터 생성
+    customer_ids = list(range(1, 101))
+    for cid in customer_ids:
+        name = fake.name().replace("'", "''")
+        email = fake.unique.email()
+        signup_date = fake.date_between(start_date='-2y', end_date='today').strftime('%Y-%m-%d')
+        f.write(f"INSERT INTO customers (customer_id, name, email, signup_date) VALUES ({cid}, '{name}', '{email}', '{signup_date}');\n")
+    
+    f.write("\n")
+
+    # 주문 데이터 생성
+    for _ in range(300):
+        customer_id = random.choice(customer_ids)
+        order_date = fake.date_between(start_date='-1y', end_date='today').strftime('%Y-%m-%d')
+        amount = round(random.uniform(10000, 200000), 2)
+        f.write(f"INSERT INTO orders (customer_id, order_date, amount) VALUES ({customer_id}, '{order_date}', {amount});\n")
+
+print("샘플 데이터 파일 'sample_db.sql'이 성공적으로 생성되었습니다.")</code></pre>
+                    </li>
+                    <li><strong>실행 및 데이터 로드:</strong>
+                        <ol>
+                            <li>터미널에서 Python 스크립트를 실행하여 <code>sample_db.sql</code> 파일을 생성합니다.
+<pre><code>python generate_sample_db.py</code></pre>
+                            </li>
+                            <li>생성된 로컬 파일을 사용하여 MySQL에 데이터를 로드합니다.
+<pre><code>mysql -u [사용자명] -p --default-character-set=utf8 [데이터베이스명] < sample_db.sql</code></pre>
+                            </li>
+                        </ol>
+                        <p>이제 원래의 실습 코드와 동일한 구조의 테이블과 데이터로 모든 SQL 쿼리 연습을 진행할 수 있습니다.</p>
+                    </li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>파트 6: 마무리 - 기술 면접 정복하기</h2>
+        <p>이 마지막 파트는 학습한 지식을 실전에서 활용하는 단계로 전환합니다. 이는 단순히 질문과 답변의 목록이 아니라, 기술 면접 문제에 접근하는 사고의 틀을 제공하는 것을 목표로 합니다. 채용 담당자는 정답 자체보다 후보자가 문제의 핵심을 파악하고, 근본 원리를 설명하며, 논리적으로 답변을 구축하는 과정을 보고 싶어 합니다. 따라서 이 강의에서 제공하는 50개의 예상 질문 [2] 각각에 대해, 본 가이드는 다음과 같은 구조로 답변을 심화하는 방법을 제시합니다.</p>
+        <ul>
+            <li><strong>질문의 의도 (The "Why"):</strong> 이 질문은 어떤 핵심 개념을 테스트하기 위해 주어졌는가?</li>
+            <li><strong>핵심 답변 (The "What"):</strong> 질문에 대한 명확하고 간결한 정의 또는 설명.</li>
+            <li><strong>동작 원리 (The "How"):</strong> 답변의 근거가 되는 내부 메커니즘을 단계별로 상세히 설명.</li>
+            <li><strong>추가 질문 (The "What If"):</strong> 더 깊은 이해도를 보여줄 수 있는 예상 후속 질문과 그에 대한 답변.</li>
+        </ul>
+
+        <h3>기술 면접 예시 문항 분석 (네트워크)</h3>
+        <ul>
+            <li><strong>질문:</strong> "TCP의 혼잡 제어 메커니즘에 대해 설명해 보세요."</li>
+            <li><strong>질문의 의도:</strong> 이 질문은 인터넷이 과부하 상태에서도 안정적으로 유지되는 원리를 이해하고 있는지를 평가합니다. 단순히 TCP가 '신뢰성 있다'고 아는 수준을 넘어, <em>어떻게</em> 신뢰성과 공정성을 달성하는지 아는 후보자를 가려내기 위함입니다.</li>
+            <li><strong>핵심 답변:</strong> TCP 혼잡 제어는 네트워크의 혼잡 정도를 추정하여 데이터 전송률을 동적으로 조절하는 메커니즘입니다. 핵심 알고리즘으로는 느린 시작(Slow Start), 혼잡 회피(Congestion Avoidance), 그리고 빠른 회복(Fast Recovery)이 있습니다.</li>
+            <li><strong>동작 원리:</strong> 파트 3에서 심화 학습한 내용을 바탕으로, 혼잡 윈도우($cwnd$)와 임계값($ssthresh$) 변수가 ACK 수신과 패킷 손실(타임아웃 또는 3개의 중복 ACK)에 따라 어떻게 변화하는지를 단계별로 설명합니다.[8, 19] 지수적 증가(느린 시작)에서 선형적 증가(혼잡 회피)로 전환되는 과정, 그리고 패킷 손실 시 $cwnd$가 어떻게 감소하고 회복되는지를 구체적인 시나리오를 들어 설명합니다.</li>
+            <li><strong>추가 질문:</strong>
+                <ul>
+                    <li><strong>"TCP는 네트워크 혼잡으로 인한 패킷 손실과, 단순 전송 오류로 인한 손실을 어떻게 구분하나요?"</strong>
+                        <blockquote>답변: 기본적으로 TCP는 둘을 구분하지 못하고 모든 패킷 손실을 혼잡의 신호로 간주하는 한계가 있습니다. 이 때문에 무선 네트워크처럼 오류가 잦은 환경에서는 불필요하게 전송 속도를 낮추기도 합니다. 이를 개선하기 위해 ECN(Explicit Congestion Notification)과 같은 기술이 제안되었습니다.[20] 라우터가 혼잡을 감지하면 패킷을 버리는 대신 헤더에 표시를 하여 수신자에게 알리고, 수신자는 이 정보를 송신자에게 전달하여 미리 전송률을 조절하게 합니다.</blockquote>
+                    </li>
+                    <li><strong>"TCP Reno, Tahoe, Cubic과 같은 다양한 혼잡 제어 알고리즘의 차이점은 무엇인가요?"</strong>
+                        <blockquote>답변: 이는 TCP의 진화 과정을 이해하고 있음을 보여주는 좋은 기회입니다. Tahoe는 타임아웃과 빠른 재전송 모두에서 $cwnd$를 1로 리셋하여 항상 느린 시작부터 다시 시작합니다. Reno는 빠른 회복 메커니즘을 도입하여 불필요한 속도 저하를 개선했습니다. 현재 리눅스 등에서 널리 쓰이는 Cubic은 RTT에 독립적으로 윈도우 크기를 조절하는 함수를 사용하여 고대역폭 및 긴 지연 시간을 갖는 네트워크(LFN)에서 더 나은 성능을 보입니다.</blockquote>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
