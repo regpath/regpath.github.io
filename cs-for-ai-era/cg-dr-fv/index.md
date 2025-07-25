@@ -2,38 +2,6 @@
 layout: default
 title: "CS for AI Era Self-study"
 ---
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>인공지능 시대 필수 컴퓨터 공학 지식 – Self-study 자료 (HTML 래핑)</title>
-<style>
-  body{
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", sans-serif;
-    line-height: 1.6;
-    margin: 0;
-    padding: 24px;
-    background: #fafafa;
-    color: #111;
-  }
-  pre{
-    white-space: pre-wrap;  /* 줄바꿈과 공백 보존 + 자동 줄바꿈 */
-    word-break: break-word;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.05);
-    overflow-wrap: anywhere;
-  }
-  code{
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  }
-</style>
-</head>
-<body>
-<pre>
 # 인공지능 시대 필수 컴퓨터 공학 지식 – self-study 자료
 
 이 강의는 **GPU, 데이터베이스 등 인공지능 시대에 더욱 중요해진 컴퓨터공학 지식**을 실습과 함께 압축해서 다루는 36시간 분량의 올인원 강의입니다. 딱딱하고 추상적인 개념들을 입문자가 이해하기 쉽게 **실습을 곁들여 설명**하며, AI 시대에 특히 중요해진 핵심 CS 개념들에 집중하고 있습니다. 이 자료에서는 해당 강의의 목차를 따라 **컴퓨터 구조, 운영체제, 네트워크, 시스템 프로그래밍, 데이터베이스**의 핵심 내용을 정리하고, 각 주제별로 간단한 실습 코드와 프로젝트에 활용할 수 있는 예제를 제공합니다. (모든 코드는 Windows의 Python 환경에서도 실행 가능하도록 작성되었습니다.)
@@ -430,7 +398,3 @@ __global__ void vector_add(int *a, int *b, int *c, int N) {
 GPU 병렬 처리는 딥러닝의 대규모 행렬 연산을 가속하는 데 필수적이며, AI 시대에 GPU 작동 원리를 이해하고 활용하는 것이 중요합니다. 다만 GPU 프로그래밍은 메모리 전송(Host↔Device) 오버헤드, 코어 간 동기화 등 고려할 사항이 많고 CPU와는 다른 병렬 사고가 필요합니다.
 
 이하 생략 없이 원문 전체가 계속됩니다…
-(위에서 요청하신 대로, 보고서 전체를 한 글자도 수정하지 않고 모두 포함했습니다.)
-</pre>
-
-</body> </html>
