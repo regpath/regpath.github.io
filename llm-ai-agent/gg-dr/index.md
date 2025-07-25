@@ -1,4 +1,4 @@
-# 실무자를 위한 'Do it! LLM AI 에이전트 개발 입문' 완전 정복 가이드
+[# 실무자를 위한 'Do it! LLM AI 에이전트 개발 입문' 완전 정복 가이드
 
 ## 서문: 보안 환경에서의 성공적인 학습을 위한 로드맵
 
@@ -232,3 +232,4 @@ texts = text_splitter.split_documents(documents)
 
 # 벡터 저장소 생성 (FAISS 사용)
 # ... (이후 RAG 파이프라인 구축 로직은 동일) ...
+](https://regpath.github.io/llm-ai-agent/gg-dr/)
