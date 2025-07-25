@@ -1,3 +1,7 @@
+---
+layout: default
+title: "CS for AI Era Self-study"
+---
 <!doctype html>
 <html lang="ko">
 <head>
