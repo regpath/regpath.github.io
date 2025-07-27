@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 NFL 드래프트 유망주 분석</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Cool Blue Accents -->
+    <!-- Application Structure Plan: A single-page application using a tabbed navigation system to switch between four key positions (DT, EDGE, RB, TE). This structure was chosen for its intuitiveness, allowing users to easily segment and focus on the large amount of information provided for each distinct category. Within each tab, player information is presented in a modular card format, combining text analysis with an interactive Chart.js visualization for statistics. This card-based grid layout is responsive and makes comparing players within the same group straightforward. The user flow is simple: select a position tab, then scroll to explore players, interacting with charts as needed. This design prioritizes content clarity and ease of navigation over a linear report structure. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Presentation Method -> Interaction -> Justification -> Library/Method. 1. Positional Overviews -> Inform -> Text Blocks (HTML) -> N/A -> Provides context for each position class before diving into players -> Tailwind CSS. 2. Player Profiles (Bio, Analysis) -> Inform/Organize -> Two-column Card Layout (HTML/CSS) -> N/A -> Organizes dense qualitative data into digestible, visually separated sections (photo/bio vs. deep analysis) for better readability -> Tailwind CSS. 3. Player Career Statistics -> Compare/Analyze Change -> Interactive Bar Chart (Canvas) -> Hover Tooltip -> Visualizing stats over time via a bar chart is more engaging and allows for quicker trend-spotting than a static table. Hover interaction provides precise data points without cluttering the UI -> Chart.js. This combination of structured text and interactive charts provides a comprehensive yet uncluttered view of each prospect, fulfilling the goal of making complex data easily consumable. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .tab-button.active {
+            border-color: #2563eb;
+            color: #2563eb;
+            font-weight: 700;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 280px;
+            max-height: 300px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 320px;
+                max-height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">2026 NFL 드래프트 유망주 분석</h1>
+            <p class="text-lg text-gray-600 mt-2">Dane Brugler의 여름 스카우팅 리포트 기반</p>
+        </header>
+
+        <section class="mb-8 p-6 bg-white rounded-xl shadow-md">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">원본 리포트 다운로드</h2>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://storage.googleapis.com/uploads/2024/07/26/Dane%20Brugler%E2%80%99s%202026%20NFL%20Draft%20summer%20positional%20rankings%20Defensive%20tackles.pdf" target="_blank" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300">Defensive Tackles 리포트</a>
+                <a href="https://storage.googleapis.com/uploads/2024/07/26/Dane%20Brugler%E2%80%99s%202026%20NFL%20Draft%20summer%20positional%20rankings%20Edge%20rushers.pdf" target="_blank" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300">Edge Rushers 리포트</a>
+                <a href="https://storage.googleapis.com/uploads/2024/07/26/Dane%20Brugler%E2%80%99s%202026%20NFL%20Draft%20summer%20positional%20rankings%20Running%20Backs.pdf" target="_blank" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300">Running Backs 리포트</a>
+                <a href="https://storage.googleapis.com/uploads/2024/07/26/Dane%20Brugler%E2%80%99s%202026%20NFL%20Draft%20summer%20positional%20rankings%20Tight%20ends.pdf" target="_blank" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300">Tight Ends 리포트</a>
+            </div>
+        </section>
+
+        <nav class="mb-8">
+            <div class="border-b border-gray-300">
+                <div class="flex -mb-px space-x-4 overflow-x-auto">
+                    <button onclick="showTab('dt')" class="tab-button active text-lg whitespace-nowrap py-4 px-1 border-b-4 font-medium text-gray-500 hover:text-blue-600 hover:border-blue-600">
+                        Defensive Tackles
+                    </button>
+                    <button onclick="showTab('edge')" class="tab-button text-lg whitespace-nowrap py-4 px-1 border-b-4 border-transparent font-medium text-gray-500 hover:text-blue-600 hover:border-blue-600">
+                        Edge Rushers
+                    </button>
+                    <button onclick="showTab('rb')" class="tab-button text-lg whitespace-nowrap py-4 px-1 border-b-4 border-transparent font-medium text-gray-500 hover:text-blue-600 hover:border-blue-600">
+                        Running Backs
+                    </button>
+                    <button onclick="showTab('te')" class="tab-button text-lg whitespace-nowrap py-4 px-1 border-b-4 border-transparent font-medium text-gray-500 hover:text-blue-600 hover:border-blue-600">
+                        Tight Ends
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <main>
+            <div id="dt" class="tab-content space-y-12"></div>
+            <div id="edge" class="tab-content hidden space-y-12"></div>
+            <div id="rb" class="tab-content hidden space-y-12"></div>
+            <div id="te" class="tab-content hidden space-y-12"></div>
+        </main>
+
+    </div>
+
+    <script>
+        const playerData = {
+            dt: {
+                intro: `2026년 디펜시브 태클 클래스는 "엄청난 잠재력"을 품고 있지만, 2025년 클래스가 배출했던 5명의 1라운드 지명자 기록에 필적할 수 있을지는 아직 미지수입니다. 이 클래스는 원초적인 힘과 발전 중인 운동 능력이 조화를 이루는 유망주들이 특징이며, 그 중심에는 클렘슨의 피터 우즈가 있습니다.`,
+                players: [
+                    {
+                        rank: 1, name: "피터 우즈 (Peter Woods)", team: "Clemson", photo: "https://images2.minutemediacdn.com/image/upload/c_crop,w_2374,h_1335,x_0,y_0/c_fill,w_720,ar_16:9,f_auto,q_auto,g_auto/images/ImagnImages/mmsport/all_clemson/01k1496kgd61hmj3nxx2.jpg", info: "6'3\", 315 lbs | 주니어",
+                        summary: "미래 NFL 수비 라인의 초석이 될 것으로 기대되는 선수로, 블루칼라의 힘과 엘리트 수준의 운동 능력을 겸비했습니다. 그의 잠재력은 패스 러싱 기술을 얼마나 정교하게 다듬느냐에 달려 있습니다.",
+                        analysis: `피터 우즈는 힘과 운동 능력이 균형을 이루는 선수로 평가받습니다. 그의 가장 큰 강점은 플레이를 빠르게 진단하는 능력과 이를 바탕으로 한 압도적인 런 디펜스입니다. 그는 블로킹 스킴을 신속하게 파악하여 블록을 무너뜨리고, 힘과 운동 능력을 이용해 볼 캐리어를 추격합니다. 하지만 그의 가장 큰 개선점은 "패스 러싱 기술의 완성도"입니다. 현재 그의 패스 러싱은 다양한 기술보다는 힘에 의존하는 "불도저" 스타일에 가깝습니다.`,
+                        career: `ESPN에 의해 전국 9위 유망주 및 포지션 1위로 평가받은 엘리트 리크루트였습니다. 2024시즌에 디펜시브 엔드(DE)와 디펜시브 태클(DT)을 오가며 다재다능함을 뽐냈지만, 2025시즌을 앞두고 DT 포지션에 집중하기로 결정했습니다. 데인 브루글러는 그를 "제일런 카터(Jalen Carter)의 90% 버전"이라고 평가했습니다.`,
+                        stats: { labels: ['2023', '2024'], datasets: [{ label: '총 태클', data: [27, 28], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: 'TFL', data: [2.5, 8.5], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: 'Sacks', data: [0.0, 3.0], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    },
+                    {
+                        rank: 2, name: "케일럽 뱅크스 (Caleb Banks)", team: "Florida", photo: "https://www.gannett-cdn.com/media/2024/11/23/USATODAY/usatsports/25695843002-11232024-florida-ole-miss-football-0288.jpg?width=660&height=440&fit=crop&format=pjpg&auto=webp", info: "6'6\", 334 lbs | 시니어",
+                        summary: "거대한 체격에 보기 드문 운동 능력을 갖춘 선수. 그의 드래프트 가치는 폭발적인 플레이를 꾸준하고 기술적으로 안정된 플레이로 전환하는 능력, 특히 패드 높이를 제어하는 데 달려 있습니다.",
+                        analysis: `케일럽 뱅크스는 NFL에 입성하는 즉시 가장 큰 선수 중 한 명이 될 "거대한 인간"입니다. 그의 가치는 단순히 크기에만 있지 않습니다. 그의 "끈질긴 노력"과 "내리막길에서의 힘"은 그를 특별하게 만듭니다. 그의 가장 큰 약점은 큰 키에서 비롯되는 "패드 높이" 문제입니다. 이로 인해 블로커에게 무게 중심을 빼앗겨 밀리는 경우가 발생합니다.`,
+                        career: `루이빌 대학에서 커리어를 시작했지만, 플로리다 대학으로 이적한 후 SEC에서 가장 파괴적인 선수 중 한 명으로 거듭났습니다. 그는 "가족 중 처음으로 대학을 졸업하는 남성"이 되기 위해 학교에 복귀했다고 밝히며 성숙함을 보여주었습니다. 2024시즌 기록한 총 29개의 프레셔 중 15개, 4.5개의 색 중 3.5개가 단 두 경기(LSU, 올미스)에서 나왔습니다.`,
+                        stats: { labels: ['2022 (Lou)', '2023 (UF)', '2024 (UF)'], datasets: [{ label: '총 태클', data: [2, 19, 21], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: 'TFL', data: [1.0, 2.0, 7.0], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: 'Sacks', data: [1.0, 1.0, 4.5], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    },
+                    {
+                        rank: 3, name: "크리스텐 밀러 (Christen Miller)", team: "Georgia", photo: "https://s3media.247sports.com/Uploads/Assets/96/985/11985096.jpg?fit=bounds&width=620&height=320&crop=620:320,offset-y0.5", info: "6'4\", 305 lbs | 주니어",
+                        summary: "부인할 수 없는 엘리트 런 스토핑 능력을 갖춘 전형적인 조지아 수비 라인 유망주. 그의 드래프트 가치는 더 많은 출전 기회를 통해 패스 러시 플랜을 개발하는 능력에 따라 결정될 것입니다.",
+                        analysis: `크리스텐 밀러의 최고 장점은 "런 게임 레이더"입니다. 그는 "라인에서 튀어나와" 힘을 이용해 블록을 제압합니다. 반면 그의 약점은 "개발되지 않은 패스 러시 플랜"과 "대응 기술의 부재"로, 이는 조지아의 두터운 수비 라인 로테이션으로 인한 제한된 출전 기회에 기인하는 것으로 분석됩니다.`,
+                        career: `고교 시절 두 번의 주 챔피언십을 차지한 4성급 유망주였습니다. 조지아의 시스템 속에서 성장하며, 개인 통계는 평범하지만 PFF 등급(82.3)은 매우 높습니다. 베테랑들의 이탈로 2025시즌에는 더 많은 기회를 받을 것으로 예상되며, 이는 그의 잠재력을 증명할 무대가 될 것입니다.`,
+                        stats: { labels: ['2023', '2024'], datasets: [{ label: '총 태클', data: [14, 27], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: 'TFL', data: [4.0, 3.5], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: 'Sacks', data: [1.0, 1.5], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    },
+                    {
+                        rank: 4, name: "데이비드 오케 (David Oke)", team: "Arkansas", photo: "https://arkansasrazorbacks.com/wp-content/uploads/2024/04/David-Oke-Headshot-scaled.jpg", info: "6'2\", 312 lbs | 시니어",
+                        summary: "작은 대학에서 두각을 나타낸 민첩한 빅맨. 그의 NFL 잠재력은 더 큰 무대인 SEC에서 꾸준한 레버리지와 힘을 증명하는 것에 달려 있습니다.",
+                        analysis: `데이비드 오케의 최고 장점은 "민첩한 빅맨"이라는 점입니다. 그는 수년간 체중을 늘리면서도 운동 능력을 잃지 않았습니다. 블로커의 정면을 가로지르거나 갭 사이를 오가며 라인에서 플레이를 멈추게 하는 측면 움직임이 탁월합니다. 그러나 그의 개선점은 "일관된 패드 높이"입니다. 그는 런 게임에서 공을 찾는 레이더가 뛰어난 활동적인 선수지만, 공격 지점에서 너무 자세가 높아져 균형을 잃는 경향이 있습니다.`,
+                        career: `애빌린 크리스천 대학에서 2024시즌 63개의 태클과 9.5개의 TFL을 기록하며 돌풍을 일으켰습니다. Power Four 팀인 텍사스 테크와의 경기에서 좋은 모습을 보여주며 가능성을 입증했고, 이제 아칸소 소속으로 SEC 무대에서 자신을 증명할 기회를 얻었습니다.`,
+                        stats: { labels: ['2022 (ACU)', '2023 (ACU)', '2024 (ACU)'], datasets: [{ label: '총 태클', data: [10, 10, 63], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: 'TFL', data: [0, 0, 9.5], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: 'Sacks', data: [1.0, 0.0, 1.0], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    },
+                    {
+                        rank: 5, name: "도모니크 오렌지 (Domonique Orange)", team: "Iowa State", photo: "https://cyclones.com/images/2023/8/22/Orange_Domonique_23_Web.jpg", info: "6'2\", 328 lbs | 시니어",
+                        summary: "'빅 시트러스'라는 별명을 가진 압도적인 힘의 소유자. 한때 400파운드를 넘었던 체중을 감량하며 운동 능력을 되찾았습니다. 그의 드래프트 성공은 폭발적인 힘을 꾸준한 생산성으로 전환하는 데 달려 있습니다.",
+                        analysis: `도모니크 오렌지는 "두껍게 만들어진 강력한 노즈 태클"로, 그의 최고 장점은 "공격 지점에서의 힘"입니다. 그는 접촉 시 팔을 뻗어 상대를 밀어내는 '넉백(knockback)'을 만들어내며, 이를 통해 런 레인을 파괴합니다. 그의 개선점은 "섬광 같은 플레이를 꾸준함으로 바꾸는 것"입니다.`,
+                        career: `고교 시절 400파운드가 넘었지만, 대학 입학 후 325파운드까지 감량하며 컨디셔닝과 경기력을 향상시켰습니다. 이러한 노력은 그를 2024년 The Athletic의 "괴물 리스트(Freaks List)"에 이름을 올리게 했습니다.`,
+                        stats: { labels: ['2022', '2023', '2024'], datasets: [{ label: '총 태클', data: [8, 16, 24], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: 'TFL', data: [0, 2.0, 4.5], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: 'Sacks', data: [0.0, 0.0, 1.0], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    }
+                ]
+            },
+            edge: {
+                intro: `2026년 드래프트의 엣지 러셔 클래스는 쿼터백이 아닌 포지션 중에서 가장 강력한 그룹 중 하나로 평가될 잠재력을 가지고 있습니다. 최상위권의 뛰어난 선수들뿐만 아니라 전반적인 뎁스 또한 훌륭하여, 여러 유망주들이 NFL 팀들의 주목을 받고 있습니다.`,
+                players: [
+                    {
+                        rank: 1, name: "켈드릭 포크 (Keldric Faulk)", team: "Auburn", photo: "https://images.rivals.com/image/upload/f_auto,q_auto,t_large/wz5gceufy7vj2e7w9xvs", info: "6'6\", 275 lbs | 주니어",
+                        summary: "압도적인 신체 조건과 운동 능력을 겸비한 파워풀한 엣지 러셔. 이미 런 디펜스에서는 완성형에 가깝지만, 패스 러싱 기술의 다양성을 확보한다면 탑 10 지명이 유력한 특급 유망주.",
+                        analysis: `켈드릭 포크의 최고 장점은 긴 팔과 강력한 손 힘을 활용한 "빅맨의 파워와 운동 능력"입니다. 그는 런 게임에서 블록을 떼어내고, 버티고, 떨쳐낸 후 마무리하는 능력이 매우 효율적입니다. 개선점은 "기본적인 패스 러시 셋업"으로, 다음 단계로 성장하기 위해서는 더 다양한 기술을 보여줘야 합니다.`,
+                        career: `여러 면에서 마이켈 윌리엄스(Mykel Williams)를 연상시키며, 이번 드래프트 클래스에서 가장 어린 선수 중 한 명입니다. 하지만 대학 2시즌 동안 보여준 꾸준함과 다재다능함은 윌리엄스보다 뛰어나다는 평가를 받습니다. 노즈 태클, 와이드 나인 등 어떤 포지션에 서든 생산적인 모습을 보여주었습니다.`,
+                        stats: { labels: ['2023', '2024'], datasets: [{ label: '총 태클', data: [35, 46], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: 'TFL', data: [1, 11.0], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: 'Sacks', data: [1.0, 7.0], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    },
+                    {
+                        rank: 2, name: "T.J. 파커 (T.J. Parker)", team: "Clemson", photo: "https://www.si.com/.image/t_share/MTExMDQ3MzQ1Mzc4OTYyNDYx/usatsi_24911046-2.jpg", info: "6'3\", 265 lbs | 주니어",
+                        summary: "스피드와 파워를 겸비한 파괴적인 패스 러셔. 아크를 도는 탁월한 신체 제어 능력을 가졌으며, 런 디펜스에서의 포지셔닝만 개선한다면 탑 10 지명이 가능한 선수.",
+                        analysis: `T.J. 파커는 스피드와 파워를 모두 사용하여 패스 러시를 지배할 수 있는 선수입니다. 그의 최고 장점은 "아크를 도는 신체 제어 능력"입니다. 그는 블로커의 바깥쪽 어깨를 통과하면, 재빨리 몸을 낮춰 쿼터백에게 돌진합니다. 개선이 필요한 부분은 "런 디펜스 시 포지셔닝"으로, 앵글 블록을 예측하는 능력을 향상시켜야 합니다.`,
+                        career: `클렘슨 입학 순간부터 스타였습니다. 2학년 때는 19.5개의 TFL, 11.0개의 색, 그리고 학교 신기록인 6개의 강제 펌블을 기록하며 엄청난 활약을 펼쳤습니다. 그의 2023년 12.5 TFL 기록은 마일스 머피의 신입생 기록을 경신한 것이기도 합니다.`,
+                        stats: { labels: ['2023', '2024'], datasets: [{ label: '총 태클', data: [32, 57], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: 'TFL', data: [12.5, 19.5], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: 'Sacks', data: [5.5, 11.0], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    },
+                    {
+                        rank: 3, name: "LT 오버튼 (LT Overton)", team: "Alabama", photo: "https://s3media.247sports.com/Uploads/Assets/320/868/11868320.jpg", info: "6'3\", 274 lbs | 시니어",
+                        summary: "5성급 유망주 출신으로, 폭발적인 재능과 에너지를 가졌지만 아직 꾸준함을 증명하지 못한 선수. 그의 드래프트 가치는 잠재력을 꾸준한 경기력으로 바꾸는 능력에 달려 있습니다.",
+                        analysis: `LT 오버튼은 꾸준함보다는 번뜩이는 플레이로 더 주목받았지만, 그의 잠재력은 매우 흥미롭습니다. 그의 최고 장점은 "재능과 에너지"입니다. 그는 자신의 체격에 비해 인상적인 민첩성, 유연성, 그리고 신체 조정 능력을 보여주며 열정적으로 경기에 임합니다. 하지만 그의 재능이 뛰어난 만큼, "기술과 플레이 강도"를 향상시켜야 합니다.`,
+                        career: `만장일치 5성급 유망주였던 오버튼은 고교 졸업 후 텍사스 A&M에 입학했으나, 2시즌 후 라이벌인 앨라배마로 이적했습니다. NFL 팀들로부터 받은 여름 등급은 2일차(Day 2) 범위에 있지만, 2025시즌에 경기마다 꾸준한 모습을 보여준다면 1라운드 지위를 굳힐 재능을 충분히 갖추고 있습니다.`,
+                        stats: { labels: ['2022 (A&M)', '2023 (A&M)', '2024 (Ala)'], datasets: [{ label: '총 태클', data: [31, 17, 42], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: 'TFL', data: [3.0, 0.0, 3.0], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: 'Sacks', data: [1.0, 0.0, 2.0], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    }
+                ]
+            },
+            rb: {
+                intro: `2026년 러닝백 클래스는 확실한 RB1인 노트르담의 제레미야 러브를 제외하면 전반적으로 깊이가 부족하다는 평가를 받습니다. 하지만 시즌이 진행됨에 따라 새로운 스타가 탄생할 가능성은 언제나 열려 있으며, 이 랭킹은 앞으로 몇 달간 매우 유동적일 것으로 예상됩니다.`,
+                players: [
+                    {
+                        rank: 1, name: "제레미야 러브 (Jeremiyah Love)", team: "Notre Dame", photo: "https://fightingirish.com/wp-content/uploads/2023/07/230718_Love_MeetTheIrish_TH-16x9-1.jpg", info: "6'0\", 210 lbs | 주니어",
+                        summary: "대학 미식축구에서 가장 보는 재미가 있는 선수 중 한 명. 본능적인 운동 능력과 폭발적인 스피드를 겸비한 확실한 RB1으로, 리시빙 능력만 더 발전시킨다면 드래프트 클래스 최고의 플레이메이커가 될 수 있습니다.",
+                        analysis: `제레미야 러브의 최고 장점은 "본능적인 운동 능력"입니다. 그는 갭 사이를 넘나드는 측면 민첩성과 구멍을 향해 최고 속도로 폭발하는 즉각적인 가속력을 갖추고 있습니다. 개선해야 할 점은 "더 나은 리시빙 존재감"을 보여주는 것입니다. 그의 역동적인 운동 능력을 고려할 때, 더 다양한 라우트에서 활용될 필요가 있습니다.`,
+                        career: `지난 시즌 캐리당 평균 6.9야드 이상, 14개 이상의 러싱 터치다운을 기록한 단 두 명의 선수 중 한 명이었습니다. 특히 그는 12팀 대학 미식축구 플레이오프 역사상 최초의 터치다운을 98야드 러싱으로 기록하며 역사에 이름을 남겼습니다.`,
+                        stats: { labels: ['2023', '2024'], datasets: [{ label: '러싱 야드', data: [385, 1125], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: '러싱 TD', data: [1, 17], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: '리시빙 야드', data: [77, 237], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    },
+                    {
+                        rank: 2, name: "닉 싱글턴 (Nick Singleton)", team: "Penn State", photo: "https://gopsusports.com/images/2023/8/16/Singleton_Nick_23_web.jpg", info: "6'0\", 218 lbs | 시니어",
+                        summary: "사이즈와 스피드를 겸비한 운동 능력의 괴물. 원-컷 러너로서 폭발적인 플레이를 만들어내지만, 창의성 부족은 그의 평가를 다소 복잡하게 만듭니다.",
+                        analysis: `닉 싱글턴의 최고 장점은 "사이즈/스피드 괴물"이라는 점입니다. 그는 4.3초대 40야드 대시 기록이 예상될 만큼 빠르면서도 컨택을 이겨낼 힘을 갖추고 있습니다. 하지만 개선점은 "창의성"으로, 블로커가 열어준 길로 돌진하는 경향이 있으며 라인 오브 스크리미지에서의 비전이 일정하지 않습니다.`,
+                        career: `2025년 드래프트를 앞두고 3라운드 피드백을 받은 후 복귀를 선택했습니다. 폭발적인 플레이를 만들어내는 운동선수이지만, 길을 개척하는 능력이 부족하다는 평가를 받습니다. 효과적인 패스 캐처이자 킥 리터너라는 점은 그의 평가에 도움이 됩니다.`,
+                        stats: { labels: ['2022', '2023', '2024'], datasets: [{ label: '러싱 야드', data: [1052, 752, 1099], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: '러싱 TD', data: [13, 10, 12], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: '리셉션', data: [11, 26, 41], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    },
+                    {
+                        rank: 3, name: "마키 휴즈 (Makhi Hughes)", team: "Oregon", photo: "https://images2.minutemediacdn.com/image/upload/c_crop,w_4088,h_2299,x_0,y_313/c_fill,w_620,ar_16:9,f_auto,q_auto,g_auto/images%2FImagnImages%2Fmmsport%2Fducks_digest%2F01jzbpetd7fz4k5xqy2w.jpg", info: "6'0\", 215 lbs | 주니어",
+                        summary: "뛰어난 컨택 밸런스를 가진 균형 잡힌 러너. 패싱 다운에서의 꾸준함만 개선한다면, 오리건의 백필드에서 핵심적인 역할을 맡을 선수.",
+                        analysis: `마키 휴즈의 최고 장점은 "컨택 밸런스"입니다. 그의 눈과 발이 동기화될 때, 그는 컨택을 예측하고, 공을 보호하며, 수비수를 튕겨내면서도 균형을 유지합니다. 그가 개선해야 할 부분은 "패싱 다운에서의 꾸준함"입니다.`,
+                        career: `2024년에 1,400 러싱 야드를 돌파한 FBS 러닝백 9명 중, 대학에 복귀하는 선수는 휴즈가 유일합니다. 그는 툴레인 대학에서의 2시즌 동안 2,776 러싱 야드, 22개 터치다운, 그리고 단 하나의 펌블도 기록하지 않는 안정성을 보여주었습니다.`,
+                        stats: { labels: ['2023 (Tulane)', '2024 (Tulane)'], datasets: [{ label: '러싱 야드', data: [1378, 1401], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: '러싱 TD', data: [7, 15], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: '리시빙 야드', data: [67, 176], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    }
+                ]
+            },
+            te: {
+                intro: `2026년 타이트 엔드 클래스는 최상위권의 압도적인 스타는 부족하지만, 드래프트 2일차에 지명될 만한 흥미로운 선수들이 다수 포진해 있어 견고한 클래스가 될 가능성이 있습니다. 이들은 리시버와 블로커의 역할을 모두 수행하며 현대 미식축구에서 중요한 미스매치 무기로 활용됩니다.`,
+                players: [
+                    {
+                        rank: 1, name: "케년 사디크 (Kenyon Sadiq)", team: "Oregon", photo: "https://images2.minutemediacdn.com/image/upload/c_crop,w_3980,h_2238,x_0,y_134/c_fill,w_720,ar_16:9,f_auto,q_auto,g_auto/images/ImagnImages/mmsport/ducks_digest/01jzbpf6g6710x3k479b.jpg", info: "6'3\", 245 lbs | 주니어",
+                        summary: "캐치 후 플레이 창출 능력이 탁월한 운동 능력의 소유자. 2025시즌 오리건 공격의 핵심으로 부상할 것으로 예상되며, TE1으로서의 생산성만 증명한다면 클래스 최고의 타이트 엔드가 될 수 있습니다.",
+                        analysis: `케년 사디크의 최고 장점은 "캐치 후 플레이 창출 능력(YAC)"입니다. 그는 지난 시즌 FBS 타이트 엔드 중 유일하게 리셉션당 평균 10야드 이상의 YAC를 기록했습니다. 그가 증명해야 할 것은 "TE1으로서의 자신"입니다. 재능과 기회는 충분하지만, 이제는 그 예상을 생산성으로 바꿔야 할 때입니다.`,
+                        career: `오리건의 공격 코디네이터 윌 스타인은 그를 "대학 미식축구 최고의 선수 중 한 명"이라고 묘사했습니다. 주전 타이트 엔드와 와이드 리시버의 이탈 및 부상으로, 사디크는 2025시즌 오리건 공격의 핵심적인 역할을 맡게 될 것입니다.`,
+                        stats: { labels: ['2023', '2024'], datasets: [{ label: '리셉션', data: [5, 24], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: '리시빙 야드', data: [24, 308], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: '리시빙 TD', data: [1, 2], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    },
+                    {
+                        rank: 2, name: "맥스 클레어 (Max Klare)", team: "Ohio State", photo: "https://s3media.247sports.com/Uploads/Assets/69/71/12071069.jpg", info: "6'4\", 240 lbs | 주니어",
+                        summary: "패싱 게임에서 공간을 창출하는 능력이 뛰어난 부드러운 운동 능력을 가진 '조커' 타이트 엔드. 블로킹 능력만 향상시킨다면, 30년 만에 오하이오 주립의 상위 라운드 타이트 엔드 지명자가 될 수 있습니다.",
+                        analysis: `맥스 클레어는 "재능 있는 조커 타이트 엔드"로, 패싱 게임에서의 부드러운 운동 능력이 최고 장점입니다. 그는 뛰어난 공간 이해도와 민첩성으로 수비수를 제압합니다. 개선점은 "블로킹 지속성"으로, 강력한 디펜시브 엔드를 상대로는 힘에서 밀리는 모습을 보였습니다.`,
+                        career: `고교 시절 쿼터백, 타이트 엔드, 키커까지 소화한 다재다능한 선수입니다. 퍼듀에서 팀의 리딩 리시버로 활약한 후, 오하이오 주립으로 이적하며 드래프트 주가를 높였습니다. 오하이오 주립은 지난 30년간 1-2라운드에 타이트 엔드를 배출하지 못했는데, 클레어는 그 역사를 바꿀 재능으로 평가받습니다.`,
+                        stats: { labels: ['2023 (Purdue)', '2024 (Purdue)'], datasets: [{ label: '리셉션', data: [22, 51], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: '리시빙 야드', data: [196, 685], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: '리시빙 TD', data: [0, 4], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    },
+                    {
+                        rank: 3, name: "조 로이어 (Joe Royer)", team: "Cincinnati", photo: "https://gobearcats.com/images/2023/8/22/Royer_Joe_23_Web.jpg", info: "6'5\", 252 lbs | 시니어",
+                        summary: "캐치 지점에서의 운동 능력이 탁월한 선수. 고향 팀으로 돌아와 트래비스 켈시의 기록을 깨며 부활했습니다. 폭발적인 플레이 생산 능력만 더한다면 드래프트 2일차 지명이 유력합니다.",
+                        analysis: `조 로이어는 사이즈에 비해 훌륭한 운동선수이며, 그의 최고 장점은 "캐치 지점에서의 운동 능력"입니다. 공의 위치에 상관없이 공을 추적하고, 자세를 조정하며, 프레임을 만드는 능력은 그의 운동 능력이 빛나는 부분입니다. 그의 개선점은 "폭발적인 플레이" 생산입니다.`,
+                        career: `오하이오 주립에서 제한된 기회를 받은 후, 고향 팀인 신시내티로 이적하여 2024년 50개의 리셉션을 기록, 트래비스 켈시가 세웠던 학교 기록을 경신했습니다. 이 이적은 개인적인 어려움을 겪었던 그에게 축구에 대한 열정을 되찾게 해준 '홈커밍'이었습니다.`,
+                        stats: { labels: ['2020-22 (OSU)', '2024 (Cincy)'], datasets: [{ label: '리셉션', data: [2, 50], backgroundColor: 'rgba(54, 162, 235, 0.6)' }, { label: '리시빙 야드', data: [10, 521], backgroundColor: 'rgba(255, 99, 132, 0.6)' }, { label: '리시빙 TD', data: [0, 3], backgroundColor: 'rgba(75, 192, 192, 0.6)' }] }
+                    }
+                ]
+            }
+        };
+
+        function createPlayerCard(player, positionKey, index) {
+            const chartId = `${positionKey}-chart-${index}`;
+            return `
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-shadow duration-300 hover:shadow-2xl">
+                    <div class="p-6 md:p-8">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                            <div class="md:col-span-1 flex flex-col items-center text-center">
+                                <img src="${player.photo}" alt="${player.name}" class="w-48 h-48 object-cover rounded-full border-4 border-gray-200 shadow-md mb-4" onerror="this.onerror=null;this.src='https://placehold.co/192x192/e2e8f0/4a5568?text=Photo+N/A';">
+                                <h2 class="text-2xl font-bold text-gray-900">${player.name}</h2>
+                                <p class="text-md text-blue-600 font-semibold">${player.team}</p>
+                                <p class="text-sm text-gray-500">${player.info}</p>
+                            </div>
+                            <div class="md:col-span-2">
+                                <div class="space-y-6">
+                                    <div>
+                                        <h3 class="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-3 text-gray-800">전문가 요약</h3>
+                                        <p class="text-gray-700">${player.summary}</p>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-3 text-gray-800">스카우팅 분석</h3>
+                                        <p class="text-gray-700">${player.analysis}</p>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-3 text-gray-800">커리어 하이라이트</h3>
+                                        <p class="text-gray-700">${player.career}</p>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-bold border-b-2 border-blue-500 pb-2 mb-3 text-gray-800">커리어 통계</h3>
+                                        <div class="chart-container">
+                                            <canvas id="${chartId}"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderContent() {
+            Object.keys(playerData).forEach(positionKey => {
+                const container = document.getElementById(positionKey);
+                const position = playerData[positionKey];
+                
+                let content = `<div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-r-lg mb-8"><p class="text-lg">${position.intro}</p></div>`;
+                
+                position.players.forEach((player, index) => {
+                    content += createPlayerCard(player, positionKey, index);
+                });
+                container.innerHTML = content;
+            });
+
+            renderCharts();
+        }
+
+        function renderCharts() {
+            Object.keys(playerData).forEach(positionKey => {
+                playerData[positionKey].players.forEach((player, index) => {
+                    const chartId = `${positionKey}-chart-${index}`;
+                    const ctx = document.getElementById(chartId);
+                    if (ctx) {
+                        new Chart(ctx, {
+                            type: 'bar',
+                            data: player.stats,
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: {
+                                            precision: 0
+                                        }
+                                    },
+                                    x: {
+                                        grid: {
+                                            display: false
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    tooltip: {
+                                        mode: 'index',
+                                        intersect: false,
+                                    }
+                                },
+                                interaction: {
+                                    mode: 'index',
+                                    intersect: false,
+                                },
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
+        function showTab(tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+            document.getElementById(tabName).classList.remove('hidden');
+
+            const buttons = document.querySelectorAll('.tab-button');
+buttons.forEach(button => button.classList.remove('active'));
+            document.querySelector(`button[onclick="showTab('${tabName}')"]`).classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', renderContent);
+    </script>
+</body>
+</html>
