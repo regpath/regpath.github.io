@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEDEC 및 DDR5 RCD 인터랙티브 분석</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony Neutrals -->
+    <!-- Application Structure Plan: The SPA is designed with a thematic, non-linear structure to make a complex topic accessible. It starts with a hero section, followed by a sticky navigation bar for easy access to different modules: 1) 'What is JEDEC?' uses interactive cards for key benefits. 2) 'Explore RCD' features a visual diagram of the memory architecture and an interactive DDR4 vs. DDR5 comparison tool to break down dense data. 3) 'Standard Evolution' uses an interactive timeline and a Chart.js bar chart to visualize performance progression. 4) 'The Process' transforms the JEDEC standardization procedure into an interactive flowchart. 5) 'JEDEC Naming' provides an interactive decoder for document IDs. This modular, interactive approach was chosen over a linear report format to enhance user engagement, facilitate non-linear exploration, and improve comprehension of technical concepts through visualization and direct interaction. -->
+    <!-- Visualization & Content Choices: 
+        - JEDEC's Role (Inform): Interactive cards (HTML/CSS/JS) to make benefits digestible.
+        - RCD Architecture (Organize/Inform): Interactive diagram (HTML/CSS/JS) to visually map signal flow, which is more intuitive than text.
+        - DDR4 vs DDR5 (Compare): Clickable feature list updating two columns (JS) to make a dense table interactive and user-driven.
+        - RCD Evolution (Change): Interactive timeline (HTML/CSS/JS) and Bar Chart (Chart.js) to show progression and performance leaps visually.
+        - JEDEC Process (Organize): Interactive flowchart (HTML/CSS/JS) to make a procedural list more engaging and easier to follow.
+        - Naming Convention (Inform): Interactive decoder (HTML/CSS/JS) for a hands-on explanation of the ID structure.
+        All choices prioritize interactivity and visual clarity to simplify complex information, adhering to the NO SVG/Mermaid constraint. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F8F7F4;
+            color: #3D3D3D;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+ Gemini
+DDR5 RCD Standard Explained
+대화 분석 계획: 인물 관계 변화
+인대재준 깐부방 대화 분석
+기사 분석 및 자료 조사 계획
+남성 속옷 브랜드 비교 조사
+LLM AI 에이전트 학습 계획
+마크다운 렌더링 문제 해결 시도
+마크다운 렌더링 문제 해결 시도
+이비인후과 석션 관련 조사 계획
+해킹 기기 추적 및 분석
+패스트캠퍼스 강의 자료 제작 계획
+PDF Document Comparison Technology Research
+협박 혐의 변호 전략 분석
+일정 추가 요청 확인
+Agentic AI: 개념과 특징
+계획 수정 요청 확인
+연구 계획 업데이트 요청
+RAG 강의 교재 제작 계획
+슬픈 한국 드라마 30개 정리
+네이처 논문 분석 계획 수립
+Progress Feedback Revision Request
+DT 간담회: AI 파트 대응 방안
+넷플릭스 '쿼터백' 시즌 1 조사
+GDDR6-AiM 아키텍처 기술 설명
+꿈, 불, 로또, 그리고 4등
+코드 수정 및 개선 제안 대화
+업무 정리 및 계획 수립
+위키백과 문서 보강 계획 작성
+위키 보강 계획 검토 요청
+NFL 승수, SoS 고려 분석
+회의록 수정 요청 및 답변
+KFA 웹사이트 데이터프레임 추출
+PyTorch NLP Tutorial 교재 제작
+JEDEC 및 DDR5 RCD 인터랙티브 분석 SPA
+
+
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879
+        \}
+        .nav-link.active, .nav-link:hover {
+            color: #3B82F6; /* blue-600 */
+            border-bottom-color: #3B82F6;
+        \}
+        .content-section {
+            display: none;
+        \}
+        .content-section.active {
+            display: block;
+
+$0       .nav-link.active, .nav-link:hover {
+            color: #3B82F6; /* blue-600 */
+            border-bottom-color: #3B82F6;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .interactive-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .interactive-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .comparison-btn.active {
+            background-color: #3B82F6;
+            color: white;
+        }
+        .timeline-item .dot {
+            transition: transform 0.3s;
+        }
+        .timeline-item:hover .dot {
+            transform: scale(1.5);
+        }
+        .process-step.active {
+            border-color: #3B82F6;
+            transform: scale(1.05);
+        }
+        .decoder-part:hover {
+            cursor: pointer;
+            color: #3B82F6;
+            font-weight: 700;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <span class="text-xl font-bold text-gray-800">JEDEC & RCD 분석</span>
+                </div>
+                <div class="hidden md:block">
+                    <div id="nav-menu" class="ml-10 flex items-baseline space-x-4">
+                        <a href="#intro" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-600 border-b-2 border-transparent">소개</a>
+                        <a href="#jedec" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-600 border-b-2 border-transparent">JEDEC이란?</a>
+                        <a href="#rcd" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-600 border-b-2 border-transparent">RCD 탐구</a>
+                        <a href="#evolution" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-600 border-b-2 border-transparent">표준의 진화</a>
+                        <a href="#process" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-600 border-b-2 border-transparent">표준화 절차</a>
+                        <a href="#naming" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-600 border-b-2 border-transparent">네이밍 규칙</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <section id="intro" class="content-section text-center py-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">현대 메모리의 심장 박동 조율기</h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">JEDEC 표준과 DDR5 Registering Clock Driver(RCD)의 세계를 탐험해 보세요. 이 인터랙티브 가이드는 복잡한 반도체 기술의 핵심 원리와 그 진화 과정을 시각적으로 명쾌하게 풀어냅니다.</p>
+        </section>
+
+        <section id="jedec" class="content-section py-12">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">1. JEDEC과 표준의 역할</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">JEDEC은 반도체 산업의 '보이지 않는 규칙'을 만드는 국제 기구입니다. 표준이 없다면 우리가 사용하는 모든 전자기기는 제대로 작동할 수 없습니다. 표준화는 왜 이토록 중요할까요?</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="interactive-card bg-white p-8 rounded-xl shadow-md text-center">
+                    <div class="text-4xl mb-4">🤝</div>
+                    <h3 class="text-xl font-bold mb-2">호환성 보장</h3>
+                    <p class="text-gray-600">서로 다른 회사가 만든 CPU, 메인보드, 메모리가 문제없이 함께 작동하도록 보장하여 거대한 기술 생태계를 유지합니다.</p>
+                </div>
+                <div class="interactive-card bg-white p-8 rounded-xl shadow-md text-center">
+                    <div class="text-4xl mb-4">🏆</div>
+                    <h3 class="text-xl font-bold mb-2">품질 및 신뢰성 확보</h3>
+                    <p class="text-gray-600">제품이 특정 성능과 안정성 기준을 충족하도록 최소한의 가이드라인을 제공하여 업계 전반의 품질을 상향 평준화합니다.</p>
+                </div>
+                <div class="interactive-card bg-white p-8 rounded-xl shadow-md text-center">
+                    <div class="text-4xl mb-4">💡</div>
+                    <h3 class="text-xl font-bold mb-2">혁신 촉진 및 비용 절감</h3>
+                    <p class="text-gray-600">기업들이 기본적인 규격 개발 대신 핵심 기술 개발에 집중할 수 있게 하여 혁신을 가속화하고 개발 비용을 절감합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="rcd" class="content-section py-12">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">2. RCD 탐구: 고성능 메모리의 핵심 조력자</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Registering Clock Driver(RCD)는 고성능 서버 메모리(RDIMM)에 탑재되는 핵심 칩입니다. RCD가 왜 필요하며, DDR5 시대에 그 역할이 어떻게 진화했는지 알아보세요.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-xl shadow-lg mb-12">
+                <h3 class="text-2xl font-bold text-center mb-6">RCD: 신호 교통정리 및 증폭기</h3>
+                <div class="flex flex-col md:flex-row items-center justify-around gap-4 text-center">
+                    <div class="flex flex-col items-center">
+                        <div class="p-4 bg-blue-100 rounded-full text-2xl">CPU</div>
+                        <p class="mt-2 font-semibold">메모리 컨트롤러</p>
+                    </div>
+                    <div class="text-4xl font-light text-gray-400 transform rotate-90 md:rotate-0">→</div>
+                    <div class="relative flex flex-col items-center p-4 border-2 border-blue-500 border-dashed rounded-lg">
+                        <div class="p-4 bg-blue-500 text-white rounded-full text-2xl">RCD</div>
+                        <p class="mt-2 font-semibold">Registering Clock Driver</p>
+                        <div class="absolute -bottom-10 text-sm text-blue-600 max-w-xs">명령/주소/클럭 신호를 받아 증폭하고 깨끗하게 다듬어 분배</div>
+                    </div>
+                    <div class="text-4xl font-light text-gray-400 transform rotate-90 md:rotate-0">→</div>
+                    <div class="grid grid-cols-4 gap-2">
+                        <div class="p-2 bg-gray-200 rounded text-sm">DRAM</div>
+                        <div class="p-2 bg-gray-200 rounded text-sm">DRAM</div>
+                        <div class="p-2 bg-gray-200 rounded text-sm">DRAM</div>
+                        <div class="p-2 bg-gray-200 rounded text-sm">DRAM</div>
+                        <div class="p-2 bg-gray-200 rounded text-sm">DRAM</div>
+                        <div class="p-2 bg-gray-200 rounded text-sm">DRAM</div>
+                        <div class="p-2 bg-gray-200 rounded text-sm">DRAM</div>
+                        <div class="p-2 bg-gray-200 rounded text-sm">DRAM</div>
+                    </div>
+                </div>
+                 <div class="mt-16 grid md:grid-cols-2 gap-8 text-center">
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="text-lg font-bold mb-2">⚡ 신호 무결성(Signal Integrity) 확보</h4>
+                        <p class="text-gray-600">고속으로 전송되는 신호가 노이즈나 왜곡 없이 DRAM 칩에 정확하게 도달하도록 보장합니다.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="text-lg font-bold mb-2">📉 전기적 부하(Electrical Load) 감소</h4>
+                        <p class="text-gray-600">메모리 컨트롤러가 RCD 칩 하나에만 신호를 보내면 되므로, 컨트롤러의 부담을 획기적으로 줄여 더 많은 메모리를 장착할 수 있게 합니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold text-center mb-6">DDR4 vs DDR5 RCD: 아키텍처의 도약</h3>
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/3">
+                        <p class="mb-4 text-gray-600">DDR5는 RCD의 역할을 더욱 중요하게 만드는 근본적인 변화를 도입했습니다. 아래 버튼을 클릭하여 주요 차이점을 비교해 보세요.</p>
+                        <div id="comparison-controls" class="flex flex-col space-y-2"></div>
+                    </div>
+                    <div class="md:w-2/3 grid grid-cols-2 gap-4 text-center">
+                        <div class="p-4 bg-gray-100 rounded-lg">
+                            <h4 class="text-xl font-bold mb-2">DDR4 RCD</h4>
+                            <div id="ddr4-details" class="text-gray-700 min-h-[100px] flex items-center justify-center"></div>
+                        </div>
+                        <div class="p-4 bg-blue-100 rounded-lg">
+                            <h4 class="text-xl font-bold mb-2 text-blue-800">DDR5 RCD</h4>
+                            <div id="ddr5-details" class="text-blue-700 min-h-[100px] flex items-center justify-center"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="evolution" class="content-section py-12">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">3. 표준의 진화: 더 높은 속도를 향하여</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">RCD 표준은 메모리 속도 향상에 맞춰 단계적으로 발전합니다. 이 '성능의 계단'은 전체 반도체 생태계가 안정적으로 다음 단계로 나아갈 수 있도록 하는 중요한 이정표입니다.</p>
+            </div>
+            
+            <div class="bg-white p-8 rounded-xl shadow-lg mb-12">
+                <h3 class="text-2xl font-bold text-center mb-8">DDR5 RCD 버전별 지원 속도</h3>
+                <div class="relative">
+                    <div class="border-l-2 border-blue-300 absolute h-full left-4 md:left-1/2 md:-translate-x-1/2"></div>
+                    <div id="timeline-container" class="space-y-12">
+                    </div>
+                </div>
+                <div id="timeline-details" class="mt-8 text-center bg-blue-50 p-6 rounded-lg min-h-[100px]">
+                    <p class="text-gray-600">타임라인의 각 지점을 클릭하여 해당 버전에 대한 설명을 확인하세요.</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                 <h3 class="text-2xl font-bold text-center mb-6">메모리 데이터 전송률(MT/s) 발전사</h3>
+                 <div class="chart-container">
+                    <canvas id="speedChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="process" class="content-section py-12">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">4. JEDEC 표준화 절차</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">JEDEC 표준은 특정 기업이 아닌, 수많은 회원사들의 치열한 토론과 합의를 통해 만들어집니다. 각 단계를 클릭하여 상세한 과정을 알아보세요.</p>
+            </div>
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                <div id="process-steps-container" class="flex flex-col md:flex-row items-stretch justify-center gap-2 md:gap-0 flex-wrap"></div>
+            </div>
+            <div id="process-details" class="mt-8 bg-white p-8 rounded-xl shadow-lg min-h-[150px]">
+                <p class="text-gray-600 text-center">위의 단계를 클릭하여 상세 설명을 확인하세요.</p>
+            </div>
+        </section>
+
+        <section id="naming" class="content-section py-12">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">5. JEDEC 네이밍 규칙 해부</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">`JESD82-514.01`과 같은 문서 번호에는 체계적인 규칙이 숨어있습니다. 각 부분을 클릭하여 그 의미를 해독해 보세요.</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <div class="text-center text-2xl md:text-4xl font-mono tracking-wider mb-8 p-4 bg-gray-100 rounded-lg">
+                    <span id="decoder-part-jesd" class="decoder-part">JESD</span><span id="decoder-part-82" class="decoder-part">82</span><span class="text-gray-400">-</span><span id="decoder-part-514" class="decoder-part">514</span><span class="text-gray-400">.</span><span id="decoder-part-01" class="decoder-part">01</span>
+                </div>
+                <div id="decoder-output" class="p-6 bg-blue-50 rounded-lg min-h-[120px] flex items-center justify-center text-center">
+                    <p class="text-gray-600">해독할 부분을 클릭하세요.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>본 페이지는 제공된 JEDEC 및 DDR5 RCD 분석 보고서를 기반으로 제작된 인터랙티브 교육용 자료입니다.</p>
+            <p class="mt-1 opacity-70">&copy; 2025 Interactive Report Generator. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.content-section');
+
+            function showSection(hash) {
+                const targetHash = hash || '#intro';
+                
+                sections.forEach(section => {
+                    if ('#' + section.id === targetHash) {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.remove('active');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    if (link.getAttribute('href') === targetHash) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetHash = this.getAttribute('href');
+                    history.pushState(null, null, targetHash);
+                    showSection(targetHash);
+                    window.scrollTo(0, 0);
+                });
+            });
+
+            window.addEventListener('popstate', () => {
+                showSection(window.location.hash);
+            });
+            
+            showSection(window.location.hash);
+
+            // RCD Comparison Logic
+            const comparisonData = {
+                '채널 아키텍처': {
+                    ddr4: '단일 72-bit 채널',
+                    ddr5: '2개의 독립적인 40-bit 서브채널'
+                },
+                '최대 데이터 속도': {
+                    ddr4: '3200 MT/s',
+                    ddr5: '8000+ MT/s (단계적 상향)'
+                },
+                '동작 전압 (VDD)': {
+                    ddr4: '1.2 V',
+                    ddr5: '1.1 V (전력 소비 감소)'
+                },
+                '명령어/주소(CA) 버스': {
+                    ddr4: 'SDR (Single Data Rate)',
+                    ddr5: 'DDR (Double Data Rate)'
+                },
+                '신호 무결성 강화': {
+                    ddr4: 'DQ 버스에 집중',
+                    ddr5: 'CA 버스에 DFE 기술 적용'
+                },
+                '컴패니언 칩': {
+                    ddr4: 'SPD',
+                    ddr5: 'SPD Hub, PMIC, 온도 센서'
+                }
+            };
+            const comparisonControls = document.getElementById('comparison-controls');
+            const ddr4Details = document.getElementById('ddr4-details');
+            const ddr5Details = document.getElementById('ddr5-details');
+            
+            Object.keys(comparisonData).forEach((key, index) => {
+                const button = document.createElement('button');
+                button.textContent = key;
+                button.classList.add('comparison-btn', 'w-full', 'text-left', 'p-3', 'rounded-lg', 'transition', 'hover:bg-gray-200');
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('.comparison-btn').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    ddr4Details.innerHTML = `<p class="text-lg">${comparisonData[key].ddr4}</p>`;
+                    ddr5Details.innerHTML = `<p class="text-lg font-semibold">${comparisonData[key].ddr5}</p>`;
+                });
+                comparisonControls.appendChild(button);
+                if (index === 0) button.click();
+            });
+
+            // Evolution Timeline Logic
+            const timelineData = [
+                { version: 'DDR5RCD01', speed: '4800 MT/s', details: 'DDR5의 초기 표준으로, 4800 MT/s의 데이터 전송률을 지원하며 새로운 아키텍처의 기반을 마련했습니다.' },
+                { version: 'DDR5RCD02', speed: '5600 MT/s', details: '5600 MT/s로 속도를 향상시키고, 초기 버전의 안정성을 개선한 표준입니다.' },
+                { version: 'DDR5RCD03', speed: '6400 MT/s', details: '최대 6400 MT/s를 지원하도록 정의되어, 고성능 컴퓨팅 시장의 요구에 부응했습니다.' },
+                { version: 'DDR5RCD04', speed: '7200 MT/s', details: '최대 7200 MT/s를 목표로 사양이 상향 조정되었으며, 향상된 신호 보정 기능이 요구됩니다.' },
+                { version: 'DDR5RCD05+', speed: '8000+ MT/s', details: '미래의 표준으로, 8000 MT/s 및 그 이상의 속도를 지원하여 차세대 서버 플랫폼의 성능을 극대화할 것입니다.' },
+            ];
+            const timelineContainer = document.getElementById('timeline-container');
+            const timelineDetails = document.getElementById('timeline-details');
+
+            timelineData.forEach((item, index) => {
+                const isLeft = index % 2 === 0;
+                const timelineItem = document.createElement('div');
+                timelineItem.classList.add('timeline-item', 'relative', 'cursor-pointer');
+                timelineItem.innerHTML = `
+                    <div class="dot w-6 h-6 bg-white border-4 border-blue-500 rounded-full absolute left-4 top-1/2 -translate-y-1/2 -translate-x-1/2 md:left-1/2 md:-translate-x-1/2 z-10"></div>
+                    <div class="content p-4 bg-white rounded-lg shadow-md w-full md:w-5/12 ${isLeft ? 'md:ml-auto md:mr-12' : 'md:ml-12 md:mr-auto'}">
+                        <h4 class="font-bold text-blue-600">${item.version}</h4>
+                        <p class="text-lg font-semibold">${item.speed}</p>
+                    </div>
+                `;
+                timelineContainer.appendChild(timelineItem);
+                timelineItem.addEventListener('click', () => {
+                    timelineDetails.innerHTML = `<h4 class="font-bold text-lg mb-2">${item.version} (${item.speed})</h4><p>${item.details}</p>`;
+                });
+            });
+
+            // Speed Chart
+            const ctx = document.getElementById('speedChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['DDR4', 'RCD01', 'RCD02', 'RCD03', 'RCD04', 'RCD05+'],
+                    datasets: [{
+                        label: '최대 데이터 전송률 (MT/s)',
+                        data: [3200, 4800, 5600, 6400, 7200, 8000],
+                        backgroundColor: [
+                            'rgba(156, 163, 175, 0.6)',
+                            'rgba(59, 130, 246, 0.6)',
+                            'rgba(59, 130, 246, 0.7)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(59, 130, 246, 0.9)',
+                            'rgba(59, 130, 246, 1)',
+                        ],
+                        borderColor: [
+                            'rgba(156, 163, 175, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(59, 130, 246, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'DDR4 대비 DDR5 RCD 버전별 속도 향상',
+                            font: { size: 18 }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'MT/s'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Process Logic
+            const processData = [
+                { name: '제안', details: '회원사가 기술적 필요성을 인지하고 위원회에 개정안을 공식 제출하며 시작됩니다.' },
+                { name: '토론', details: '관련 기술 위원회에서 다양한 이해관계자들이 모여 제안서를 검토하고 치열한 기술 토론을 벌입니다.' },
+                { name: '투표', details: '위원회 내에서 공감대가 형성되면 공식 투표 안건으로 상정되어 회원사들의 투표를 거칩니다. 반대 의견은 반드시 기술적 근거를 제시해야 합니다.' },
+                { name: '조율', details: '제출된 모든 반대 의견을 검토하고 제안 내용을 수정하거나 설득하는 등 의견을 조율합니다. 이 과정이 표준 절차의 핵심입니다.' },
+                { name: '승인', details: '위원회 투표를 통과한 안건은 JEDEC 이사회에 상정되어 최종 승인을 받습니다.' },
+                { name: '발표', details: '최종 승인이 완료되면 새로운 표준 문서가 공식 웹사이트를 통해 전 세계에 발표됩니다.' }
+            ];
+            const processStepsContainer = document.getElementById('process-steps-container');
+            const processDetails = document.getElementById('process-details');
+
+            processData.forEach((step, index) => {
+                const stepEl = document.createElement('div');
+                stepEl.classList.add('process-step', 'p-4', 'border-2', 'border-gray-300', 'rounded-lg', 'cursor-pointer', 'transition-all', 'duration-300', 'bg-white', 'text-center', 'flex-grow');
+                stepEl.textContent = step.name;
+                stepEl.addEventListener('click', () => {
+                    document.querySelectorAll('.process-step').forEach(el => el.classList.remove('active'));
+                    stepEl.classList.add('active');
+                    processDetails.innerHTML = `<h4 class="font-bold text-lg mb-2">${step.name}</h4><p>${step.details}</p>`;
+                });
+                processStepsContainer.appendChild(stepEl);
+
+                if (index < processData.length - 1) {
+                    const arrow = document.createElement('div');
+                    arrow.classList.add('text-2xl', 'text-gray-400', 'flex', 'items-center', 'justify-center', 'px-2', 'transform', 'md:rotate-0');
+                    arrow.innerHTML = `<span>&rarr;</span>`;
+                    processStepsContainer.appendChild(arrow);
+                }
+            });
+            processStepsContainer.children[0].click();
+
+            // Decoder Logic
+            const decoderData = {
+                'jesd': { title: '접두사 (Prefix)', text: '`JESD`는 JEDEC Standard의 약자로, 제품의 요구사항을 정의하는 공식 표준 문서임을 의미합니다.' },
+                '82': { title: '시리즈 번호 (Series Number)', text: '`82`는 관련된 표준들을 그룹화하는 번호입니다. JESD82 시리즈는 메모리 모듈용 클럭 드라이버, 버퍼 등 특정 로직 소자의 정의를 다룹니다.' },
+                '514': { title: '문서 ID (Document ID)', text: '`-514`는 시리즈 내에서 각 문서를 고유하게 식별하는 번호입니다. `-513`은 DDR5RCD03을, `-514`는 DDR5RCD04를 정의합니다.' },
+                '01': { title: '개정 접미사 (Revision Suffix)', text: '`.01`은 사소한 업데이트나 오타 수정을 의미하는 부 개정(minor revision)을 나타냅니다. 주요 개정은 알파벳(A, B)을 사용합니다.' }
+            };
+            const decoderOutput = document.getElementById('decoder-output');
+            document.querySelectorAll('.decoder-part').forEach(part => {
+                part.addEventListener('click', () => {
+                    const key = part.id.replace('decoder-part-', '');
+                    const data = decoderData[key];
+                    decoderOutput.innerHTML = `<h4 class="font-bold text-lg mb-2 text-blue-800">${data.title}</h4><p class="text-gray-700">${data.text}</p>`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
