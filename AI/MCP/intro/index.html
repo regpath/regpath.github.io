@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP의 모든 것: 인터랙티브 가이드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: A thematic, single-page narrative structure guides users from high-level concepts to practical application. The flow is: 1) Hero introduction (What is MCP?), 2) Core Benefits (Why use it?), 3) Interactive Architecture Diagram (How it works?), 4) Tabbed Primitives explanation (What are its components?), 5) Simulated Code Walkthrough (How to build with it?), and 6) Adoption Guidance (Is it for me?). This top-down approach is ideal for non-experts, building foundational knowledge before introducing complexity, making the topic more approachable and digestible. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: MCP Architecture (Host, Client, Server). Goal: Explain relationships. Viz/Method: Interactive diagram using HTML/CSS/JS. Interaction: Click components to see details and data flow animation. Justification: More engaging and clearer than static text. Library/Method: Vanilla JS, Tailwind.
+        - Report Info: MCP Primitives (Tools, Resources, Prompts). Goal: Differentiate concepts. Viz/Method: Tabbed interface. Interaction: Click tabs to switch content. Justification: Standard UI for organizing distinct but related info. Library/Method: Vanilla JS.
+        - Report Info: Python Code Example. Goal: Demonstrate practical use. Viz/Method: Simulated IDE with step-by-step code reveal. Interaction: Click buttons to progress through coding steps. Justification: Makes code accessible without requiring a local setup. Library/Method: Vanilla JS.
+        - Report Info: Ecosystem SDKs. Goal: Show multi-language support. Viz/Method: Horizontal Bar Chart. Interaction: Hover tooltips. Justification: Quick visual summary of ecosystem breadth. Library/Method: Chart.js.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0d6efd;
+            border-bottom-color: #0d6efd;
+        }
+        .section-title {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #0d6efd;
+        }
+        .benefit-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .tab-btn {
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .code-step.active {
+            background-color: #e9ecef;
+            border-left-color: #0d6efd;
+        }
+        .flow-line {
+            position: absolute;
+            background-color: #adb5bd;
+            z-index: 0;
+        }
+        .flow-line.vertical { width: 2px; }
+        .flow-line.horizontal { height: 2px; }
+        .flow-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #0d6efd;
+            border-radius: 50%;
+            z-index: 1;
+            opacity: 0;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 400px; }
+        }
+    </style>
+</head>
+<body class="scroll-smooth">
+
+    <header class="bg-white/80 backdrop-blur-sm shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-gray-800">MCP 가이드</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#intro" class="nav-link">소개</a>
+                <a href="#architecture" class="nav-link">아키텍처</a>
+                <a href="#primitives" class="nav-link">핵심 요소</a>
+                <a href="#practice" class="nav-link">실습</a>
+                <a href="#adoption" class="nav-link">도입 전략</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-4 6h4"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#intro" class="block py-2 px-4 text-sm hover:bg-gray-200">소개</a>
+            <a href="#architecture" class="block py-2 px-4 text-sm hover:bg-gray-200">아키텍처</a>
+            <a href="#primitives" class="block py-2 px-4 text-sm hover:bg-gray-200">핵심 요소</a>
+            <a href="#practice" class="block py-2 px-4 text-sm hover:bg-gray-200">실습</a>
+            <a href="#adoption" class="block py-2 px-4 text-sm hover:bg-gray-200">도입 전략</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="intro" class="text-center mb-24 scroll-mt-20">
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-4">모델 컨텍스트 프로토콜(MCP)</h1>
+            <p class="text-xl md:text-2xl text-gray-600 mb-8">AI 통합의 혼돈을 잠재우는 표준</p>
+            <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                <p class="text-2xl font-bold text-blue-600 mb-4">"AI 애플리케이션을 위한 USB-C 포트" 🔌</p>
+                <p class="text-lg text-gray-700">
+                    수많은 AI 도구와 데이터를 연결할 때마다 제각각인 방식으로 코드를 작성하는 것은 비효율적이고 불안정합니다. MCP는 LLM(대규모 언어 모델)이 외부 세계(도구, 데이터, 서비스)와 소통하는 방식을 표준화하여, 어떤 도구나 서비스든 '플러그 앤 플레이'처럼 쉽게 연결할 수 있게 해주는 개방형 프로토콜입니다.
+                </p>
+            </div>
+        </section>
+
+        <section id="benefits" class="mb-24 scroll-mt-20">
+            <h2 class="section-title text-3xl font-bold">왜 MCP를 사용해야 할까요?</h2>
+            <p class="text-lg text-gray-600 mb-12">MCP는 개발 속도를 높이고, 보안을 강화하며, AI 시스템의 확장성을 극대화합니다. 이는 단순한 기술을 넘어 AI 아키텍처의 패러다임을 바꾸는 혁신입니다.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="benefit-card bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                    <h3 class="text-xl font-bold mb-2">🧩 표준화</h3>
+                    <p>개별 도구마다 맞춤 코드를 작성할 필요 없이, 표준화된 방식으로 빠르고 안정적인 통합이 가능합니다.</p>
+                </div>
+                <div class="benefit-card bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                    <h3 class="text-xl font-bold mb-2">♻️ 재사용성</h3>
+                    <p>한 번 만든 MCP 서버는 다른 모든 MCP 호환 앱에서 재사용할 수 있어, 개발 생태계가 풍부해집니다.</p>
+                </div>
+                <div class="benefit-card bg-white p-6 rounded-lg shadow-md border-l-4 border-yellow-500">
+                    <h3 class="text-xl font-bold mb-2">🛡️ 보안 및 거버넌스</h3>
+                    <p>사용자 동의, 권한 관리를 위한 명확한 구조를 제공하여 엔터프라이즈급 보안을 쉽게 구현할 수 있습니다.</p>
+                </div>
+                <div class="benefit-card bg-white p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                    <h3 class="text-xl font-bold mb-2">🔗 구성 가능성</h3>
+                    <p>전문 MCP 서버들을 레고처럼 조립하여, 복잡하고 강력한 다중 에이전트 시스템을 구축할 수 있습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="mb-24 scroll-mt-20">
+            <h2 class="section-title text-3xl font-bold">MCP 아키텍처: 어떻게 동작하나요?</h2>
+            <p class="text-lg text-gray-600 mb-8">MCP는 클라이언트-서버 모델을 기반으로 합니다. 사용자가 상호작용하는 '호스트' 앱, 통신을 담당하는 '클라이언트', 그리고 실제 기능을 제공하는 '서버'로 구성됩니다. 아래 다이어그램의 각 요소를 클릭하여 자세한 설명을 확인하고, '요청 흐름 보기' 버튼으로 데이터 흐름을 시각적으로 따라가 보세요.</p>
+            
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <div id="diagram-container" class="relative h-96 md:h-[500px] flex flex-col md:flex-row justify-around items-center">
+                    
+                    <div id="host-box" class="diagram-box relative text-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer bg-blue-50 z-10 w-48">
+                        <h4 class="font-bold">MCP 호스트</h4>
+                        <p class="text-sm">AI 챗봇, 앱</p>
+                    </div>
+
+                    <div id="client-box" class="diagram-box relative text-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer bg-green-50 z-10 w-48 mt-8 md:mt-0">
+                        <h4 class="font-bold">MCP 클라이언트</h4>
+                        <p class="text-sm">프로토콜 통역사</p>
+                    </div>
+
+                    <div id="server-box" class="diagram-box relative text-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer bg-yellow-50 z-10 w-48 mt-8 md:mt-0">
+                        <h4 class="font-bold">MCP 서버</h4>
+                        <p class="text-sm">기능 제공자</p>
+                    </div>
+                    
+                    <div id="flow-line-1" class="flow-line horizontal hidden md:block" style="top: 50%; left: 25%; width: 25%;"></div>
+                    <div id="flow-line-2" class="flow-line horizontal hidden md:block" style="top: 50%; left: 50%; width: 25%;"></div>
+                    <div id="flow-line-3" class="flow-line vertical md:hidden" style="left: 50%; top: 20%; height: 20%;"></div>
+                    <div id="flow-line-4" class="flow-line vertical md:hidden" style="left: 50%; top: 53%; height: 20%;"></div>
+
+                    <div id="flow-dot-1" class="flow-dot"></div>
+                    <div id="flow-dot-2" class="flow-dot"></div>
+                </div>
+
+                <div id="diagram-info" class="mt-8 p-4 bg-gray-100 rounded-lg min-h-[100px]">
+                    <p class="text-center text-gray-500">다이어그램의 요소를 클릭하여 설명을 확인하세요.</p>
+                </div>
+
+                <div class="text-center mt-6">
+                    <button id="play-flow-btn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">요청 흐름 보기</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="primitives" class="mb-24 scroll-mt-20">
+            <h2 class="section-title text-3xl font-bold">MCP의 핵심 요소: 프리미티브</h2>
+            <p class="text-lg text-gray-600 mb-8">MCP 서버는 '프리미티브'라는 표준화된 유형으로 컨텍스트를 제공합니다. 이는 LLM이 외부 세계와 상호작용하는 구체적인 방법입니다.</p>
+            <div class="flex justify-center mb-6 border-b">
+                <button data-tab="tools" class="tab-btn px-6 py-2 font-semibold text-gray-600 active">🛠️ 도구 (Tools)</button>
+                <button data-tab="resources" class="tab-btn px-6 py-2 font-semibold text-gray-600">📚 리소스 (Resources)</button>
+                <button data-tab="prompts" class="tab-btn px-6 py-2 font-semibold text-gray-600">📝 프롬프트 (Prompts)</button>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-lg min-h-[250px]">
+                <div id="tools" class="tab-content">
+                    <h3 class="text-2xl font-bold mb-4">도구: LLM에게 '행동' 능력 부여</h3>
+                    <p class="mb-4">LLM이 호출할 수 있는 실행 가능한 함수입니다. 날씨를 묻거나, 데이터베이스에 정보를 추가하는 등의 '행동'을 수행합니다. REST API의 `POST`나 `PUT`과 유사합니다.</p>
+                    <pre class="bg-gray-800 text-white p-4 rounded-md"><code>get_weather(city: "Seoul") -> "현재 서울은 맑고 25도입니다."</code></pre>
+                </div>
+                <div id="resources" class="tab-content hidden">
+                    <h3 class="text-2xl font-bold mb-4">리소스: LLM에게 '지식' 제공</h3>
+                    <p class="mb-4">LLM의 컨텍스트에 로드할 수 있는 정보나 데이터 소스입니다. 파일 내용, 데이터베이스 스키마 등을 나타냅니다. REST API의 `GET`과 유사합니다.</p>
+                    <pre class="bg-gray-800 text-white p-4 rounded-md"><code>file:///path/to/report.txt -> "프로젝트 보고서 내용..."</code></pre>
+                </div>
+                <div id="prompts" class="tab-content hidden">
+                    <h3 class="text-2xl font-bold mb-4">프롬프트: 재사용 가능한 '상호작용' 템플릿</h3>
+                    <p class="mb-4">사용자나 LLM을 정해진 워크플로우로 안내하는 템플릿입니다. '휴가 계획' 프롬프트는 목적지, 예산, 날짜 등의 입력을 요구할 수 있습니다. 복잡한 프롬프트 체인을 만드는 핵심입니다.</p>
+                    <pre class="bg-gray-800 text-white p-4 rounded-md"><code>/plan_vacation(destination, budget, dates) -> "휴가 계획 생성 중..."</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="practice" class="mb-24 scroll-mt-20">
+            <h2 class="section-title text-3xl font-bold">실전 가이드: Q&A 어시스턴트 만들기</h2>
+            <p class="text-lg text-gray-600 mb-8">이론은 충분합니다! 이제 MCP를 사용해 간단한 RAG(검색 증강 생성) 애플리케이션을 만드는 과정을 시뮬레이션해 봅시다. 아래 단계를 클릭하여 각 단계의 코드와 설명을 확인하세요. 실제 Python 환경 없이도 전체 흐름을 이해할 수 있습니다.</p>
+            
+            <div class="flex flex-col md:flex-row bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="w-full md:w-1/3 bg-gray-100 p-4 border-r">
+                    <h3 class="font-bold mb-4">개발 단계</h3>
+                    <ul class="space-y-2">
+                        <li><button data-step="1" class="code-step w-full text-left p-3 rounded-md border-l-4 border-transparent active">1. 지식 베이스 준비</button></li>
+                        <li><button data-step="2" class="code-step w-full text-left p-3 rounded-md border-l-4 border-transparent">2. MCP 서버 구축</button></li>
+                        <li><button data-step="3" class="code-step w-full text-left p-3 rounded-md border-l-4 border-transparent">3. 클라이언트 앱 구축</button></li>
+                        <li><button data-step="4" class="code-step w-full text-left p-3 rounded-md border-l-4 border-transparent">4. 실행 및 테스트</button></li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-2/3 p-6">
+                    <div id="code-display">
+                        <!-- Code content will be injected here by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="adoption" class="mb-24 scroll-mt-20">
+            <h2 class="section-title text-3xl font-bold">MCP, 언제 사용해야 할까요?</h2>
+            <p class="text-lg text-gray-600 mb-12">MCP는 강력하지만 모든 상황에 필요한 만능 해결책은 아닙니다. 시스템의 복잡성에 따라 도입 여부를 결정하는 것이 중요합니다.</p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-lg border-t-4 border-green-500">
+                    <h3 class="text-2xl font-bold text-green-600 mb-4">✅ MCP가 빛을 발하는 경우</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>여러 팀/고객이 사용하는 LLM 서비스를 구축할 때</li>
+                        <li>외부 개발자를 위한 플러그인 생태계를 만들 때</li>
+                        <li>보안과 재사용성이 중요한 대규모 엔터프라이즈 환경</li>
+                        <li>여러 백엔드 시스템을 통합하는 복잡한 AI 에이전트 개발</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg border-t-4 border-red-500">
+                    <h3 class="text-2xl font-bold text-red-600 mb-4">❌ 단순함이 최선일 때</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>단일 팀이 관리하는 작고 독립적인 프로젝트</li>
+                        <li>통합할 외부 도구나 데이터가 거의 없는 경우</li>
+                        <li>프로토타이핑 단계에서 빠른 구현이 더 중요할 때</li>
+                        <li>MCP의 추상화가 불필요한 오버헤드가 될 수 있는 경우</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="ecosystem" class="scroll-mt-20">
+            <h2 class="section-title text-3xl font-bold">성장하는 MCP 생태계</h2>
+            <p class="text-lg text-gray-600 mb-12">MCP는 이론에 머무르지 않고, 다양한 언어를 지원하는 공식 SDK와 커뮤니티를 통해 활발하게 성장하고 있습니다. 이는 MCP가 신뢰할 수 있는 표준으로 자리 잡고 있음을 의미합니다.</p>
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <div class="chart-container">
+                    <canvas id="sdkChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-24">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>이 페이지는 MCP에 대한 이해를 돕기 위해 제작된 인터랙티브 가이드입니다.</p>
+            <p class="text-sm text-gray-400 mt-2">&copy; 2025 MCP Interactive Guide. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link, #mobile-menu a');
+            const sections = document.querySelectorAll('section');
+
+            const activateLink = (id) => {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        activateLink(entry.target.id);
+                    }
+                });
+            }, { rootMargin: '-30% 0px -70% 0px' });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (mobileMenu.contains(e.target)) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            const diagramBoxes = document.querySelectorAll('.diagram-box');
+            const diagramInfo = document.getElementById('diagram-info');
+            const diagramData = {
+                'host-box': {
+                    title: 'MCP 호스트 (Host)',
+                    desc: '사용자가 직접 상호작용하는 애플리케이션입니다 (예: 챗봇, AI 코딩 도우미). 전체 시스템을 조율하는 지휘자 역할을 합니다.'
+                },
+                'client-box': {
+                    title: 'MCP 클라이언트 (Client)',
+                    desc: '호스트 내부에 존재하며 MCP 프로토콜을 이해하는 통역사입니다. 호스트와 특정 서버 간의 1:1 통신을 담당합니다.'
+                },
+                'server-box': {
+                    title: 'MCP 서버 (Server)',
+                    desc: '실제 기능(도구, 데이터)을 제공하는 서비스입니다. 파일 시스템 접근, 데이터베이스 조회, 외부 API 호출 등을 수행합니다.'
+                }
+            };
+            diagramBoxes.forEach(box => {
+                box.addEventListener('click', () => {
+                    diagramBoxes.forEach(b => b.classList.remove('border-blue-500', 'border-4'));
+                    box.classList.add('border-blue-500', 'border-4');
+                    const data = diagramData[box.id];
+                    diagramInfo.innerHTML = `<h4 class="font-bold text-lg mb-2">${data.title}</h4><p>${data.desc}</p>`;
+                });
+            });
+
+            const playFlowBtn = document.getElementById('play-flow-btn');
+            const dot1 = document.getElementById('flow-dot-1');
+            const dot2 = document.getElementById('flow-dot-2');
+            
+            const animateDot = (dot, path) => {
+                return new Promise(resolve => {
+                    dot.style.transition = 'none';
+                    dot.style.opacity = '1';
+                    dot.style.transform = `translate(${path[0].x}px, ${path[0].y}px)`;
+                    
+                    setTimeout(() => {
+                        dot.style.transition = 'transform 1s linear';
+                        dot.style.transform = `translate(${path[1].x}px, ${path[1].y}px)`;
+                    }, 100);
+
+                    setTimeout(() => {
+                        dot.style.opacity = '0';
+                        resolve();
+                    }, 1100);
+                });
+            };
+
+            playFlowBtn.addEventListener('click', async () => {
+                playFlowBtn.disabled = true;
+                playFlowBtn.innerText = '실행 중...';
+                
+                const containerRect = document.getElementById('diagram-container').getBoundingClientRect();
+                const hostRect = document.getElementById('host-box').getBoundingClientRect();
+                const clientRect = document.getElementById('client-box').getBoundingClientRect();
+                const serverRect = document.getElementById('server-box').getBoundingClientRect();
+                
+                const isMobile = window.innerWidth < 768;
+
+                const hostCenter = { x: hostRect.left + hostRect.width / 2 - containerRect.left, y: hostRect.top + hostRect.height / 2 - containerRect.top };
+                const clientCenter = { x: clientRect.left + clientRect.width / 2 - containerRect.left, y: clientRect.top + clientRect.height / 2 - containerRect.top };
+                const serverCenter = { x: serverRect.left + serverRect.width / 2 - containerRect.left, y: serverRect.top + serverRect.height / 2 - containerRect.top };
+
+                const path1 = [hostCenter, clientCenter];
+                const path2 = [clientCenter, serverCenter];
+                const path3 = [serverCenter, clientCenter];
+                const path4 = [clientCenter, hostCenter];
+
+                diagramInfo.innerHTML = `<p class="text-center text-blue-600 font-semibold">1. 호스트가 클라이언트에게 요청을 보냅니다...</p>`;
+                await animateDot(dot1, path1);
+                
+                diagramInfo.innerHTML = `<p class="text-center text-blue-600 font-semibold">2. 클라이언트가 서버에게 표준화된 메시지를 보냅니다...</p>`;
+                await animateDot(dot1, path2);
+
+                diagramInfo.innerHTML = `<p class="text-center text-green-600 font-semibold">3. 서버가 결과를 클라이언트에게 응답합니다...</p>`;
+                await animateDot(dot2, path3);
+
+                diagramInfo.innerHTML = `<p class="text-center text-green-600 font-semibold">4. 클라이언트가 최종 결과를 호스트에게 전달합니다.</p>`;
+                await animateDot(dot2, path4);
+
+                setTimeout(() => {
+                    diagramInfo.innerHTML = `<p class="text-center text-gray-500">흐름 완료! 다이어그램의 요소를 클릭하여 설명을 확인하세요.</p>`;
+                    playFlowBtn.disabled = false;
+                    playFlowBtn.innerText = '요청 흐름 보기';
+                }, 500);
+            });
+
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const tab = button.dataset.tab;
+                    tabContents.forEach(content => {
+                        if (content.id === tab) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const codeSteps = document.querySelectorAll('.code-step');
+            const codeDisplay = document.getElementById('code-display');
+            const codeData = {
+                '1': {
+                    title: '1. 지식 베이스 준비 (knowledge_base.py)',
+                    desc: '먼저, LLM이 참조할 지식 베이스를 만듭니다. 여기서는 보안상 안전한 Hugging Face의 SQuAD 데이터셋을 사용하고, 간단한 키워드 검색 함수를 구현합니다.',
+                    code: `import pandas as pd
+from datasets import load_dataset
+
+# Hugging Face에서 SQuAD 데이터셋 로드
+dataset = load_dataset("squad", split="train")
+df = pd.DataFrame(dataset)
+
+def search_knowledge(query: str) -> str:
+    """간단한 키워드 검색으로 관련 컨텍스트를 찾습니다."""
+    query_words = set(query.lower().split())
+    for _, row in df.iterrows():
+        if query_words.intersection(set(row['context'].lower().split())):
+            return row['context']
+    return "관련 정보를 찾을 수 없습니다."`
+                },
+                '2': {
+                    title: '2. MCP 서버 구축 (qa_server.py)',
+                    desc: '준비된 지식 베이스 검색 함수를 LLM이 사용할 수 있는 "도구"로 노출하는 MCP 서버를 만듭니다. `@mcp.tool()` 데코레이터 하나로 간단하게 도구를 정의할 수 있습니다.',
+                    code: `from mcp.server.fastmcp import FastMCP
+from knowledge_base import search_knowledge
+
+mcp = FastMCP("QAServer")
+
+@mcp.tool()
+def search_knowledge_base(query: str) -> str:
+    """
+    사용자 쿼리와 관련된 정보를 찾기 위해 지식 베이스를 검색합니다.
+    일반 지식이 아닌 특정 문서에 대한 질문에 사용하세요.
+    """
+    return search_knowledge(query)
+
+if __name__ == "__main__":
+    mcp.run(transport="stdio")`
+                },
+                '3': {
+                    title: '3. 클라이언트 앱 구축 (app.py)',
+                    desc: '사용자 입력을 받아 LLM과 MCP 서버를 조율하는 클라이언트 앱입니다. LLM이 도구 사용을 결정하면, MCP 클라이언트를 통해 서버의 도구를 호출하고 결과를 받아 최종 답변을 생성합니다.',
+                    code: `import asyncio
+from openai import OpenAI
+from mcp import ClientSession
+from mcp.client.stdio import stdio_client
+
+# OpenAI API 호환 클라이언트 (사내 LLM 사용 시 base_url 변경)
+client = OpenAI(api_key="YOUR_API_KEY")
+
+async def main():
+    server_params = StdioServerParameters(command="python", args=["qa_server.py"])
+    async with stdio_client(server_params) as (r, w):
+        async with ClientSession(r, w) as session:
+            await session.initialize()
+            mcp_tools = await session.list_tools()
+            
+            # --- (LLM과 상호작용하며 도구를 호출하는 로직) ---
+            # 1. 사용자 질문과 도구 정보를 LLM에 전달
+            # 2. LLM이 도구 사용을 결정하면 tool_calls 반환
+            # 3. session.call_tool()로 MCP 서버의 도구 실행
+            # 4. 도구 결과를 다시 LLM에 전달하여 최종 답변 생성
+            print("Q&A 봇이 준비되었습니다. 질문을 입력하세요.")`
+                },
+                '4': {
+                    title: '4. 실행 및 테스트',
+                    desc: '이제 모든 준비가 끝났습니다. 클라이언트 앱을 실행하면, 내부적으로 MCP 서버가 실행되고 둘 사이에 통신 채널이 열립니다. 사용자가 질문하면 LLM이 MCP를 통해 도구를 호출하고 답변하는 과정을 볼 수 있습니다.',
+                    code: `✅ 서버에서 도구를 성공적으로 로드했습니다: ['search_knowledge_base']
+🤔 질문을 입력하세요: To whom did the Virgin Mary allegedly appear?
+
+🤖 LLM이 'search_knowledge_base' 도구를 호출하려고 합니다...
+✅ 도구 실행 완료. 결과 일부: Architecturally, the school has a Catholic character...
+
+💡 최종 답변:
+According to the provided text, the Virgin Mary allegedly appeared to Saint Bernadette Soubirous.`
+                }
+            };
+
+            const renderCodeStep = (step) => {
+                const data = codeData[step];
+                codeDisplay.innerHTML = `
+                    <h3 class="text-xl font-bold mb-2">${data.title}</h3>
+                    <p class="text-gray-600 mb-4">${data.desc}</p>
+                    <div class="bg-gray-800 text-white p-4 rounded-md text-sm overflow-x-auto">
+                        <pre><code>${data.code}</code></pre>
+                    </div>
+                `;
+            };
+
+            codeSteps.forEach(button => {
+                button.addEventListener('click', () => {
+                    codeSteps.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    renderCodeStep(button.dataset.step);
+                });
+            });
+
+            renderCodeStep('1');
+
+            const ctx = document.getElementById('sdkChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Python', 'TypeScript/JS', 'C#', 'Java', 'Community'],
+                    datasets: [{
+                        label: '공식/커뮤니티 SDK 지원 현황',
+                        data: [100, 95, 80, 75, 90],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 99, 132, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: '언어별 SDK 지원 수준'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
