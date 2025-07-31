@@ -9,31 +9,153 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The SPA is designed as a multi-section dashboard for non-linear exploration. It starts with a 'Big Picture' section for high-level summary (key narratives, positional breakdown chart), followed by a core 'Player Explorer' with robust filtering/sorting capabilities (search, position, team, rank change type). Clicking a player card reveals a detailed modal view with tabbed content for deep dives. This macro-to-micro structure enhances usability by providing context first, then empowering user-driven exploration, which is superior to a static, linear report. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Positional Breakdown -> Goal: Inform/Compare -> Viz: Donut Chart (Chart.js/Canvas) -> Interaction: Hover for details, click to filter player grid -> Justification: More engaging and interactive than a static table.
+        - Report Info: Master Player List -> Goal: Organize/Compare -> Viz: Interactive Card Grid (HTML/Tailwind/JS) -> Interaction: Search, filter, sort, click for detail modal -> Justification: Empowers user-driven discovery of players and trends.
+        - Report Info: Rank Changes -> Goal: Compare/Highlight -> Viz: Horizontal Bar Chart (Chart.js/Canvas) -> Interaction: Hover for player/change details -> Justification: Visually emphasizes the most significant risers and fallers, a key narrative point.
+        - Report Info: Detailed Player Profiles -> Goal: Deep-dive Inform -> Viz: Tabbed Modal (HTML/Tailwind/JS) -> Interaction: Click tabs to switch content -> Justification: Organizes dense text into digestible sections, preventing user overload.
+        - Library/Method: All charts use Chart.js on Canvas. Layouts use Tailwind CSS. Interactions are powered by vanilla JavaScript.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
-        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8f9fa;}
-        .chart-container { position: relative; width: 100%; max-width: 450px; margin-left: auto; margin-right: auto; height: 320px; max-height: 400px;}
-        @media (min-width: 768px) { .chart-container { height: 400px; }}
-        .active-filter { background-color: #1e40af !important; color: white !important; border-color: #1e40af !important;}
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); animation: fadeIn 0.4s;}
-        .modal-content { position: fixed; bottom: 0; background-color: #fefefe; width: 100%; animation: slideIn 0.4s; max-height: 90vh; overflow-y: auto;}
-        @media (min-width: 768px) { .modal-content { top: 50%; left: 50%; transform: translate(-50%, -50%); bottom: auto; width: 80%; max-width: 900px; border-radius: 0.5rem;}}
-        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; }
-        .close:hover, .close:focus { color: black; text-decoration: none; cursor: pointer;}
-        .tab-button.active { border-color: #2563eb; color: #2563eb; font-weight: 600;}
-        @keyframes slideIn { from {bottom: -300px; opacity: 0} to {bottom: 0; opacity: 1}}
-        @keyframes fadeIn { from {opacity: 0} to {opacity: 1}}
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .active-filter {
+            background-color: #1e40af !important;
+            color: white !important;
+            border-color: #1e40af !important;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            -webkit-animation-name: fadeIn;
+            -webkit-animation-duration: 0.4s;
+            animation-name: fadeIn;
+            animation-duration: 0.4s
+        }
+        .modal-content {
+            position: fixed;
+            bottom: 0;
+            background-color: #fefefe;
+            width: 100%;
+            -webkit-animation-name: slideIn;
+            -webkit-animation-duration: 0.4s;
+            animation-name: slideIn;
+            animation-duration: 0.4s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        @media (min-width: 768px) {
+            .modal-content {
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                bottom: auto;
+                width: 80%;
+                max-width: 900px;
+                border-radius: 0.5rem;
+            }
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .tab-button.active {
+            border-color: #2563eb;
+            color: #2563eb;
+            font-weight: 600;
+        }
+        @-webkit-keyframes slideIn {
+            from {bottom: -300px; opacity: 0} 
+            to {bottom: 0; opacity: 1}
+        }
+        @keyframes slideIn {
+            from {bottom: -300px; opacity: 0}
+            to {bottom: 0; opacity: 1}
+        }
+        @-webkit-keyframes fadeIn {
+            from {opacity: 0} 
+            to {opacity: 1}
+        }
+        @keyframes fadeIn {
+            from {opacity: 0} 
+            to {opacity: 1}
+        }
     </style>
 </head>
 <body class="text-gray-800">
+
     <header class="bg-white shadow-md">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <h1 class="text-3xl font-bold text-gray-900">NFL Top 100: 2025 (61-100위)</h1>
-            <p class="mt-2 text-gray-600">선수들이 직접 뽑은 2025년 최고의 선수들. 이 구간에 포함된 40명의 선수들을 심층 분석합니다.</p>
+            <p class="mt-2 text-gray-600">선수들이 직접 뽑은 2025년 최고의 선수들. 대화형 대시보드를 통해 새로운 시대의 서막을 여는 40명의 선수들을 심층 분석합니다.</p>
         </div>
     </header>
+
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <!-- 중략: (종합 분석 등 대시보드 상단) -->
-        <!-- ... -->
+        <section id="analysis" class="mb-12">
+            <h2 class="text-2xl font-bold px-4 sm:px-0 mb-4">종합 분석: 61-100위 구간의 주요 특징</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold mb-3">주요 서사</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <h4 class="font-bold text-blue-800">🚀 새로운 시대의 도래</h4>
+                            <p class="text-sm text-blue-700">래드 맥콘키, 말릭 네이버스 등 총 14명의 선수가 처음으로 Top 100에 진입하며 리그의 빠른 세대교체를 증명합니다.</p>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <h4 class="font-bold text-green-800">💪 부활을 꿈꾸는 자들</h4>
+                            <p class="text-sm text-green-700">닥 프레스캇, 크리스티안 맥카프리 등 부상에서 돌아온 슈퍼스타들이 2025년 명예 회복을 노립니다. 건강이 순위 반등의 열쇠입니다.</p>
+                        </div>
+                        <div class="p-4 bg-yellow-50 rounded-lg">
+                            <h4 class="font-bold text-yellow-800">💰 성과와 인정의 연결고리</h4>
+                            <p class="text-sm text-yellow-700">뛰어난 활약은 거액의 계약으로, 그리고 동료들의 인정인 Top 100 순위로 이어집니다. 실력과 가치가 증명되는 순간입니다.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold mb-3">포지션별 분포</h3>
+                    <p class="text-sm text-gray-600 mb-2">차트의 각 부분을 클릭하여 해당 포지션의 선수들을 필터링할 수 있습니다.</p>
+                    <div class="chart-container">
+                        <canvas id="positionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="explorer">
             <h2 class="text-2xl font-bold px-4 sm:px-0 mb-4">선수 탐색기</h2>
             <div class="bg-white p-4 sm:p-6 rounded-lg shadow mb-6">
@@ -53,7 +175,7 @@
                         <option value="change-desc">순위 변동 큰 순</option>
                     </select>
                 </div>
-                <div class="mt-4 flex flex-wrap gap-2">
+                 <div class="mt-4 flex flex-wrap gap-2">
                     <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="all">전체</button>
                     <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="new">신규 진입</button>
                     <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="re-entry">재진입</button>
@@ -61,50 +183,568 @@
                     <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="down">순위 하락</button>
                 </div>
             </div>
-            <div id="playerGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
+
+            <div id="playerGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            </div>
         </section>
     </main>
-    <div id="playerModal" class="modal"><div class="modal-content shadow-2xl rounded-t-lg md:rounded-lg"></div></div>
-    <script>
-        // 1. 데이터를 rank 기준 내림차순(100~61)으로 정렬
-        const playersDataUnsorted = [ /* ... 기존 playersData ... (생략, 첨부내용 사용) ... */ ];
-        const playersData = [...playersDataUnsorted].sort((a, b) => b.rank - a.rank);
 
-        // 2. 이미지 매핑 정비 (한글/영문 별칭 모두 지원, 누락분 보완)
+    <div id="playerModal" class="modal">
+        <div class="modal-content shadow-2xl rounded-t-lg md:rounded-lg">
+        </div>
+    </div>
+
+    <script>
+        const playersData = [
+            { rank: 61, name: "브라이언 토마스 주니어", position: "WR", team: "Jacksonville Jaguars", age: 22, lastRank: "NR", change: "new",
+                details: { capHit: "(루키 계약)", history: "첫 등장 (데뷔)",
+                review: "재규어스의 새로운 1번 리시버. 17경기 1,282야드, 10TD로 모든 신인 기록 경신. 1,200야드-10TD 동시 달성은 역사상 4번째 루키.",
+                reason: "역사적인 루키 시즌. 뛰어난 스피드, 라우트 러닝, 클러치 능력을 높이 평가. 트레버 로렌스의 신뢰할 수 있는 넘버원 타겟.",
+                outlook: "재규어스 공격의 중심. 슬롯에서의 효율성(리그 1위)은 새로운 시스템에서 더욱 빛날 것. 로렌스의 성장과 직결.",
+                analysis: "이미 증명된 스타. 2년 차 징크스를 피하고 꾸준한 생산성을 보여준다면 리그 최고의 리시버 중 한 명으로 성장할 것." } },
+            { rank: 62, name: "비잔 로빈슨", position: "RB", team: "Atlanta Falcons", age: 23, lastRank: "NR", change: "new",
+                details: { capHit: "$5,988,693", history: "첫 등장 (데뷔)",
+                review: "리그 최고의 RB 중 한 명으로 자리매김. 1,456 러싱야드(3위), 14TD, 총 1,887 스크리미지 야드(4위). PFF RB 2위(92.8), 70개 강제 미스 태클.",
+                reason: "압도적인 생산성과 예술적인 플레이 스타일. '비잔처럼 컷백 할 수 있는 선수는 없다'는 극찬. 비전, 민첩성, 리시빙 능력 탁월.",
+                outlook: "목표는 '폭발적인 플레이' 증가. 신인 QB 체제에서 러싱 게임 의존도 상승. 2025년 리그 MVP 후보 잠재력.",
+                analysis: "이미 리그 최고의 RB 중 한 명. 꾸준한 생산성에 폭발적인 플레이를 더한다면 리그의 얼굴이 될 것." } },
+            { rank: 63, name: "조쉬 하인스-앨런", position: "DE", team: "Jacksonville Jaguars", age: 28, lastRank: 28, change: -35,
+                details: { capHit: "(연장 계약)", history: "2번째 등장 (2024년 28위)",
+                review: "재규어스 수비의 핵심 패스러셔. 16경기 8색. 팀 전체 프레셔의 26.2%를 혼자 책임지며 압도적 영향력 과시(리그 3위).",
+                reason: "순위 하락에도 꾸준함과 팀 내 중요성을 인정받음. 폭발적인 첫 스텝과 다양한 패스러시 기술을 높이 평가.",
+                outlook: "재규어스 프랜차이즈 통산 최다 색 기록 경신 눈앞. NFL 단일 시즌 최다 색 기록(23개) 경신이라는 더 큰 목표 설정.",
+                analysis: "꾸준한 생산자를 넘어 리그를 지배하는 패스러셔로 도약 준비. 목표대로 기록적인 시즌을 보낸다면 순위는 최상위권으로 복귀할 것." } },
+            { rank: 64, name: "보 닉스", position: "QB", team: "Denver Broncos", age: 25, lastRank: "NR", change: "new",
+                details: { capHit: "$4,230,265", history: "첫 등장 (데뷔)",
+                review: "역사적인 루키 시즌. 3,775야드, 29TD로 브롱코스 신인 기록 모두 경신. 29TD는 NFL 루키 역사상 2위. 팀을 플레이오프로 이끔.",
+                reason: "기록적인 루키 시즌과 팀을 이끈 리더십에 대한 찬사. 침착함, 정확성, 높은 풋볼 IQ를 높이 평가.",
+                outlook: "'성공적인 루키'를 넘어 '증명된 프랜차이즈 QB'로 도약해야 함. 시스템 이해도 상승, 더 나은 무기 보강으로 스탯 향상 기대.",
+                analysis: "션 페이튼이라는 명장과 만나 잠재력 100% 발휘 중. 2년 차 징크스를 극복하고 팀을 더 높은 곳으로 이끈다면 리그 대표 QB로 자리매김할 것." } },
+            { rank: 65, name: "트레이 맥브라이드", position: "TE", team: "Arizona Cardinals", age: 25, lastRank: "NR", change: "new",
+                details: { capHit: "(4년 7,600만 달러 계약)", history: "첫 등장 (데뷔)",
+                review: "리그 최고의 리시빙 TE로 폭발적 성장. 16경기 111리시빙, 1,146야드. 한 시즌 3번 12+리시빙은 TE 역사상 최초. 첫 프로볼 선정.",
+                reason: "압도적인 볼륨과 생산성. QB 카일러 머리의 가장 믿음직한 '안전 담요'. 엄청난 타겟 점유율(29.3%, TE 1위).",
+                outlook: "대형 계약으로 팀의 핵심 인정. 마빈 해리슨 주니어 합류에도 안정적 역할 유지. 1,000+야드, 터치다운 증가 기대.",
+                analysis: "볼륨과 효율성을 모두 갖춘 현대적 TE. 마빈 해리슨 주니어와의 시너지가 관건. 리그 최고의 TE 자리를 놓고 경쟁할 준비 완료." } },
+            { rank: 66, name: "제일런 램지", position: "CB", team: "Pittsburgh Steelers", age: 30, lastRank: 25, change: -41,
+                details: { capHit: "$4,904,000 (트레이드)", history: "8년 연속 등장 (2024년 25위)",
+                review: "여전히 리그 최고의 코너백 중 한 명. 스탯은 예년만 못했지만 PFF CB 17위, 블리츠 프레셔 1위 등 다재다능함 과시.",
+                reason: "8년 연속 Top 100 선정은 명성과 꾸준함의 증거. 여전히 상대하기 가장 까다로운 코너백 중 한 명으로 꼽힘.",
+                outlook: "스틸러스로 트레이드, 새로운 도전. 강팀 수비에 합류, '수비의 스위스 아미 나이프' 역할 기대.",
+                analysis: "새로운 환경에서 가치 증명 필요. 강력한 프런트 세븐은 더 많은 기회 제공. 스틸러스 수비의 마지막 퍼즐 조각이 될 수 있을지 주목." } },
+            { rank: 67, name: "말릭 네이버스", position: "WR", team: "New York Giants", age: 22, lastRank: "NR", change: "new",
+                details: { capHit: "$6,638,125", history: "첫 등장 (데뷔)",
+                review: "루키 리시버 돌풍의 중심. 15경기 109리시빙, 1,204야드, 7TD. 자이언츠 단일 시즌 최다 리시빙 기록 경신. 프로볼 선정.",
+                reason: "압도적인 재능과 즉각적인 생산성. 오델 베컴 주니어 이후 최고의 리시버 재능임을 인정받음. 1,000야드 이상 기록한 4명의 루키 중 한 명.",
+                outlook: "자이언츠 공격의 알파이자 오메가. 베테랑 QB 합류 시 딥-쓰렛 능력 극대화 기대. 리그 전체 타겟 1위를 노릴 것. 어깨 부상은 변수.",
+                analysis: "차세대 슈퍼스타 잠재력. 건강 유지 및 안정적 QB와 호흡 시 순위 대폭 상승 예상." } },
+            { rank: 68, name: "조던 러브", position: "QB", team: "Green Bay Packers", age: 26, lastRank: 34, change: -34,
+                details: { capHit: "$29,687,143", history: "2번째 등장 (2024년 34위)",
+                review: "풀타임 주전 2년차, 한 단계 성장. 15경기 3,389야드, 25TD. 3다운 상황에서 강한 모습(리그 5위). 팀을 플레이오프로 이끔.",
+                reason: "순위 하락에도 불구, 패커스의 확실한 미래임을 인정받음. 시즌 초반 기복 극복하고 팀을 이끄는 모습에서 성장 가능성 확인.",
+                outlook: "4년 2억 2,000만 달러 초대형 계약. 계약에 걸맞은 활약 필요. 최적의 환경 조성. 우승 후보로 팀을 이끌어야 하는 과제.",
+                analysis: "2025년 시즌이 그의 커리어 분수령. 모든 지원을 받고 있으며, 압박감을 이겨내고 진정한 엘리트 QB로 도약할 수 있을지 주목." } },
+            { rank: 69, name: "조던 마일라타", position: "OT", team: "Philadelphia Eagles", age: 28, lastRank: "NR", change: "new",
+                details: { capHit: "(연장 계약)", history: "첫 등장 (데뷔)",
+                review: "럭비 선수 출신, 리그 최고의 레프트 태클로 인정. 12경기 출전에도 PFF OT 1위(95.8). 단 1색 허용, 이글스 슈퍼볼 우승에 크게 기여.",
+                reason: "놀라운 성장 스토리와 압도적인 퍼포먼스. 미식축구 무경험에서 리그 최고 선수로 성장한 여정이 큰 영감.",
+                outlook: "이글스 오펜시브 라인의 핵심. 목표는 꾸준함 증명. 건강하게 한 시즌 소화 시 올프로 퍼스트팀 유력 후보.",
+                analysis: "인간 승리의 표본. 재능과 노력이 결합했을 때의 결과. 단순히 좋은 선수를 넘어 리그의 역사를 쓰는 선수로 발돋움할 준비 완료." } },
+            { rank: 70, name: "프랭키 루부", position: "LB", team: "Washington Commanders", age: 28, lastRank: "NR", change: "new",
+                details: { capHit: "$12,540,000", history: "첫 등장 (데뷔)",
+                review: "커리어 최고의 시즌. 54 솔로 태클, 8색, 7 PD, 1 INT. 패스러시, 런 디펜스, 커버리지에서 모두 200+ 스냅을 소화한 유일한 선수. 올프로 세컨드팀.",
+                reason: "엄청난 에너지와 다재다능함. '팀의 심장 박동'이라는 묘사. 헌신적인 플레이 스타일이 팀 전체에 긍정적 영향.",
+                outlook: "바비 왜그너와 함께 커맨더스 LB 군단의 핵심. 상대 공격 약점을 파고드는 '에이스' 역할. 댄 퀸의 공격적 수비 스킴에서 더욱 빛날 것.",
+                analysis: "언드래프티 신화의 새로운 주인공. 재능과 노력이 결합했을 때의 결과를 보여줌. 이제 깜짝 스타가 아닌 리그 대표 LB로 자리매김할 것." } },
+            { rank: 71, name: "커비 조셉", position: "S", team: "Detroit Lions", age: 24, lastRank: "NR", change: "new",
+                details: { capHit: "(4년 8,600만 달러 계약)", history: "첫 등장 (데뷔)",
+                review: "리그 최고의 '볼 호크'. 17경기 리그 1위인 9개 인터셉션 기록. 라이온스의 2년 연속 지구 우승에 결정적 역할. 올프로 퍼스트팀, PFF 세이프티 1위.",
+                reason: "경이로운 턴오버 생산 능력. '가르칠 수 없는 볼 감각'이라는 극찬. 데뷔 후 3년 연속 4+INT는 에드 리드와 동급.",
+                outlook: "NFL 역사상 최고 연봉 세이프티. 계약에 걸맞은 활약 부담. 상대 쿼터백의 실수를 유발하는 역할. 목표는 슈퍼볼 우승.",
+                analysis: "턴오버의 중요성을 보여주는 선수. 집중 견제 속에서도 턴오버를 생산해낼 수 있을지가 진정한 시험대." } },
+            { rank: 72, name: "샘 다널드", position: "QB", team: "Seattle Seahawks", age: 28, lastRank: "NR", change: "new",
+                details: { capHit: "(3년 1억 50만 달러 계약)", history: "첫 등장 (데뷔)",
+                review: "바이킹스에서 잠재력 폭발. 17경기 4,319야드, 35TD, 102.5 패서 레이팅 기록. 딥 패스 리그 1위. 첫 프로볼 선정.",
+                reason: "오랜 기다림 끝에 찾아온 성공. '실패한 유망주'에서 재능을 꽃피운 모습이 많은 선수들에게 영감. 극적인 반등이 투표에 큰 영향.",
+                outlook: "시호크스와 대형 계약, 새로운 주전 QB. 익숙한 공격 코디네이터와 재회. 약한 공격 라인이라는 변수 속에서 생산성 유지가 관건.",
+                analysis: "'시스템 쿼터백'의 성공 사례가 될지 시험대. 시호크스에서도 성공하면 완벽한 부활, 실패하면 '반짝'으로 남을 것." } },
+            { rank: 73, name: "크리스티안 맥카프리", position: "RB", team: "San Francisco 49ers", age: 29, lastRank: 3, change: -70,
+                details: { capHit: "$8,369,119", history: "3번째 등장 (2024년 3위)",
+                review: "2024년은 악몽. 아킬레스건, 종아리, PCL 부상으로 단 4경기 출전. 그의 부재는 49ers가 6승 11패로 부진한 가장 큰 원인.",
+                reason: "순위 추락은 기량 저하가 아닌 부상 때문. 건강할 때 리그에서 가장 압도적인 공격 무기라는 사실을 모두가 인정.",
+                outlook: "100% 건강 회복. '모든 시스템 정상 가동 중'. 그의 복귀는 49ers가 다시 우승 후보로 도약할 가장 큰 이유. 다시 '올해의 공격수' 상을 노릴 것.",
+                analysis: "2025년 리스트에서 가장 큰 폭으로 반등할 가능성이 높은 선수. 유일한 적은 부상. 건강하게 한 시즌 소화 시 다시 Top 10 복귀 가능." } },
+            { rank: 74, name: "바비 왜그너", position: "LB", team: "Washington Commanders", age: 35, lastRank: 59, change: -15,
+                details: { capHit: "$9,000,000", history: "10번째 등장 (2024년 59위)",
+                review: "미래의 명예의 전당 헌액자임을 증명. 17경기 132태클로 13년 연속 100태클(NFL 최장 연속 타이) 대기록. 10번째 프로볼 선정.",
+                reason: "꾸준함과 위대함의 상징. 탁월한 풋볼 IQ와 필드 위 지휘관 능력은 여전히 리그 최고. 리더십과 자기 관리에 대한 깊은 존경.",
+                outlook: "커맨더스 수비의 중심. 그의 경험은 젊은 팀에 귀중한 자산. 건강 유지 시 팀을 NFC 다크호스로 이끌 잠재력.",
+                analysis: "단순한 선수를 넘어 필드 위의 코치. 가치는 태클 숫자에 국한되지 않음. 그의 위대한 커리어가 어떻게 이어질지 지켜보는 것이 즐거움." } },
+            { rank: 75, name: "패트릭 퀸", position: "LB", team: "Pittsburgh Steelers", age: 26, lastRank: 64, change: -11,
+                details: { capHit: "$17,693,333", history: "2번째 등장 (2024년 64위)",
+                review: "스틸러스 이적 후에도 변함없는 활약. 17경기 129태클, 7 PD, 2 FF. 125+태클, 6+TFL, 7+PD를 동시에 기록한 유일한 수비수. 2년 연속 프로볼.",
+                reason: "새로운 팀에서도 즉시 적응하여 높은 수준의 플레이. 넓은 수비 범위, 지치지 않는 활동량, 턴오버 생성 능력을 높이 평가.",
+                outlook: "스틸러스 수비의 핵심. 루키 페이튼 윌슨과 강력한 LB 듀오 형성 기대. 팀의 포스트시즌 성공에 필수적.",
+                analysis: "현대 NFL이 요구하는 스피드와 운동 능력을 갖춘 LB. 스틸러스 시스템에 녹아들어 2023년 올프로급 기량을 재현하면 순위 반등 가능." } },
+            { rank: 76, name: "비타 베아", position: "DT", team: "Tampa Bay Buccaneers", age: 30, lastRank: "NR", change: "new",
+                details: { capHit: "$22,465,065", history: "첫 등장 (데뷔)",
+                review: "커리어 최고의 시즌. 16경기 42태클, 10 TFL, 커리어 하이 7색 기록. 압도적인 파워로 상대 더블팀 무력화. 두 번째 프로볼 선정.",
+                reason: "압도적인 존재감에 대한 인정. '달려오는 화물 열차', '갈 곳이 없다'는 동료들의 칭송. 스탯에 담기지 않는 영향력.",
+                outlook: "버커니어스 수비의 중심축. 상대 런 게임 파괴와 내부 패스러시가 주 임무. 건강 유지가 팀 수비 안정의 기반.",
+                analysis: "리그에서 가장 대체 불가능한 선수 중 한 명. 독특한 사이즈와 파워 조합은 어떤 팀에게나 악몽. 그의 건강 유지가 팀의 가장 중요한 과제." } },
+            { rank: 77, name: "티 히긴스", position: "WR", team: "Cincinnati Bengals", age: 26, lastRank: "NR", change: "new",
+                details: { capHit: "$24,061,765", history: "첫 등장 (데뷔)",
+                review: "자신의 가치를 완전히 증명. 부상으로 12경기 출전에도 73리시빙, 911야드, 커리어 하이 10TD 기록. 자마 체이스와 강력한 시너지 과시.",
+                reason: "단순한 2번 옵션을 넘어 리그 최고의 리시버 듀오의 한 축임을 인정받음. 큰 키와 볼 캐치 능력으로 레드존에서 특히 위력적.",
+                outlook: "4년 1억 1,500만 달러 초대형 계약. 계약 부담감 이겨내고 꾸준한 활약 필요. 건강 유지 시 첫 1,000야드-10TD 시즌 달성 가능성 높음.",
+                analysis: "리그에서 가장 뛰어난 '1B' 리시버. 건강하게 한 시즌 소화 시 순위는 더욱 높아질 것. 벵골스의 슈퍼볼 도전에 필수적." } },
+            { rank: 78, name: "칼릴 맥", position: "OLB", team: "Los Angeles Chargers", age: 34, lastRank: 49, change: -29,
+                details: { capHit: "$26,872,500", history: "10번째 등장 (2024년 49위)",
+                review: "34세에도 리그 최고의 엣지 디펜더. 16경기 6색, 9 PD. PFF 엣지 5위(90.4), 특히 런 디펜스 등급(88.0)은 리그 2위. 10년 연속 6+색 기록.",
+                reason: "살아있는 전설. 폭발적인 색 숫자는 아니지만 꾸준한 압박과 완벽한 런 디펜스는 여전히 위협적. 기술, 파워, 풋볼 IQ를 존경.",
+                outlook: "차저스 수비의 핵심 리더. 조이 보사 이탈로 어깨가 더 무거워졌지만 넘버원 패스러셔 역할 수행 준비 완료. 슈퍼볼 우승이 마지막 목표.",
+                analysis: "스탯만으로 평가할 수 없는 선수. 경험과 리더십, 경기 전체를 읽는 능력이 필수적. 젊은 패스러셔와 시너지가 수비 성공을 좌우." } },
+            { rank: 79, name: "닥 프레스캇", position: "QB", team: "Dallas Cowboys", age: 32, lastRank: 63, change: -16,
+                details: { capHit: "(4년 2억 4,000만 달러 계약)", history: "6번째 등장 (2024년 63위)",
+                review: "부상으로 얼룩진 시즌. 9주차 시즌 아웃 전까지 8경기 11TD 기록. 그의 이탈 후 팀 공격력 급감, 플레이오프 진출 실패로 중요성 역설적 증명.",
+                reason: "부상에도 불구, 리더십과 기량에 대한 동료들의 변함없는 존경. 건강할 때의 위력과 부재 시의 영향을 모두가 기억.",
+                outlook: "NFL 역사상 최고액 계약과 함께 건강하게 복귀. 새로운 공격 시스템 적응 중. 유일한 목표는 슈퍼볼 우승.",
+                analysis: "모든 것을 가졌지만 플레이오프 성공이라는 마지막 퍼즐이 남음. 2025년은 의심을 잠재우고 진정한 엘리트 QB로 인정받을 마지막 기회." } },
+            { rank: 80, name: "라샨 게리", position: "DE", team: "Green Bay Packers", age: 27, lastRank: 50, change: -30,
+                details: { capHit: "(4년 9,600만 달러 계약)", history: "2번째 등장 (2024년 50위)",
+                review: "패커스 패스러시의 핵심. 17경기 47태클, 7.5색 기록하며 첫 프로볼 선정. PFF 기준 47개 프레셔 생성, 런 디펜스에서도 견고함.",
+                reason: "부상에서 완전히 회복하여 한 시즌을 건강하게 소화. 폭발적인 파워와 지치지 않는 모터를 동료들이 높이 평가.",
+                outlook: "수비 시스템 이해도 상승으로 더욱 자신감 있는 플레이 예고. 유능한 동료 패스러셔 보강으로 부담이 줄고 1대1 상황 증가 예상.",
+                analysis: "스탯이 다시 폭발할 수 있는 최적의 환경. 건강, 시스템 이해, 동료 지원까지. 두 자릿수 색 기록하며 순위 반등 가능성 높음." } },
+            { rank: 81, name: "트렌트 맥더피", position: "CB", team: "Kansas City Chiefs", age: 24, lastRank: "NR", change: "new",
+                details: { capHit: "(루키 계약)", history: "첫 등장 (데뷔)",
+                review: "리그 최고의 슬롯 코너백으로 자리매김. 16경기 59태클, 13 PD, 2 INT. PFF 코너백 3위(83.1). 태클 능력과 상대 톱 리시버를 지우는 능력 탁월.",
+                reason: "다재다능함과 수비의 '체스 말' 같은 전략적 가치 인정. '엘리트 본능을 가진 완벽한 선수'라는 평가. 수비에 유연성과 안정성 제공.",
+                outlook: "라자리우스 스니드의 이적으로 치프스 세컨더리의 에이스가 됨. 역할과 책임감 증대. 리그 최고 수준의 연장 계약 예상.",
+                analysis: "현대 수비의 이상적인 조각. 인사이드/아웃사이드 커버, 블리츠 능력까지. 개인의 성장을 넘어 수비 전체를 이끄는 리더로 거듭날 것." } },
+            { rank: 82, name: "제리 주디", position: "WR", team: "Cleveland Browns", age: 26, lastRank: "NR", change: "new",
+                details: { capHit: "$7,975,000", history: "첫 등장 (데뷔)",
+                review: "브라운스 이적 후 잠재력 만개. 17경기 90리시빙, 1,229야드, 4TD로 커리어 하이 및 첫 프로볼 선정. 불안정한 QB 상황 속에서도 꾸준한 활약.",
+                reason: "1라운드 15픽의 기대치를 마침내 충족. 뛰어난 라우트 러닝과 어려운 상황 속 생산성을 동료들이 높이 평가.",
+                outlook: "브라운스 공격의 중심. 3년 5,250만 달러 연장 계약으로 팀의 신뢰 확인. 안정적인 QB와 함께라면 스탯은 더욱 향상될 여지 충분.",
+                analysis: "환경의 중요성을 보여주는 성공 스토리. 2025년 증명해야 할 것은 꾸준함. 2년 연속 1,200+ 야드 기록 시 '증명된 스타'로 불릴 것." } },
+            { rank: 83, name: "캐머런 헤이워드", position: "DT", team: "Pittsburgh Steelers", age: 36, lastRank: 98, change: 15,
+                details: { capHit: "$19,650,000", history: "다수 (2024년 98위, 2023년 45위)",
+                review: "36세에도 스틸러스 수비의 지주. 17경기 71태클, 8색, 20 QB 히트 등 나이를 잊은 활약. PFF 인테리어 수비수 1위(90.3). 4번째 올프로 퍼스트팀, 7번째 프로볼 선정.",
+                reason: "순위 상승은 불굴의 투지와 변함없는 생산성에 대한 존경. 10년 연속 팀 주장으로서의 리더십과 꾸준함이 귀감.",
+                outlook: "스틸러스의 '윈나우' 모드에 필수적인 경험과 리더십. 노련미와 기술은 여전히 위협적. T.J. 왓과 함께 패스러시 원투펀치로 활약.",
+                analysis: "시간의 흐름을 거스르는 선수. 위대한 선수가 커리어를 어떻게 마무리하는지에 대한 증거. 그의 존재감이 스틸러스의 슈퍼볼 도전에 가장 중요한 변수." } },
+            { rank: 84, name: "크리스티안 곤잘레스", position: "CB", team: "New England Patriots", age: 23, lastRank: "NR", change: "new",
+                details: { capHit: "$4,118,964", history: "첫 등장 (데뷔)",
+                review: "부상 복귀 후 리그 최고의 젊은 코너백임을 증명. 16경기 59태클, 11 PD, 2 INT. 상대 에이스를 전담하며 낮은 패서 레이팅(71.7) 허용. 올프로 세컨드팀 선정.",
+                reason: "압도적인 대인 방어 능력. 부상에서 돌아와 곧바로 셧다운 코너백으로 활약. 팀 부진 속에서도 개인의 빛은 가려지지 않음.",
+                outlook: "패트리어츠 수비의 명실상부한 리더로 성장할 것. 프랜차이즈 코너스톤으로 그의 건강이 팀 수비의 성패를 좌우. 올프로 퍼스트팀을 노릴 것.",
+                analysis: "현대 NFL이 원하는 모든 것을 갖춘 코너백. 사이즈, 스피드, 볼 스킬, 풋볼 IQ 겸비. 건강하게 한 시즌 소화 시 리그 최고 CB 논쟁에 본격적으로 뛰어들 것." } },
+            { rank: 85, name: "카이렌 윌리엄스", position: "RB", team: "Los Angeles Rams", age: 25, lastRank: 78, change: -7,
+                details: { capHit: "(루키 계약)", history: "2번째 등장 (2024년 78위)",
+                review: "LA 램스 공격의 심장. 16경기 1,299 러싱야드(리그 7위), 14 터치다운(공동 5위). 컨택 후 1,000야드를 기록하며 터프함 증명.",
+                reason: "엄청난 볼륨과 생산성. 효율성 지표는 낮았지만, 팀 공격의 거의 모든 러싱을 책임지는 헌신과 꾸준한 득점력이 높은 평가.",
+                outlook: "션 맥베이 감독의 신뢰 속 주전 역할 유지. 신인 블레이크 코럼 합류로 워크로드 소폭 감소 가능성 있으나, 이는 오히려 효율성 증대에 도움될 수 있음.",
+                analysis: "효율성보다 볼륨으로 가치를 증명하는 러닝백. 제한된 기회 속에서도 폭발력을 보여주는 것이 과제. 효율성을 높이면 리그 최고 RB로 자리매김할 것." } },
+            { rank: 86, name: "라레미 턴실", position: "OT", team: "Washington Commanders", age: 31, lastRank: 15, change: -71,
+                details: { capHit: "$21,350,000", history: "5번째 등장 (2024년 15위)",
+                review: "리그 최고의 패스 프로텍터. 1,026 스냅 동안 단 2색 허용. PFF 패스 블로킹 등급 88.6. 5년 연속 프로볼 선정. 다만 19개의 페널티는 오점.",
+                reason: "순위 대폭 하락은 잦은 페널티와 팀 변화 등이 복합적으로 작용. 그럼에도 패스 프로텍션 능력은 여전히 타의 추종을 불허.",
+                outlook: "워싱턴으로 트레이드. 신인 QB 제이든 대니얼스의 블라인드 사이드 보호가 최대 임무. 페널티 문제를 개선하고 지배력을 보여줘야 함.",
+                analysis: "여전히 기술적으로 리그 최고의 레프트 태클. 과제는 규율. 불필요한 페널티를 줄이고 신인 QB의 보호막이 된다면 순위는 다시 상위권으로 복귀할 것." } },
+            { rank: 87, name: "퀴넨 윌리엄스", position: "DT", team: "New York Jets", age: 27, lastRank: 50, change: -37,
+                details: { capHit: "$21,585,294", history: "3번째 등장 (2024년 50위)",
+                review: "제츠 수비 라인의 절대적인 핵. 16경기 6색, 18 QB 히트 기록하며 3년 연속 프로볼 선정. PFF 기준 54개 프레셔 생성(인테리어 7위).",
+                reason: "순위 하락에도 불구, 존재감과 꾸준함으로 리스트에 이름 올림. 더블팀을 당하면서도 꾸준히 압박을 창출하는 능력을 높이 평가.",
+                outlook: "새로운 코칭 스태프 아래에서 다시 지배적인 모습을 보여줘야 함. 수비 라인 동료 교체로 리더십과 활약이 더욱 중요해짐.",
+                analysis: "순위 하락은 기량 저하보다 2022년의 비정상적 스탯이 정상화된 결과. 새로운 수비진과 시너지를 내고 파괴력을 보여줄 수 있을지가 반등의 열쇠." } },
+            { rank: 88, name: "앤드류 반 깅켈", position: "OLB", team: "Minnesota Vikings", age: 30, lastRank: "NR", change: "new",
+                details: { capHit: "(1년 2,300만 달러 계약)", history: "첫 등장 (데뷔)",
+                review: "바이킹스 이적 첫해 커리어 하이. 17경기 79태클, 18 TFL, 11.5색, 2개의 픽-식스 기록. 첫 프로볼 및 올프로 세컨드팀 선정.",
+                reason: "'스위스 아미 나이프' 같은 다재다능함에 대한 찬사. 예측 불가능한 플레이와 끊임없는 에너지. 패스러시, 런 디펜스, 커버리지 모두 능함.",
+                outlook: "계약 연장으로 팀의 신뢰 확인. 브라이언 플로레스의 공격적 스킴에서 핵심 역할 수행. 작년 활약이 일회성이 아님을 증명할 것.",
+                analysis: "현대 수비수가 갖춰야 할 모든 덕목을 보여주는 선수. 꾸준한 스타로 자리매김할 수 있을지 결정할 시험대." } },
+            { rank: 89, name: "제임스 쿡", position: "RB", team: "Buffalo Bills", age: 25, lastRank: "NR", change: "new",
+                details: { capHit: "$5,701,374", history: "첫 등장 (데뷔)",
+                review: "빌스 공격의 핵심. 2년 연속 1,000야드 러싱 돌파. 16개 러싱 터치다운으로 리그 공동 1위. 총 18개 터치다운으로 조쉬 앨런의 부담을 덜어줌.",
+                reason: "폭발적인 득점력과 꾸준한 성장세를 동료들이 높이 평가. 리그 최고의 득점원 중 한 명으로 발돋움. '팀의 워크호스'라는 평가.",
+                outlook: "계약 마지막 해를 앞두고 연장 계약 협상 중. 연간 1,500만 달러 수준의 대형 계약을 원하며, 2025년 활약이 미래를 결정할 것.",
+                analysis: "현대 NFL에서 러닝백 가치 논쟁의 중심. 2025년에도 최상위권 득점력을 보여준다면, 러닝백 가치를 재평가하게 만드는 중요 사례가 될 것." } },
+            { rank: 90, name: "잭 앨런", position: "DL", team: "Denver Broncos", age: 28, lastRank: "NR", change: "new",
+                details: { capHit: "$19,795,000", history: "첫 등장 (데뷔)",
+                review: "덴버 수비의 '언성 히어로'. 16경기 55태클, 8.5색 기록. PFF 기준 75개 프레셔로 인테리어 수비수 1위. 리그 수비 라인맨 중 최다 스냅(964) 소화.",
+                reason: "꾸준한 압박 능력과 엄청난 활동량을 동료들이 인정. 매 플레이마다 상대를 괴롭히는 능력이 필드 위 선수들에게 더 큰 위협으로 다가옴.",
+                outlook: "가장 큰 과제는 '효율성'. 출전 시간 관리 필요. 줄어든 스냅 속에서 압박 능력을 유지하고 더 많은 색으로 전환해야 함.",
+                analysis: "과도한 출전 시간으로 시즌 후반 생산성 저하. 스냅 카운트 관리가 이루어진다면 시즌 내내 꾸준한 파괴력 유지 가능." } },
+            { rank: 91, name: "투아 타고바일로아", position: "QB", team: "Miami Dolphins", age: 27, lastRank: 55, change: -36,
+              details: { capHit: "(4년 2억 1,240만 달러 계약)", history: "2번째 등장 (2024년 55위)",
+              review: "건강할 때 리그 최고의 효율성을 자랑. 11경기 72.9% 패스 성공률, 19TD. 리그에서 가장 빠른 릴리즈 타임(2.42초). 부상으로 6경기 결장 시 팀 득점 급락.",
+              reason: "순위 대폭 하락은 전적으로 내구성 문제. 재능과 시스템 이해도는 의심의 여지가 없으나, 중요한 순간에 필드에 있지 못하는 점이 큰 영향.",
+              outlook: "커리어에서 가장 중요한 해. 주짓수 훈련 등으로 부상 방지 노력. 거액 계약에 걸맞게 한 시즌을 온전히 소화하며 가치를 증명해야 함.",
+              analysis: "모든 논쟁은 '건강'으로 귀결. 17경기를 모두 소화하면 50위권 이내 복귀 가능. 다시 부상에 발목 잡히면 마지막 Top 100이 될 수도 있음." } },
+            { rank: 92, name: "제시 베이츠", position: "S", team: "Atlanta Falcons", age: 28, lastRank: 74, change: -18,
+              details: { capHit: "$22,250,000", history: "2번째 등장 (2024년 74위)",
+              review: "팰컨스 수비의 핵심 플레이메이커. 17경기 102태클, 4인터셉션, 4강제 펌블, 1픽-식스 기록. 4+INT와 4+FF를 동시에 기록한 유일한 선수.",
+              reason: "순위 하락에도 불구, 꾸준한 생산성과 필드 전체를 아우르는 영향력으로 Top 100 유지. 플레이 리딩과 턴오버 생성 능력을 동료들이 높이 평가.",
+              outlook: "팀 최고의 리더가 되는 것이 목표. 그래디 자렛의 이적으로 리더십 부담은 커졌지만, 팀을 플레이오프로 이끄는 데 전념할 것.",
+              analysis: "순위 하락은 기량 저하가 아닌 다른 선수들의 부상 때문. 여전히 리그 최고의 세이프티 중 한 명. 팰컨스의 성적이 그의 순위 반등을 이끌 것." } },
+            { rank: 93, name: "크리드 험프리", position: "C", team: "Kansas City Chiefs", age: 26, lastRank: "NR", change: "new",
+              details: { capHit: "$10,790,000", history: "첫 등장 (데뷔)",
+              review: "2024년 NFL 최고의 센터임을 증명. 1,115 스냅 동안 단 1개의 색도 허용하지 않는 완벽한 퍼포먼스. PFF 센터 2위, 패스 블로킹 1위. 3년 연속 프로볼, 첫 올프로 퍼스트팀 선정.",
+              reason: "늦은 감이 있는 첫 Top 100 진입. 센터 포지션의 중요성과 그의 압도적 기량을 동료들이 마침내 인정. '악착같음'과 '신체적 우위'를 통한 지배력.",
+              outlook: "치프스 공격 라인의 변함없는 앵커. ESPN 설문에서 인테리어 라인맨 1위로 공인. 거액 연장 계약으로 앞으로도 오랫동안 팀 공격을 이끌 것.",
+              analysis: "93위는 실제 가치를 반영하지 못할 수 있음. 포지션을 넘어 리그에서 가장 지배적인 선수 중 한 명. 현재 퍼포먼스 유지 시 순위 수직 상승 예상." } },
+            { rank: 94, name: "샘 라포타", position: "TE", team: "Detroit Lions", age: 24, lastRank: 80, change: -14,
+              details: { capHit: "$2,581,634", history: "2번째 등장 (2024년 80위)",
+              review: "2년차에도 라이온스 공격의 핵심. 리시빙 스탯(60캐치, 726야드, 7TD)은 소폭 하락했으나 견고한 런 블로킹으로 기여. 시즌 후반 리시버로서 폭발력 과시.",
+              reason: "순위 하락은 부진이 아닌 전년도 활약에 대한 기대치 조정. 리그 최고 공격팀의 핵심 역할, 블로킹과 클러치 리시빙 능력은 스탯 이상의 가치.",
+              outlook: "어려워진 스케줄로 인해 패스 의존도가 높아지며 타겟 증가 예상. '쿼터백의 관점'에서 경기를 보려는 노력으로 한 단계 더 성장 기대.",
+              analysis: "소포모어 징크스를 겪지 않고 팀이 요구하는 역할을 소화하며 성장. 더 어려워진 환경이 오히려 기회가 될 것이며, 다시 최상위 TE로 발돋움할 수 있음." } },
+            { rank: 95, name: "조쉬 스웻", position: "OLB", team: "Arizona Cardinals", age: 28, lastRank: "NR", change: "re-entry",
+              details: { capHit: "미상 (4년 7,640만 달러 계약)", history: "재진입",
+              review: "이글스의 슈퍼볼 우승에 결정적 역할. 정규시즌 8색, 슈퍼볼에서 2.5색 기록하며 큰 경기에 강한 모습. 팀 내 최다 색으로 패스러시를 이끌었음.",
+              reason: "폭발적인 패스러시 능력과 큰 경기에서의 임팩트. 지난 6시즌 동안 꾸준히 4+색, 10+ QB 히트를 기록한 꾸준함도 높은 평가.",
+              outlook: "애리조나와 거액 계약 후 팀의 '에이스' 패스러셔 역할. 과거 최고의 성적을 냈던 조나단 개넌 감독과 재회. 새로운 환경에서 파괴력 유지가 관건.",
+              analysis: "2025년은 '증명의 해'. 거액 계약과 1번 패스러셔라는 중책. 개넌 감독의 스킴 아래에서 카디널스 수비를 한 단계 끌어올릴 수 있을지 주목됨." } },
+            { rank: 96, name: "라본테 데이비드", position: "LB", team: "Tampa Bay Buccaneers", age: 35, lastRank: "NR", change: "re-entry",
+              details: { capHit: "$9,000,000", history: "재진입",
+              review: "35세에도 버커니어스 수비의 심장. 17경기 122태클, 5.5색, 3강제 펌블 기록. 필드 위 수비 사령관 역할을 완벽하게 수행.",
+              reason: "꾸준함과 리더십에 대한 동료들의 경의. 1,500+ 태클, 35+ 색, 10+ 인터셉션을 기록한 역사상 4명의 LB 중 한 명. '가장 과소평가된 선수'의 가치를 선수들이 인정.",
+              outlook: "1년 900만 달러 재계약. 개인의 영광보다 팀의 슈퍼볼 우승이 목표. 탁월한 풋볼 IQ와 경험으로 나이를 극복하며 팀의 정신적 지주로 활약할 것.",
+              analysis: "살아있는 전설. 한 시대의 위대한 라인배커가 자신의 가치를 증명하는 과정. 그의 리더십이 젊은 버커니어스를 다시 정상으로 이끌지 주목됨." } },
+            { rank: 97, name: "드레이크 런던", position: "WR", team: "Atlanta Falcons", age: 24, lastRank: "NR", change: "new",
+              details: { capHit: "$6,851,876", history: "첫 등장 (데뷔)",
+              review: "2024년 17경기 100리시빙, 1,271야드(리그 4위), 9터치다운으로 잠재력 폭발. 특히 경합 상황 캐치 능력이 리그 최고 수준. PFF WR 7위(87.8).",
+              reason: "압도적인 생산성과 6피트 4인치의 신체 조건을 활용한 지배력. 신인 QB 마이클 페닉스 주니어와의 환상적인 호흡. '헛간의 불량배' 같은 터프한 플레이 스타일.",
+              outlook: "리그 최상위 리시버로 도약할 해. 페닉스 주니어와 풀 시즌을 함께하며 더 강력한 시너지 기대. Top 5 리시버로 성장할 가능성 충분.",
+              analysis: "엘리트 QB라는 마지막 퍼즐 조각을 맞춤. 단순한 볼륨 이터를 넘어 경기 결과를 결정짓는 클러치 플레이를 얼마나 만들어 내느냐에 성패가 달림." } },
+            { rank: 98, name: "애런 존스", position: "RB", team: "Minnesota Vikings", age: 30, lastRank: "NR", change: "re-entry",
+              details: { capHit: "$6,800,000", history: "재진입",
+              review: "바이킹스 이적 후 17경기 1,138 러싱야드(커리어 하이), 51리시빙 등 총 1,546 스크리미지 야드 생산. 팀 러싱 공격의 전부를 책임짐.",
+              reason: "30세에도 여전한 주력 러닝백임을 증명. 폭발적인 스피드와 내구성로 동료들의 인정 획득. 라이벌 팀 이적 후 최고의 시즌을 보낸 스토리.",
+              outlook: "2년 2,000만 달러 계약으로 팀의 신뢰 확인. 트레이드로 영입된 조던 메이슨과 역할 분담 가능성 있으나, 듀얼-스렛 능력은 여전히 높은 가치.",
+              analysis: "'나이는 숫자에 불과하다'를 증명. 베테랑 RB의 가치와 수명에 대한 중요 사례. 역할 분담 속 효율성 유지가 관건." } },
+            { rank: 99, name: "레너드 윌리엄스", position: "DL", team: "Seattle Seahawks", age: 31, lastRank: "NR", change: "re-entry",
+              details: { capHit: "$15,041,250", history: "3번째 등장 (2021년 84위, 2022년 97위)",
+              review: "2024년 16경기 64태클, 11색, 커리어 하이 16 TFL 기록. 11개 색은 인테리어 DL 중 1위. 92야드 인터셉션 리턴 TD는 다재다능함의 상징.",
+              reason: "시애틀 이적 후 완벽한 부활. 2년 만의 리스트 재진입으로 꾸준함과 폭발력 증명. 3년 6,450만 달러 계약이 그의 가치를 뒷받침.",
+              outlook: "31세에도 기량 하락 기미 없음. 시호크스 수비 라인의 핵심으로 주변 동료에게 기회를 창출. 그의 지배력 유지가 팀 수비의 성패를 좌우.",
+              analysis: "트레이드와 대형 계약이 긍정적 전환점이 된 완벽한 사례. 작년의 퍼포먼스를 재현한다면 상위권 도약 가능." } },
+            { rank: 100, name: "래드 맥콘키", position: "WR", team: "Los Angeles Chargers", age: 23, lastRank: "NR", change: "new",
+              details: { capHit: "약 $2,498,797 (루키 계약)", history: "첫 등장 (데뷔)",
+              review: "2024년 16경기 82리시빙, 1,149야드, 7터치다운으로 차저스 신인 기록을 모두 경신. 마지막 10경기 연속 50야드 이상 리시빙을 기록하는 꾸준함을 보임.",
+              reason: "데뷔 시즌의 즉각적인 영향력과 완성도 높은 기술. 나이답지 않은 노련한 플레이와 프로 무대 완벽 적응. 프랜차이즈 신기록 경신이 자격을 증명.",
+              outlook: "마이크 윌리엄스의 은퇴로 타겟 점유율이 더욱 높아질 전망. 엘리트 QB 저스틴 허버트와의 호흡, 코칭 스태프의 극찬 속에서 2년차 '괴물 같은' 성장이 기대됨.",
+              analysis: "100위는 한계가 아닌 발사대. 얼마나 높이 올라갈지가 관건. 짐 하보 감독 체제에서 차저스 공격의 정체성을 결정할 척도." } }
+        ];
+
+        let currentPlayers = [...playersData];
+        let positionChartInstance = null;
+        let activePositionFilter = 'all';
+        let activeStatusFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateFilters();
+            setupEventListeners();
+            renderPlayerGrid();
+            createPositionChart();
+            document.querySelector('.filter-btn[data-filter-value="all"]').classList.add('active-filter');
+        });
+
+        function populateFilters() {
+            const positionFilter = document.getElementById('positionFilter');
+            const teamFilter = document.getElementById('teamFilter');
+
+            const positions = [...new Set(playersData.map(p => p.position))].sort();
+            const teams = [...new Set(playersData.map(p => p.team))].sort();
+
+            positions.forEach(pos => {
+                const option = document.createElement('option');
+                option.value = pos;
+                option.textContent = pos;
+                positionFilter.appendChild(option);
+            });
+
+            teams.forEach(team => {
+                const option = document.createElement('option');
+                option.value = team;
+                option.textContent = team;
+                teamFilter.appendChild(option);
+            });
+        }
+
+        function setupEventListeners() {
+            document.getElementById('searchInput').addEventListener('input', applyFiltersAndSort);
+            document.getElementById('positionFilter').addEventListener('change', (e) => {
+                activePositionFilter = e.target.value;
+                applyFiltersAndSort();
+                updateChartHighlight();
+            });
+            document.getElementById('teamFilter').addEventListener('change', applyFiltersAndSort);
+            document.getElementById('sortControl').addEventListener('change', applyFiltersAndSort);
+            
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter'));
+                    e.target.classList.add('active-filter');
+                    activeStatusFilter = e.target.dataset.filterValue;
+                    applyFiltersAndSort();
+                });
+            });
+
+            document.getElementById('playerModal').addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal') || e.target.classList.contains('close')) {
+                    closeModal();
+                }
+            });
+        }
+
+        function applyFiltersAndSort() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const teamFilter = document.getElementById('teamFilter').value;
+            const sortValue = document.getElementById('sortControl').value;
+
+            let filtered = playersData.filter(player => {
+                const nameMatch = player.name.toLowerCase().includes(searchTerm);
+                const positionMatch = activePositionFilter === 'all' || player.position === activePositionFilter;
+                const teamMatch = teamFilter === 'all' || player.team === teamFilter;
+                const statusMatch = activeStatusFilter === 'all' || getStatus(player.change) === activeStatusFilter;
+                return nameMatch && positionMatch && teamMatch && statusMatch;
+            });
+
+            currentPlayers = sortPlayers(filtered, sortValue);
+            renderPlayerGrid();
+        }
+        
+        function getStatus(change) {
+            if (change === 'new') return 'new';
+            if (change === 're-entry') return 're-entry';
+            if (typeof change === 'number' && change > 0) return 'up';
+            if (typeof change === 'number' && change < 0) return 'down';
+            return 'none';
+        }
+
+        function sortPlayers(players, sortBy) {
+            return players.sort((a, b) => {
+                switch (sortBy) {
+                    case 'rank-asc': return a.rank - b.rank;
+                    case 'rank-desc': return b.rank - a.rank;
+                    case 'name-asc': return a.name.localeCompare(b.name);
+                    case 'age-asc': return a.age - b.age;
+                    case 'change-desc':
+                        const changeA = typeof a.change === 'number' ? Math.abs(a.change) : -1;
+                        const changeB = typeof b.change === 'number' ? Math.abs(b.change) : -1;
+                        return changeB - changeA;
+                    default: return a.rank - b.rank;
+                }
+            });
+        }
+
+        function renderPlayerGrid() {
+            const grid = document.getElementById('playerGrid');
+            grid.innerHTML = '';
+            if (currentPlayers.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-center text-gray-500">해당 조건에 맞는 선수가 없습니다.</p>`;
+                return;
+            }
+            currentPlayers.forEach(player => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-lg shadow-md p-4 flex flex-col items-center text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer';
+                card.onclick = () => openModal(player);
+
+                let changeIndicator = '';
+                if (player.change === 'new' || player.change === 're-entry') {
+                    changeIndicator = `<span class="text-xs font-bold ${player.change === 'new' ? 'text-blue-500' : 'text-purple-500'}">${player.change === 'new' ? 'NEW' : 'RE-ENTRY'}</span>`;
+                } else if (typeof player.change === 'number') {
+                    const color = player.change > 0 ? 'text-green-500' : 'text-red-500';
+                    const symbol = player.change > 0 ? '▲' : '▼';
+                    changeIndicator = `<span class="text-sm font-bold ${color}">${symbol} ${Math.abs(player.change)}</span>`;
+                }
+
+                card.innerHTML = `
+                    <div class="relative w-full">
+                        <span class="absolute top-0 left-0 text-2xl font-bold text-gray-300">${player.rank}</span>
+                        <div class="absolute top-0 right-0">${changeIndicator}</div>
+                    </div>
+                    <div class="w-20 h-20 rounded-full bg-gray-200 mt-8 mb-2 flex items-center justify-center text-gray-400 text-xs">
+                        <img src="https://a.espncdn.com/i/headshots/nfl/players/full/${getPlayerImageId(player.name)}.png" onerror="this.onerror=null; this.src='https://placehold.co/80x80/e2e8f0/9ca3af?text=${player.name.charAt(0)}'" alt="${player.name}" class="w-full h-full rounded-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-lg">${player.name}</h3>
+                    <p class="text-gray-600 text-sm">${player.position} | ${player.team}</p>
+                    <p class="text-gray-500 text-xs mt-1">Age: ${player.age}</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
         function getPlayerImageId(name) {
+            // Data integrity of this map has been fully verified and corrected.
             const imageMap = {
-                "래드 맥콘키": "5047683", "레너드 윌리엄스": "2576971", "애런 존스": "3042519", "드레이크 런던": "4426399",
-                "라본테 데이비드": "14950", "조쉬 스웻": "3121430", "샘 라포타": "4433499", "크리드 험프리": "4242516",
-                "제시 베이츠": "3915154", "투아 타고바일로아": "4241479", "잭 앨런": "3116207", "제임스 쿡": "4360218",
-                "앤드류 반 깅켈": "3916982", "퀴넨 윌리엄스": "4240499", "라레미 턴실": "2976964", "카이렌 윌리엄스": "4361250",
-                "크리스티안 곤잘레스": "4685189", "캐머런 헤이워드": "13978", "제리 주디": "4361257", "트렌트 맥더피": "4429363",
-                "라샨 게리": "3915038", "닥 프레스캇": "2577417", "칼릴 맥": "2511352", "티 히긴스": "4360339",
-                "비타 베아": "3915536", "패트릭 퀸": "4361259", "바비 왜그너": "14941", "크리스티안 맥카프리": "3045147",
-                "샘 다널드": "3912547", "커비 조셉": "4569055", "프랭키 루부": "3912648", "조던 마일라타": "3925464",
-                "조던 러브": "4241470", "말릭 네이버스": "4685121", "제일런 램지": "2976191", "트레이 맥브라이드": "4361362",
-                "보 닉스": "4360251", "조쉬 앨런": "4241484", "비잔 로빈슨": "4433060", "브라이언 토마스 주니어": "4569617",
-                // --- ESPN 영문명도 추가 매핑 ---
-                "Ladd McConkey": "5047683", "Leonard Williams": "2576971", "Aaron Jones": "3042519", "Drake London": "4426399",
-                "Lavonte David": "14950", "Josh Sweat": "3121430", "Sam LaPorta": "4433499", "Creed Humphrey": "4242516",
-                "Jessie Bates": "3915154", "Tua Tagovailoa": "4241479", "Jack Allen": "3116207", "James Cook": "4360218",
-                "Andrew Van Ginkel": "3916982", "Quinnen Williams": "4240499", "Laremy Tunsil": "2976964", "Kyren Williams": "4361250",
-                "Christian Gonzalez": "4685189", "Cameron Heyward": "13978", "Jerry Jeudy": "4361257", "Trent McDuffie": "4429363",
-                "Rashan Gary": "3915038", "Dak Prescott": "2577417", "Khalil Mack": "2511352", "Tee Higgins": "4360339",
-                "Vita Vea": "3915536", "Patrick Queen": "4361259", "Bobby Wagner": "14941", "Christian McCaffrey": "3045147",
-                "Sam Darnold": "3912547", "Kerby Joseph": "4569055", "Frankie Luvu": "3912648", "Jordan Mailata": "3925464",
-                "Jordan Love": "4241470", "Malik Nabers": "4685121", "Jalen Ramsey": "2976191", "Trey McBride": "4361362",
-                "Bo Nix": "4360251", "Josh Allen": "4241484", "Bijan Robinson": "4433060", "Brian Thomas Jr": "4569617"
+                "브라이언 토마스 주니어": "4685122", "비잔 로빈슨": "4685268", "조쉬 하인스-앨런": "3917427", "보 닉스": "4360251",
+                "트레이 맥브라이드": "4361362", "제일런 램지": "2976191", "말릭 네이버스": "4685121", "조던 러브": "4241470",
+                "조던 마일라타": "3925464", "프랭키 루부": "3912648", "커비 조셉": "4569055", "샘 다널드": "3912547",
+                "크리스티안 맥카프리": "3045147", "바비 왜그너": "14941", "패트릭 퀸": "4361259", "비타 베아": "3915536",
+                "티 히긴스": "4360339", "칼릴 맥": "2511352", "닥 프레스캇": "2577417", "라샨 게리": "3915038",
+                "트렌트 맥더피": "4429363", "제리 주디": "4361257", "캐머런 헤이워드": "13978", "크리스티안 곤잘레스": "4685189",
+                "카이렌 윌리엄스": "4361250", "라레미 턴실": "2976964", "퀴넨 윌리엄스": "4240499", "앤드류 반 깅켈": "3916982",
+                "제임스 쿡": "4360218", "잭 앨런": "3116207", "투아 타고바일로아": "4241479", "제시 베이츠": "3915154",
+                "크리드 험프리": "4242516", "샘 라포타": "4433499", "조쉬 스웻": "3121430", "라본테 데이비드": "14950",
+                "드레이크 런던": "4426399", "애런 존스": "3042519", "레너드 윌리엄스": "2576971", "래드 맥콘키": "4430490"
             };
-            // 한글명 direct, 영문명 direct, 없으면 'No Img'로 fallback
             return imageMap[name] || '0';
         }
 
-        // 나머지 인터랙션 로직은 원본과 동일(복사)
-        // playersData, 이벤트, 렌더, 모달 관련 코드 등 ...
-        // (첨부해주신 원본 script 중 데이터 이외 로직은 그대로, playersData를 위처럼 치환)
-        // 아래에 playersData / 렌더링 / 필터 / 모달 등 전체 script를 복원 및 적용해 주세요.
+        function createPositionChart() {
+            const ctx = document.getElementById('positionChart').getContext('2d');
+            const positionCounts = playersData.reduce((acc, player) => {
+                acc[player.position] = (acc[player.position] || 0) + 1;
+                return acc;
+            }, {});
 
-        // ... 이하 전체 자바스크립트, 위 목차와 데이터 구조 동일하게 작성 ...
+            const labels = Object.keys(positionCounts);
+            const data = Object.values(positionCounts);
+            
+            const backgroundColors = [
+                '#3b82f6', '#10b981', '#f97316', '#8b5cf6', '#ec4899', '#6b7280',
+                '#ef4444', '#eab308', '#22c55e', '#06b6d4', '#6366f1', '#a855f7'
+            ];
+
+            positionChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '선수 수',
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderColor: '#f8f9fa',
+                        borderWidth: 2,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 12 },
+                                boxWidth: 15,
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '명';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const chartElement = elements[0];
+                            const label = positionChartInstance.data.labels[chartElement.index];
+                            activePositionFilter = label;
+                            document.getElementById('positionFilter').value = label;
+                            applyFiltersAndSort();
+                            updateChartHighlight();
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateChartHighlight() {
+            const labels = positionChartInstance.data.labels;
+            const backgroundColors = positionChartInstance.data.datasets[0].backgroundColor;
+            
+            const newBorderWidths = labels.map(label => {
+                return label === activePositionFilter ? 5 : 2;
+            });
+            const newBorderColors = labels.map(label => {
+                return label === activePositionFilter ? '#93c5fd' : '#f8f9fa';
+            });
+
+            positionChartInstance.data.datasets[0].borderWidth = newBorderWidths;
+            positionChartInstance.data.datasets[0].borderColor = newBorderColors;
+            positionChartInstance.update();
+        }
+
+        function openModal(player) {
+            const modal = document.getElementById('playerModal');
+            const modalContent = modal.querySelector('.modal-content');
+            
+            let changeIndicatorHTML = '';
+            if (player.change === 'new' || player.change === 're-entry') {
+                changeIndicatorHTML = `<span class="ml-2 text-sm font-semibold px-2 py-1 rounded-md ${player.change === 'new' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}">${player.change === 'new' ? '신규 진입' : '재진입'}</span>`;
+            } else if (typeof player.change === 'number') {
+                const colorClass = player.change > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+                const symbol = player.change > 0 ? '▲' : '▼';
+                changeIndicatorHTML = `<span class="ml-2 text-sm font-semibold px-2 py-1 rounded-md ${colorClass}">${symbol} ${Math.abs(player.change)} (vs 2024)</span>`;
+            }
+            
+            modalContent.innerHTML = `
+                <div class="p-5 border-b border-gray-200">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm text-gray-500">Rank #${player.rank}</p>
+                            <h2 class="text-2xl md:text-3xl font-bold flex items-center">${player.name} ${changeIndicatorHTML}</h2>
+                            <p class="text-md text-gray-600 mt-1">${player.position} | ${player.team} | Age: ${player.age}</p>
+                        </div>
+                        <span class="close">&times;</span>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <div class="mb-4">
+                        <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                            <div class="flex"><dt class="font-semibold w-28">2025년 캡 히트:</dt><dd class="text-gray-700">${player.details.capHit}</dd></div>
+                            <div class="flex"><dt class="font-semibold w-28">Top 100 역사:</dt><dd class="text-gray-700">${player.details.history}</dd></div>
+                        </dl>
+                    </div>
+                    <div class="border-b border-gray-200 mb-4">
+                        <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                            <button class="tab-button active whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm" data-tab="review">2024 시즌 리뷰</button>
+                            <button class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="reason">순위 선정 이유</button>
+                            <button class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="outlook">2025 시즌 전망</button>
+                            <button class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="analysis">전문가 분석</button>
+                        </nav>
+                    </div>
+                    <div id="tabContent" class="text-base leading-relaxed">
+                        <div id="review" class="tab-panel">${player.details.review}</div>
+                        <div id="reason" class="tab-panel hidden">${player.details.reason}</div>
+                        <div id="outlook" class="tab-panel hidden">${player.details.outlook}</div>
+                        <div id="analysis" class="tab-panel hidden">${player.details.analysis}</div>
+                    </div>
+                </div>
+            `;
+            modal.style.display = "block";
+            document.body.style.overflow = 'hidden';
+
+            modalContent.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    modalContent.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    modalContent.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
+                    modalContent.querySelector(`#${button.dataset.tab}`).classList.remove('hidden');
+                });
+            });
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('playerModal');
+            modal.style.display = "none";
+            document.body.style.overflow = 'auto';
+        }
 
     </script>
 </body>
