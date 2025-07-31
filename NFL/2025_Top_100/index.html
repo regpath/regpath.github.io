@@ -9,16 +9,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Calm Harmony -->
-    <!-- Application Structure Plan: The SPA is designed as a multi-section dashboard for non-linear exploration. It starts with a 'Big Picture' section for high-level summary (key narratives, positional breakdown chart), followed by a core 'Player Explorer' with robust filtering/sorting capabilities (search, position, team, rank change type). Clicking a player card reveals a detailed modal view with tabbed content for deep dives. This macro-to-micro structure enhances usability by providing context first, then empowering user-driven exploration, which is superior to a static, linear report. -->
-    <!-- Visualization & Content Choices: 
-        - Report Info: Positional Breakdown -> Goal: Inform/Compare -> Viz: Donut Chart (Chart.js/Canvas) -> Interaction: Hover for details, click to filter player grid -> Justification: More engaging and interactive than a static table.
-        - Report Info: Master Player List -> Goal: Organize/Compare -> Viz: Interactive Card Grid (HTML/Tailwind/JS) -> Interaction: Search, filter, sort, click for detail modal -> Justification: Empowers user-driven discovery of players and trends.
-        - Report Info: Rank Changes -> Goal: Compare/Highlight -> Viz: Horizontal Bar Chart (Chart.js/Canvas) -> Interaction: Hover for player/change details -> Justification: Visually emphasizes the most significant risers and fallers, a key narrative point.
-        - Report Info: Detailed Player Profiles -> Goal: Deep-dive Inform -> Viz: Tabbed Modal (HTML/Tailwind/JS) -> Interaction: Click tabs to switch content -> Justification: Organizes dense text into digestible sections, preventing user overload.
-        - Library/Method: All charts use Chart.js on Canvas. Layouts use Tailwind CSS. Interactions are powered by vanilla JavaScript.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -97,6 +87,10 @@
             border-color: #2563eb;
             color: #2563eb;
             font-weight: 600;
+        }
+        #playerTooltip {
+            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+            pointer-events: none; /* So it doesn't interfere with mouse events on cards */
         }
         @-webkit-keyframes slideIn {
             from {bottom: -300px; opacity: 0} 
@@ -192,6 +186,11 @@
     <div id="playerModal" class="modal">
         <div class="modal-content shadow-2xl rounded-t-lg md:rounded-lg">
         </div>
+    </div>
+    
+    <!-- Tooltip Element -->
+    <div id="playerTooltip" class="hidden absolute z-50 p-3 bg-gray-900 text-white rounded-lg shadow-xl max-w-xs text-sm leading-relaxed opacity-0">
+        <!-- Content will be injected here -->
     </div>
 
     <script>
@@ -438,344 +437,100 @@
               analysis: "100위는 한계가 아닌 발사대. 얼마나 높이 올라갈지가 관건. 짐 하보 감독 체제에서 차저스 공격의 정체성을 결정할 척도." } }
         ];
 
-        let currentPlayers = [...playersData];
-        let positionChartInstance = null;
-        let activePositionFilter = 'all';
-        let activeStatusFilter = 'all';
-
-        document.addEventListener('DOMContentLoaded', () => {
-            populateFilters();
-            setupEventListeners();
-            renderPlayerGrid();
-            createPositionChart();
-            document.querySelector('.filter-btn[data-filter-value="all"]').classList.add('active-filter');
-        });
-
-        function populateFilters() {
-            const positionFilter = document.getElementById('positionFilter');
-            const teamFilter = document.getElementById('teamFilter');
-
-            const positions = [...new Set(playersData.map(p => p.position))].sort();
-            const teams = [...new Set(playersData.map(p => p.team))].sort();
-
-            positions.forEach(pos => {
-                const option = document.createElement('option');
-                option.value = pos;
-                option.textContent = pos;
-                positionFilter.appendChild(option);
-            });
-
-            teams.forEach(team => {
-                const option = document.createElement('option');
-                option.value = team;
-                option.textContent = team;
-                teamFilter.appendChild(option);
-            });
-        }
-
-        function setupEventListeners() {
-            document.getElementById('searchInput').addEventListener('input', applyFiltersAndSort);
-            document.getElementById('positionFilter').addEventListener('change', (e) => {
-                activePositionFilter = e.target.value;
-                applyFiltersAndSort();
-                updateChartHighlight();
-            });
-            document.getElementById('teamFilter').addEventListener('change', applyFiltersAndSort);
-            document.getElementById('sortControl').addEventListener('change', applyFiltersAndSort);
+        // --- Generate and Populate Scripts ---
+        function generateScripts() {
+            let bashScript = '#!/bin/bash\n# 이 스크립트를 download.sh로 저장하고 터미널에서 bash download.sh를 실행하세요.\n\n';
+            let psScript = '# 이 스크립트를 download.ps1로 저장하고 PowerShell에서 실행하세요.\n# 실행 오류 발생 시 먼저 Set-ExecutionPolicy RemoteSigned -Scope Process 를 실행하세요.\n\n';
             
-            document.querySelectorAll('.filter-btn').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter'));
-                    e.target.classList.add('active-filter');
-                    activeStatusFilter = e.target.dataset.filterValue;
-                    applyFiltersAndSort();
-                });
+            players.forEach(player => {
+                const imageUrl = `https://a.espncdn.com/i/headshots/nfl/players/full/${player.id}.png`;
+                const safeFilename = player.name.replace(/[^a-zA-Z0-9가-힣\s.-]/g, '');
+                
+                bashScript += `echo "Downloading ${safeFilename}..."\nwget -O "${safeFilename}.png" "${imageUrl}"\n`;
+                psScript += `Write-Host "Downloading ${safeFilename}..."\nInvoke-WebRequest -Uri "${imageUrl}" -OutFile "${safeFilename}.png"\n`;
             });
 
-            document.getElementById('playerModal').addEventListener('click', (e) => {
-                if (e.target.classList.contains('modal') || e.target.classList.contains('close')) {
-                    closeModal();
-                }
-            });
+            document.getElementById('download-script-mac').value = bashScript;
+            document.getElementById('download-script-windows').value = psScript;
         }
 
-        function applyFiltersAndSort() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const teamFilter = document.getElementById('teamFilter').value;
-            const sortValue = document.getElementById('sortControl').value;
-
-            let filtered = playersData.filter(player => {
-                const nameMatch = player.name.toLowerCase().includes(searchTerm);
-                const positionMatch = activePositionFilter === 'all' || player.position === activePositionFilter;
-                const teamMatch = teamFilter === 'all' || player.team === teamFilter;
-                const statusMatch = activeStatusFilter === 'all' || getStatus(player.change) === activeStatusFilter;
-                return nameMatch && positionMatch && teamMatch && statusMatch;
-            });
-
-            currentPlayers = sortPlayers(filtered, sortValue);
-            renderPlayerGrid();
-        }
-        
-        function getStatus(change) {
-            if (change === 'new') return 'new';
-            if (change === 're-entry') return 're-entry';
-            if (typeof change === 'number' && change > 0) return 'up';
-            if (typeof change === 'number' && change < 0) return 'down';
-            return 'none';
-        }
-
-        function sortPlayers(players, sortBy) {
-            return players.sort((a, b) => {
-                switch (sortBy) {
-                    case 'rank-asc': return a.rank - b.rank;
-                    case 'rank-desc': return b.rank - a.rank;
-                    case 'name-asc': return a.name.localeCompare(b.name);
-                    case 'age-asc': return a.age - b.age;
-                    case 'change-desc':
-                        const changeA = typeof a.change === 'number' ? Math.abs(a.change) : -1;
-                        const changeB = typeof b.change === 'number' ? Math.abs(b.change) : -1;
-                        return changeB - changeA;
-                    default: return a.rank - b.rank;
-                }
-            });
-        }
-
-        function renderPlayerGrid() {
-            const grid = document.getElementById('playerGrid');
-            grid.innerHTML = '';
-            if (currentPlayers.length === 0) {
-                grid.innerHTML = `<p class="col-span-full text-center text-gray-500">해당 조건에 맞는 선수가 없습니다.</p>`;
-                return;
-            }
-            currentPlayers.forEach(player => {
+        // --- Populate Individual Image Gallery ---
+        function populateGallery() {
+            const gallery = document.getElementById('image-gallery');
+            players.forEach(player => {
+                const imageUrl = `https://a.espncdn.com/i/headshots/nfl/players/full/${player.id}.png`;
                 const card = document.createElement('div');
-                card.className = 'bg-white rounded-lg shadow-md p-4 flex flex-col items-center text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer';
-                card.onclick = () => openModal(player);
-
-                let changeIndicator = '';
-                if (player.change === 'new' || player.change === 're-entry') {
-                    changeIndicator = `<span class="text-xs font-bold ${player.change === 'new' ? 'text-blue-500' : 'text-purple-500'}">${player.change === 'new' ? 'NEW' : 'RE-ENTRY'}</span>`;
-                } else if (typeof player.change === 'number') {
-                    const color = player.change > 0 ? 'text-green-500' : 'text-red-500';
-                    const symbol = player.change > 0 ? '▲' : '▼';
-                    changeIndicator = `<span class="text-sm font-bold ${color}">${symbol} ${Math.abs(player.change)}</span>`;
-                }
-
+                card.className = 'bg-white rounded-lg shadow-md p-3 text-center flex flex-col items-center';
                 card.innerHTML = `
+                    <img src="${imageUrl}" alt="${player.name}" class="w-24 h-24 object-cover rounded-full border-2 border-gray-200 mb-3" onerror="this.onerror=null; this.src='https://placehold.co/96x96/e2e8f0/9ca3af?text=N/A';">
+                    <p class="font-semibold text-sm text-gray-800 mb-2">${player.name}</p>
                     <div class="relative w-full">
-                        <span class="absolute top-0 left-0 text-2xl font-bold text-gray-300">${player.rank}</span>
-                        <div class="absolute top-0 right-0">${changeIndicator}</div>
+                        <button class="copy-link-btn w-full bg-gray-500 text-white text-xs py-1 px-2 rounded hover:bg-gray-600 transition-colors" data-link="${imageUrl}">링크 복사</button>
+                        <div class="copied-feedback">복사 완료!</div>
                     </div>
-                    <div class="w-20 h-20 rounded-full bg-gray-200 mt-8 mb-2 flex items-center justify-center text-gray-400 text-xs">
-                        <img src="${getPlayerImageUrl(player.name)}" onerror="this.onerror=null; this.src='https://placehold.co/80x80/e2e8f0/9ca3af?text=${player.name.charAt(0)}'" alt="${player.name}" class="w-full h-full rounded-full object-cover">
-                    </div>
-                    <h3 class="font-bold text-lg">${player.name}</h3>
-                    <p class="text-gray-600 text-sm">${player.position} | ${player.team}</p>
-                    <p class="text-gray-500 text-xs mt-1">Age: ${player.age}</p>
                 `;
-                grid.appendChild(card);
+                gallery.appendChild(card);
             });
         }
-        
-        function getPlayerImageUrl(name) {
-            // All image URLs have been manually verified and replaced with direct links to high-resolution files from Wikimedia Commons to ensure stability.
-            const imageUrlMap = {
-                "브라이언 토마스 주니어": "https://upload.wikimedia.org/wikipedia/commons/3/33/Brian_Thomas_Jr_on_the_jumbotron_at_LSU.jpg",
-                "비잔 로빈슨": "https://upload.wikimedia.org/wikipedia/commons/1/13/Atlanta_Falcons_Bijan_Robinson_MAY2023_%28cropped%29.png",
-                "조쉬 하인스-앨런": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Josh_Allen_Jaguars_vs_Falcons_Wembley_2023.jpg",
-                "보 닉스": "https://upload.wikimedia.org/wikipedia/commons/3/39/Bo_Nix_Ducks_vs_Beavers_2022.jpg",
-                "트레이 맥브라이드": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Trey_McBride_Cardinals_vs_Commanders_2023.jpg",
-                "제일런 램지": "https://upload.wikimedia.org/wikipedia/commons/3/39/Jalen_Ramsey_with_the_Miami_Dolphins.jpg",
-                "말릭 네이버스": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Malik_Nabers_LSU_vs_FSU_2023.jpg",
-                "조던 러브": "https://upload.wikimedia.org/wikipedia/commons/c/c2/Jordan_Love_pre-snap_in_2023.jpg",
-                "조던 마일라타": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Jordan_Mailata_in_2022.jpg",
-                "프랭키 루부": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Frankie_Luvu_Panthers_vs_Falcons_2023.jpg",
-                "커비 조셉": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Kerby_Joseph_Lions_vs_Jaguars_2022.jpg",
-                "샘 다널드": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Sam_Darnold_Niners_preseason_2023.jpg",
-                "크리스티안 맥카프리": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Christian_McCaffrey_2023.jpg",
-                "바비 왜그너": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Bobby_Wagner_Seahawks_vs_Commanders_2023.jpg",
-                "패트릭 퀸": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Patrick_Queen_Ravens_vs_Browns_2023.jpg",
-                "비타 베아": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Vita_Vea_Buccaneers_vs_Jaguars_2023.jpg",
-                "티 히긴스": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Tee_Higgins_Bengals_vs_Browns_2023.jpg",
-                "칼릴 맥": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Khalil_Mack_in_2023.jpg",
-                "닥 프레스캇": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Dak_Prescott_in_2022.jpg",
-                "라샨 게리": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Rashan_Gary_in_2023.jpg",
-                "트렌트 맥더피": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Trent_McDuffie_in_2023.jpg",
-                "제리 주디": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Jerry_Jeudy_in_2022.jpg",
-                "캐머런 헤이워드": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Cameron_Heyward_in_2023.jpg",
-                "크리스티안 곤잘레스": "https://upload.wikimedia.org/wikipedia/commons/3/33/Christian_Gonzalez_in_2023.jpg",
-                "카이렌 윌리엄스": "https://upload.wikimedia.org/wikipedia/commons/2/26/Kyren_Williams_in_2023.jpg",
-                "라레미 턴실": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Laremy_Tunsil_in_2023.jpg",
-                "퀴넨 윌리엄스": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Quinnen_Williams_in_2023.jpg",
-                "앤드류 반 깅켈": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Andrew_Van_Ginkel_in_2023.jpg",
-                "제임스 쿡": "https://upload.wikimedia.org/wikipedia/commons/5/53/James_Cook_in_2023.jpg",
-                "잭 앨런": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Zach_Allen_in_2023.jpg",
-                "투아 타고바일로아": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Tua_Tagovailoa_at_Dolphins_training_camp%2C_2023.jpg",
-                "제시 베이츠": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Jessie_Bates_Falcons_vs_Panthers_2023.jpg",
-                "크리드 험프리": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Creed_Humphrey_in_2023.jpg",
-                "샘 라포타": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Sam_LaPorta_in_2023.jpg",
-                "조쉬 스웻": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Josh_Sweat_in_2022.jpg",
-                "라본테 데이비드": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Lavonte_David_Buccaneers_vs_Jaguars_2023.jpg",
-                "드레이크 런던": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Drake_London_Falcons_vs_Panthers_2023.jpg",
-                "애런 존스": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Aaron_Jones_in_2023.jpg",
-                "레너드 윌리엄스": "https://upload.wikimedia.org/wikipedia/commons/3/36/Leonard_Williams_in_2023.jpg",
-                "래드 맥콘키": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Ladd_McConkey_with_Georgia_in_2022.jpg"
-            };
-            return imageUrlMap[name] || ''; // Return empty string if no URL is found
-        }
 
-        function createPositionChart() {
-            const ctx = document.getElementById('positionChart').getContext('2d');
-            const positionCounts = playersData.reduce((acc, player) => {
-                acc[player.position] = (acc[player.position] || 0) + 1;
-                return acc;
-            }, {});
-
-            const labels = Object.keys(positionCounts);
-            const data = Object.values(positionCounts);
-            
-            const backgroundColors = [
-                '#3b82f6', '#10b981', '#f97316', '#8b5cf6', '#ec4899', '#6b7280',
-                '#ef4444', '#eab308', '#22c55e', '#06b6d4', '#6366f1', '#a855f7'
-            ];
-
-            positionChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: '선수 수',
-                        data: data,
-                        backgroundColor: backgroundColors,
-                        borderColor: '#f8f9fa',
-                        borderWidth: 2,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                font: { size: 12 },
-                                boxWidth: 15,
-                                padding: 15
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        label += context.parsed + '명';
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    onClick: (event, elements) => {
-                        if (elements.length > 0) {
-                            const chartElement = elements[0];
-                            const label = positionChartInstance.data.labels[chartElement.index];
-                            activePositionFilter = label;
-                            document.getElementById('positionFilter').value = label;
-                            applyFiltersAndSort();
-                            updateChartHighlight();
-                        }
-                    }
-                }
+        // --- Event Listeners ---
+        function setupEventListeners() {
+            document.querySelectorAll('.copy-link-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const link = e.target.dataset.link;
+                    const feedback = e.target.nextElementSibling;
+                    copyToClipboard(link, feedback);
+                });
             });
-        }
-        
-        function updateChartHighlight() {
-            const labels = positionChartInstance.data.labels;
-            const backgroundColors = positionChartInstance.data.datasets[0].backgroundColor;
             
-            const newBorderWidths = labels.map(label => {
-                return label === activePositionFilter ? 5 : 2;
-            });
-            const newBorderColors = labels.map(label => {
-                return label === activePositionFilter ? '#93c5fd' : '#f8f9fa';
+            document.getElementById('copy-script-btn-windows').addEventListener('click', () => {
+                const scriptText = document.getElementById('download-script-windows').value;
+                const feedback = document.getElementById('script-copied-feedback-windows');
+                copyToClipboard(scriptText, feedback);
             });
 
-            positionChartInstance.data.datasets[0].borderWidth = newBorderWidths;
-            positionChartInstance.data.datasets[0].borderColor = newBorderColors;
-            positionChartInstance.update();
-        }
+            document.getElementById('copy-script-btn-mac').addEventListener('click', () => {
+                const scriptText = document.getElementById('download-script-mac').value;
+                const feedback = document.getElementById('script-copied-feedback-mac');
+                copyToClipboard(scriptText, feedback);
+            });
 
-        function openModal(player) {
-            const modal = document.getElementById('playerModal');
-            const modalContent = modal.querySelector('.modal-content');
-            
-            let changeIndicatorHTML = '';
-            if (player.change === 'new' || player.change === 're-entry') {
-                changeIndicatorHTML = `<span class="ml-2 text-sm font-semibold px-2 py-1 rounded-md ${player.change === 'new' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}">${player.change === 'new' ? '신규 진입' : '재진입'}</span>`;
-            } else if (typeof player.change === 'number') {
-                const colorClass = player.change > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-                const symbol = player.change > 0 ? '▲' : '▼';
-                changeIndicatorHTML = `<span class="ml-2 text-sm font-semibold px-2 py-1 rounded-md ${colorClass}">${symbol} ${Math.abs(player.change)} (vs 2024)</span>`;
-            }
-            
-            modalContent.innerHTML = `
-                <div class="p-5 border-b border-gray-200">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-sm text-gray-500">Rank #${player.rank}</p>
-                            <h2 class="text-2xl md:text-3xl font-bold flex items-center">${player.name} ${changeIndicatorHTML}</h2>
-                            <p class="text-md text-gray-600 mt-1">${player.position} | ${player.team} | Age: ${player.age}</p>
-                        </div>
-                        <span class="close">&times;</span>
-                    </div>
-                </div>
-                <div class="p-5">
-                    <div class="mb-4">
-                        <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                            <div class="flex"><dt class="font-semibold w-28">2025년 캡 히트:</dt><dd class="text-gray-700">${player.details.capHit}</dd></div>
-                            <div class="flex"><dt class="font-semibold w-28">Top 100 역사:</dt><dd class="text-gray-700">${player.details.history}</dd></div>
-                        </dl>
-                    </div>
-                    <div class="border-b border-gray-200 mb-4">
-                        <nav class="-mb-px flex space-x-6" aria-label="Tabs">
-                            <button class="tab-button active whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm" data-tab="review">2024 시즌 리뷰</button>
-                            <button class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="reason">순위 선정 이유</button>
-                            <button class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="outlook">2025 시즌 전망</button>
-                            <button class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="analysis">전문가 분석</button>
-                        </nav>
-                    </div>
-                    <div id="tabContent" class="text-base leading-relaxed">
-                        <div id="review" class="tab-panel">${player.details.review}</div>
-                        <div id="reason" class="tab-panel hidden">${player.details.reason}</div>
-                        <div id="outlook" class="tab-panel hidden">${player.details.outlook}</div>
-                        <div id="analysis" class="tab-panel hidden">${player.details.analysis}</div>
-                    </div>
-                </div>
-            `;
-            modal.style.display = "block";
-            document.body.style.overflow = 'hidden';
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
 
-            modalContent.querySelectorAll('.tab-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    modalContent.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    
-                    modalContent.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
-                    modalContent.querySelector(`#${button.dataset.tab}`).classList.remove('hidden');
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+                    document.getElementById(`${e.currentTarget.dataset.tab}-content`).classList.remove('hidden');
                 });
             });
         }
 
-        function closeModal() {
-            const modal = document.getElementById('playerModal');
-            modal.style.display = "none";
-            document.body.style.overflow = 'auto';
+        function copyToClipboard(text, feedbackElement) {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = text;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            try {
+                document.execCommand('copy');
+                if(feedbackElement) {
+                    feedbackElement.style.opacity = '1';
+                    setTimeout(() => {
+                        feedbackElement.style.opacity = '0';
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+            document.body.removeChild(tempTextArea);
         }
 
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            generateScripts();
+            populateGallery();
+            setupEventListeners();
+        });
     </script>
 </body>
 </html>
