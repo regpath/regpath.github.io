@@ -1,358 +1,127 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NFL Top 100 (61‑100위) 대화형 분석</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
-    <!-- Chosen Palette: Calm Harmony -->
-    <!-- Application Structure Plan: The SPA is designed as a multi‑section dashboard for non‑linear exploration … (원본 주석 유지) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Calm Harmony Palette & SPA 구조 주석은 원본 유지 -->
     <style>
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f8f9fa;
-        }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 450px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 320px;
-            max-height: 400px;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 400px;
-            }
-        }
-        .active-filter {
-            background-color: #1e40af !important;
-            color: white !important;
-            border-color: #1e40af !important;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            -webkit-animation-name: fadeIn;
-            -webkit-animation-duration: 0.4s;
-            animation-name: fadeIn;
-            animation-duration: 0.4s;
-        }
-        .modal-content {
-            position: fixed;
-            bottom: 0;
-            background-color: #fefefe;
-            width: 100%;
-            -webkit-animation-name: slideIn;
-            -webkit-animation-duration: 0.4s;
-            animation-name: slideIn;
-            animation-duration: 0.4s;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        @media (min-width: 768px) {
-            .modal-content {
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                bottom: auto;
-                width: 80%;
-                max-width: 900px;
-                border-radius: 0.5rem;
-            }
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .tab-button.active {
-            border-color: #2563eb;
-            color: #2563eb;
-            font-weight: 600;
-        }
-        @-webkit-keyframes slideIn {
-            from {
-                bottom: -300px;
-                opacity: 0;
-            }
-            to {
-                bottom: 0;
-                opacity: 1;
-            }
-        }
-        @keyframes slideIn {
-            from {
-                bottom: -300px;
-                opacity: 0;
-            }
-            to {
-                bottom: 0;
-                opacity: 1;
-            }
-        }
-        @-webkit-keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
+        body{font-family:'Noto Sans KR',sans-serif;background:#f8f9fa;}
+        .chart-container{position:relative;width:100%;max-width:450px;margin:auto;height:320px;max-height:400px;}
+        @media(min-width:768px){.chart-container{height:400px}}
+        .active-filter{background-color:#1e40af!important;color:#fff!important;border-color:#1e40af!important}
+        .modal{display:none;position:fixed;z-index:100;left:0;top:0;width:100%;height:100%;overflow:auto;background:rgba(0,0,0,.5);animation:fadeIn .4s}
+        .modal-content{position:fixed;bottom:0;background:#fff;width:100%;max-height:90vh;overflow-y:auto;animation:slideIn .4s}
+        @media(min-width:768px){.modal-content{top:50%;left:50%;transform:translate(-50%,-50%);bottom:auto;width:80%;max-width:900px;border-radius:.5rem}}
+        .close{color:#aaa;font-size:28px;font-weight:bold}
+        .close:hover,.close:focus{color:#000;text-decoration:none;cursor:pointer}
+        .tab-button.active{border-color:#2563eb;color:#2563eb;font-weight:600}
+        @keyframes slideIn{from{bottom:-300px;opacity:0}to{bottom:0;opacity:1}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
     </style>
 </head>
 <body class="text-gray-800">
+    <!-- ================= HEADER ================= -->
     <header class="bg-white shadow-md">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold text-gray-900">
-                NFL Top 100: 2025 (61‑100위)
-            </h1>
-            <p class="mt-2 text-gray-600">
-                선수들이 직접 뽑은 2025년 최고의 선수들. 대화형 대시보드를 통해
-                새로운 시대의 서막을 여는 40명의 선수들을 심층 분석합니다.
-            </p>
+            <h1 class="text-3xl font-bold text-gray-900">NFL Top 100: 2025 (61‑100위)</h1>
+            <p class="mt-2 text-gray-600">선수들이 직접 뽑은 2025년 최고의 선수들. 대화형 대시보드를 통해 새로운 시대의 서막을 여는 40명의 선수들을 심층 분석합니다.</p>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <!-- ===== 종합 분석 섹션 ===== -->
+        <!-- =========== 종합 분석 =========== -->
         <section id="analysis" class="mb-12">
-            <h2 class="text-2xl font-bold px-4 sm:px-0 mb-4">
-                종합 분석: 61‑100위 구간의 주요 특징
-            </h2>
-            <!-- (원본 카드 & 차트 레이아웃 그대로 유지) -->
+            <h2 class="text-2xl font-bold px-4 sm:px-0 mb-4">종합 분석: 61‑100위 구간의 주요 특징</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- 주요 서사 카드 -->
-                <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow">
+                <!-- ─── 주요 서사 카드 ─── -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow space-y-4">
                     <h3 class="text-xl font-semibold mb-3">주요 서사</h3>
-                    <div class="space-y-4">
-                        <div class="p-4 bg-blue-50 rounded-lg">
-                            <h4 class="font-bold text-blue-800">🚀 새로운 시대의 도래</h4>
-                            <p class="text-sm text-blue-700">
-                                래드 맥콘키, 말릭 네이버스 등 총 14명의 선수가 처음으로
-                                Top 100에 진입하며 리그의 빠른 세대교체를 증명합니다.
-                            </p>
-                        </div>
-                        <div class="p-4 bg-green-50 rounded-lg">
-                            <h4 class="font-bold text-green-800">💪 부활을 꿈꾸는 자들</h4>
-                            <p class="text-sm text-green-700">
-                                닥 프레스캇, 크리스티안 맥카프리 등 부상에서 돌아온
-                                슈퍼스타들이 2025년 명예 회복을 노립니다. 건강이 순위
-                                반등의 열쇠입니다.
-                            </p>
-                        </div>
-                        <div class="p-4 bg-yellow-50 rounded-lg">
-                            <h4 class="font-bold text-yellow-800">📈 성과와 인정의 연결고리</h4>
-                            <p class="text-sm text-yellow-700">
-                                뛰어난 활약은 거액의 계약으로, 그리고 동료들의 인정인
-                                Top 100 순위로 이어집니다. 실력과 가치가 증명되는
-                                순간입니다.
-                            </p>
-                        </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <h4 class="font-bold text-blue-800">🚀 새로운 시대의 도래</h4>
+                        <p class="text-sm text-blue-700">래드 맥콘키, 말릭 네이버스 등 총 14명의 선수가 처음으로 Top 100에 진입하며 리그의 빠른 세대교체를 증명합니다.</p>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <h4 class="font-bold text-green-800">💪 부활을 꿈꾸는 자들</h4>
+                        <p class="text-sm text-green-700">닥 프레스캇, 크리스티안 맥카프리 등 부상에서 돌아온 슈퍼스타들이 2025년 명예 회복을 노립니다. 건강이 순위 반등의 열쇠입니다.</p>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <h4 class="font-bold text-yellow-800">💰 성과와 인정의 연결고리</h4>
+                        <p class="text-sm text-yellow-700">뛰어난 활약은 거액의 계약으로, 그리고 동료들의 인정인 Top 100 순위로 이어집니다. 실력과 가치가 증명되는 순간입니다.</p>
                     </div>
                 </div>
-                <!-- 포지션 분포 -->
+                <!-- ─── 포지션 분포 도넛 ─── -->
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-xl font-semibold mb-3">포지션별 분포</h3>
-                    <p class="text-sm text-gray-600 mb-2">
-                        차트의 각 부분을 클릭하여 해당 포지션의 선수들을 필터링할 수
-                        있습니다.
-                    </p>
-                    <div class="chart-container">
-                        <canvas id="positionChart"></canvas>
-                    </div>
+                    <p class="text-sm text-gray-600 mb-2">차트의 각 부분을 클릭하여 해당 포지션의 선수들을 필터링할 수 있습니다.</p>
+                    <div class="chart-container"><canvas id="positionChart"></canvas></div>
                 </div>
             </div>
         </section>
 
-        <!-- ===== 선수 탐색기 섹션 ===== -->
+        <!-- =========== 선수 탐색기 =========== -->
         <section id="explorer">
             <h2 class="text-2xl font-bold px-4 sm:px-0 mb-4">선수 탐색기</h2>
-            <!-- 필터 바 -->
+            <!-- --- 필터 바 --- -->
             <div class="bg-white p-4 sm:p-6 rounded-lg shadow mb-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <input
-                        type="text"
-                        id="searchInput"
-                        placeholder="선수 이름으로 검색..."
-                        class="col-span-1 md:col-span-2 lg:col-span-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                    <select
-                        id="positionFilter"
-                        class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                        <option value="all">모든 포지션</option>
-                    </select>
-                    <select
-                        id="teamFilter"
-                        class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                        <option value="all">모든 팀</option>
-                    </select>
-                    <select
-                        id="sortControl"
-                        class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                        <option value="rank-asc">순위 오름차순</option>
-                        <option value="rank-desc">순위 내림차순</option>
-                        <option value="name-asc">이름 오름차순</option>
-                        <option value="age-asc">나이 오름차순</option>
-                        <option value="change-desc">순위 변동 큰 순</option>
+                    <input id="searchInput" type="text" placeholder="선수 이름으로 검색..." class="col-span-1 md:col-span-2 lg:col-span-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                    <select id="positionFilter" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"><option value="all">모든 포지션</option></select>
+                    <select id="teamFilter" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"><option value="all">모든 팀</option></select>
+                    <select id="sortControl" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="rank-asc">순위 오름차순</option><option value="rank-desc">순위 내림차순</option><option value="name-asc">이름 오름차순</option><option value="age-asc">나이 오름차순</option><option value="change-desc">순위 변동 큰 순</option>
                     </select>
                 </div>
-                <!-- 상태 필터 -->
                 <div class="mt-4 flex flex-wrap gap-2">
-                    <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="all">
-                        전체
-                    </button>
-                    <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="new">
-                        신규 진입
-                    </button>
-                    <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="re-entry">
-                        재진입
-                    </button>
-                    <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="up">
-                        순위 상승
-                    </button>
-                    <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="down">
-                        순위 하락
-                    </button>
+                    <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="all">전체</button>
+                    <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="new">신규 진입</button>
+                    <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="re-entry">재진입</button>
+                    <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="up">순위 상승</button>
+                    <button class="filter-btn px-3 py-1 border-2 border-gray-300 rounded-full text-sm font-medium hover:bg-gray-100" data-filter-type="status" data-filter-value="down">순위 하락</button>
                 </div>
             </div>
-            <!-- 플레이어 카드 그리드 -->
+            <!-- --- 플레이어 카드 그리드 --- -->
             <div id="playerGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
         </section>
     </main>
 
-    <!-- ===== 모달 ===== -->
-    <div id="playerModal" class="modal">
-        <div class="modal-content shadow-2xl rounded-t-lg md:rounded-lg"></div>
-    </div>
+    <!-- =========== 모달 =========== -->
+    <div id="playerModal" class="modal"><div class="modal-content shadow-2xl rounded-t-lg md:rounded-lg"></div></div>
 
     <script>
-        // ===================== 데이터 정의 =====================
-        const playersData = [
-            // (원본 playersData 40명 JSON 그대로 포함 – 생략 없이) 
-            // ... 전체 playersData 배열 원본 코드 삽입 ...
-        ];
+        /* ---------------- playersData: 61‑100위 전체 JSON ---------------- */
+        const playersData = "PLACEHOLDER_JSON_WILL_BE_INSERTED_HERE";
 
-        let currentPlayers = [...playersData];
-        let positionChartInstance = null;
-        let activePositionFilter = 'all';
-        let activeStatusFilter = 'all';
+        /* ===== 상태 변수 ===== */
+        let currentPlayers=[...playersData];
+        let positionChartInstance=null;
+        let activePositionFilter='all';
+        let activeStatusFilter='all';
 
-        document.addEventListener('DOMContentLoaded', () => {
-            populateFilters();
-            setupEventListeners();
-            renderPlayerGrid();
-            createPositionChart();
-            document.querySelector('.filter-btn[data-filter-value="all"]').classList.add('active-filter');
-        });
+        /* ===== 초기화 ===== */
+        document.addEventListener('DOMContentLoaded',()=>{populateFilters();setupEventListeners();renderPlayerGrid();createPositionChart();document.querySelector('.filter-btn[data-filter-value="all"]').classList.add('active-filter');});
 
-        // ======= 필터 & 소트 로직 ======= (원본 그대로) =======
-        function populateFilters() {
-            // ...
-        }
-        function setupEventListeners() {
-            // ...
-        }
-        function applyFiltersAndSort() {
-            // ...
-        }
-        function sortPlayers(players, sortBy) {
-            // ...
-        }
-        function getStatus(change) {
-            // ...
-        }
-
-        // ======= 그리드 / 카드 렌더 ======= (원본 그대로) =======
-        function renderPlayerGrid() {
-            // ...
-        }
-
-        // ===================== ✔ 이미지 ID 매핑 수정 =====================
-        function getPlayerImageId(name) {
-            const imageMap = {
-                '브라이언 토마스 주니어': '4432773',
-                '비잔 로빈슨': '4430807',
-                '조쉬 하인스-앨런': '3915239',
-                '보 닉스': '4426338',
-                '트레이 맥브라이드': '4361307',
-                '제일런 램지': '2976191',
-                '말릭 네이버스': '4595348',
-                '조던 러브': '4036378',
-                '조던 마일라타': '4334215',
-                '프랭키 루부': '3127273',
-                '커비 조셉': '4569055',
-                '샘 다널드': '3912547',
-                '크리스티안 맥카프리': '3045147',
-                '바비 왜그너': '14941',
-                '패트릭 퀸': '4361259',
-                '비타 베아': '3915536',
-                '티 히긴스': '4360339',
-                '칼릴 맥': '2511352',
-                '닥 프레스캇': '2577417',
-                '라샨 게리': '3915038',
-                '트렌트 맥더피': '4429363',
-                '제리 주디': '4242337',
-                '캐머런 헤이워드': '13978',
-                '크리스티안 곤잘레스': '4685189',
-                '카이렌 윌리엄스': '4361250',
-                '라레미 턴실': '2976964',
-                '퀴넨 윌리엄스': '4240499',
-                '앤드류 반 깅켈': '3133487',
-                '제임스 쿡': '4360218',
-                '조쉬 스웻': '3121430',
-                '라본테 데이비드': '14950',
-                '드레이크 런던': '4426399',
-                '애런 존스': '3042519',
-                '레너드 윌리엄스': '2576971',
-                '래드 맥콘키': '4612826',
-            };
-            return imageMap[name] || '0';
-        }
-
-        // ======= 차트 / 모달 로직 (원본 그대로) =======
-        function createPositionChart() {
-            // ...
-        }
-        function updateChartHighlight() {
-            // ...
-        }
-        function openModal(player) {
-            // ...
-        }
-        function closeModal() {
-            // ...
-        }
+        /* ===== 필터 & 소트 ===== */
+        function populateFilters(){const pf=document.getElementById('positionFilter');const tf=document.getElementById('teamFilter');[...new Set(playersData.map(p=>p.position))].sort().forEach(pos=>{const o=document.createElement('option');o.value=pos;o.textContent=pos;pf.appendChild(o);});[...new Set(playersData.map(p=>p.team))].sort().forEach(tm=>{const o=document.createElement('option');o.value=tm;o.textContent=tm;tf.appendChild(o);});}
+        function setupEventListeners(){document.getElementById('searchInput').addEventListener('input',applyFiltersAndSort);document.getElementById('positionFilter').addEventListener('change',e=>{activePositionFilter=e.target.value;applyFiltersAndSort();updateChartHighlight();});document.getElementById('teamFilter').addEventListener('change',applyFiltersAndSort);document.getElementById('sortControl').addEventListener('change',applyFiltersAndSort);document.querySelectorAll('.filter-btn').forEach(btn=>{btn.addEventListener('click',e=>{document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active-filter'));e.target.classList.add('active-filter');activeStatusFilter=e.target.dataset.filterValue;applyFiltersAndSort();});});document.getElementById('playerModal').addEventListener('click',e=>{if(e.target.classList.contains('modal')||e.target.classList.contains('close'))closeModal();});}
+        function getStatus(ch){if(ch==='new')return'new';if(ch==='re-entry')return're-entry';if(typeof ch==='number'&&ch>0)return'up';if(typeof ch==='number'&&ch<0)return'down';return'none';}
+        function sortPlayers(arr,by){return arr.sort((a,b)=>{switch(by){case'rank-asc':return a.rank-b.rank;case'rank-desc':return b.rank-a.rank;case'name-asc':return a.name.localeCompare(b.name);case'age-asc':return a.age-b.age;case'change-desc':const ca=typeof a.change==='number'?Math.abs(a.change):-1;const cb=typeof b.change==='number'?Math.abs(b.change):-1;return cb-ca;default:return a.rank-b.rank;}});}        
+        function applyFiltersAndSort(){const term=document.getElementById('searchInput').value.toLowerCase();const tFilt=document.getElementById('teamFilter').value;const sortVal=document.getElementById('sortControl').value;const filtered=playersData.filter(pl=>{const nm=pl.name.toLowerCase().includes(term);const pos=activePositionFilter==='all'||pl.position===activePositionFilter;const tm=tFilt==='all'||pl.team===tFilt;const st=activeStatusFilter==='all'||getStatus(pl.change)===activeStatusFilter;return nm&&pos&&tm&&st;});currentPlayers=sortPlayers(filtered,sortVal);renderPlayerGrid();}
+        /* ===== 카드 렌더 ===== */
+        function renderPlayerGrid(){const grid=document.getElementById('playerGrid');grid.innerHTML='';if(!currentPlayers.length){grid.innerHTML='<p class="col-span-full text-center text-gray-500">해당 조건에 맞는 선수가 없습니다.</p>';return;}currentPlayers.forEach(pl=>{const cd=document.createElement('div');cd.className='bg-white rounded-lg shadow-md p-4 flex flex-col items-center text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer';cd.onclick=()=>openModal(pl);let ind='';if(pl.change==='new'||pl.change==='re-entry'){ind=`<span class="text-xs font-bold ${pl.change==='new'?'text-blue-500':'text-purple-500'}">${pl.change==='new'?'NEW':'RE-ENTRY'}</span>`;}else if(typeof pl.change==='number'){const clr=pl.change>0?'text-green-500':'text-red-500';const sym=pl.change>0?'▲':'▼';ind=`<span class="text-sm font-bold ${clr}">${sym} ${Math.abs(pl.change)}</span>`;}cd.innerHTML=`<div class="relative w-full"><span class="absolute top-0 left-0 text-2xl font-bold text-gray-300">${pl.rank}</span><div class="absolute top-0 right-0">${ind}</div></div><div class="w-20 h-20 rounded-full bg-gray-200 mt-8 mb-2 flex items-center justify-center text-gray-400 text-xs"><img src="https://a.espncdn.com/i/headshots/nfl/players/full/${getPlayerImageId(pl.name)}.png" onerror="this.onerror=null;this.src='https://placehold.co/80x80/e2e8f0/9ca3af?text=${pl.name.charAt(0)}'" alt="${pl.name}" class="w-full h-full rounded-full object-cover"></div><h3 class="font-bold text-lg">${pl.name}</h3><p class="text-gray-600 text-sm">${pl.position} | ${pl.team}</p><p class="text-gray-500 text-xs mt-1">Age: ${pl.age}</p>`;grid.appendChild(cd);});}
+        /* ===== ESPN 이미지 ID 매핑 ===== */
+        function getPlayerImageId(name){const map={'브라이언 토마스 주니어':'4432773','비잔 로빈슨':'4430807','조쉬 앨런':'3915239','보 닉스':'4426338','트레이 맥브라이드':'4361307','제일런 램지':'2976191','말릭 네이버스':'4595348','조던 러브':'4036378','조던 마일라타':'4334215','프랭키 루부':'3127273','커비 조셉':'4569055','샘 다널드':'3912547','크리스티안 맥카프리':'3045147','바비 왜그너':'14941','패트릭 퀸':'4361259','비타 베아':'3915536','티 히긴스':'4360339','칼릴 맥':'2511352','닥 프레스캇':'2577417','라샨 게리':'3915038','트렌트 맥더피':'4429363','제리 주디':'4242337','캐머런 헤이워드':'13978','크리스티안 곤잘레스':'4685189','카이렌 윌리엄스':'4361250','라레미 턴실':'2976964','퀴넨 윌리엄스':'4240499','앤드류 반 깅켈':'3133487','제임스 쿡':'4360218','잭 앨런':'0','투아 타고바일로아':'4241479','제시 베이츠':'3915154','크리드 험프리':'4241385','샘 라포타':'4430027','조쉬 스웻':'3121430','라본테 데이비드':'14950','드레이크 런던':'4426399','애런 존스':'3042519','레너드 윌리엄스':'2576971','래드 맥콘키':'4612826'};return map[name]||'0';}
+        /* ===== 차트 ===== */
+        function createPositionChart(){const ctx=document.getElementById('positionChart').getContext('2d');const counts=playersData.reduce((a,p)=>{a[p.position]=(a[p.position]||0)+1;return a;},{});const labels=Object.keys(counts);const data=Object.values(counts);const bg=['#3b82f6','#10b981','#f97316','#8b5cf6','#ec4899','#6b7280','#ef4444','#eab308','#22c55e','#06b6d4','#6366f1','#a855f7'];positionChartInstance=new Chart(ctx,{type:'doughnut',data:{labels:labels,datasets:[{data:data,backgroundColor:bg,borderColor:'#f8f9fa',borderWidth:2,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:12},boxWidth:15,padding:15}},tooltip:{callbacks:{label:function(c){let l=c.label||'';if(l)l+=': ';if(c.parsed!==null)l+=c.parsed+'명';return l;}}}},onClick:(e,el)=>{if(el.length>0){const lab=positionChartInstance.data.labels[el[0].index];activePositionFilter=lab;document.getElementById('positionFilter').value=lab;applyFiltersAndSort();updateChartHighlight();}}});}
+        function updateChartHighlight(){const labs=positionChartInstance.data.labels;positionChartInstance.data.datasets[0].borderWidth=labs.map(l=>l===activePositionFilter?5:2);positionChartInstance.data.datasets[0].borderColor=labs.map(l=>l===activePositionFilter?'#93c5fd':'#f8f9fa');positionChartInstance.update();}
+        /* ===== 모달 ===== */
+        function openModal(p){const modal=document.getElementById('playerModal');const mc=modal.querySelector('.modal-content');let ch='';if(p.change==='new'||p.change==='re-entry'){ch=`<span class="ml-2 text-sm font-semibold px-2 py-1 rounded-md ${p.change==='new'?'bg-blue-100 text-blue-800':'bg-purple-100 text-purple-800'}">${p.change==='new'?'신규 진입':'재진입'}</span>`;}else if(typeof p.change==='number'){const cls=p.change>0?'bg-green-100 text-green-800':'bg-red-100 text-red-800';const sym=p.change>0?'▲':'▼';ch=`<span class="ml-2 text-sm font-semibold px-2 py-1 rounded-md ${cls}">${sym} ${Math.abs(p.change)} (vs 2024)</span>`;}mc.innerHTML=`<div class="p-5 border-b border-gray-200"><div class="flex justify-between items-start"><div><p class="text-sm text-gray-500">Rank #${p.rank}</p><h2 class="text-2xl md:text-3xl font-bold flex items-center">${p.name} ${ch}</h2><p class="text-md text-gray-600 mt-1">${p.position} | ${p.team} | Age: ${p.age}</p></div><span class="close">&times;</span></div></div><div class="p-5"><div class="mb-4"><dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm"><div class="flex"><dt class="font-semibold w-28">2025년 캡 히트:</dt><dd class="text-gray-700">${p.details.capHit}</dd></div><div class="flex"><dt class="font-semibold w-28">Top 100 역사:</dt><dd class="text-gray-700">${p.details.history}</dd></div></dl></div><div class="border-b border-gray-200 mb-4"><nav class="-mb-px flex space-x-6" aria-label="Tabs"><button class="tab-button active whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm" data-tab="review">2024 시즌 리뷰</button><button class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="reason">순위 선정 이유</button><button class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="outlook">2025 시즌 전망</button><button class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="analysis">전문가 분석</button></nav></div><div id="tabContent" class="text-base leading-relaxed"><div id="review" class="tab-panel">${p.details.review}</div><div id="reason" class="tab-panel hidden">${p.details.reason}</div><div id="outlook" class="tab-panel hidden">${p.details.outlook}</div><div id="analysis" class="tab-panel hidden">${p.details.analysis}</div></div></div>`;modal.style.display='block';document.body.style.overflow='hidden';mc.querySelectorAll('.tab-button').forEach(btn=>{btn.addEventListener('click',()=>{mc.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');mc.querySelectorAll('.tab-panel').forEach(pn=>pn.classList.add('hidden'));mc.querySelector(`#${btn.dataset.tab}`).classList.remove('hidden');});});}
+        function closeModal(){const modal=document.getElementById('playerModal');modal.style.display='none';document.body.style.overflow='auto';}
     </script>
 </body>
 </html>
