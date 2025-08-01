@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI 생산성 보고서: 인터랙티브 분석 (상세 버전)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f9fafb; /* 라이트 모드 배경 */
+            color: #1f2937; /* 기본 텍스트 색상 */
+        }
+        .section-title {
+            @apply text-3xl md:text-4xl font-bold text-gray-900 mb-2 text-center;
+        }
+        .section-subtitle {
+            @apply text-lg md:text-xl text-gray-600 mb-12 text-center max-w-4xl mx-auto;
+        }
+        .card {
+            @apply bg-white border border-gray-200 rounded-xl p-6 transition-all duration-300;
+        }
+        .card:hover {
+            @apply transform -translate-y-1 shadow-xl shadow-cyan-500/10;
+        }
+        .tag {
+            @apply inline-block bg-cyan-100 text-cyan-800 text-xs font-semibold px-3 py-1 rounded-full;
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .tab-btn {
+            @apply px-4 py-2 font-semibold text-gray-500 rounded-t-lg border-b-2 border-transparent transition-all duration-300;
+        }
+        .tab-btn.active {
+            @apply text-cyan-600 border-cyan-600;
+        }
+        .tab-content {
+            @apply hidden;
+        }
+        .tab-content.active {
+            @apply block;
+        }
+        table {
+            @apply w-full text-sm text-left text-gray-500;
+        }
+        thead {
+            @apply text-xs text-gray-700 uppercase bg-gray-50;
+        }
+        th, td {
+            @apply px-6 py-3;
+        }
+        tbody tr {
+            @apply bg-white border-b;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 border-b border-gray-200">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold text-gray-900">
+                <span class="text-cyan-600">AI</span> 생산성 보고서 분석
+            </div>
+            <div class="hidden md:flex space-x-6 text-sm font-medium">
+                <a href="#vision" class="text-gray-600 hover:text-cyan-600 transition">비전</a>
+                <a href="#evidence" class="text-gray-600 hover:text-cyan-600 transition">증거</a>
+                <a href="#reality" class="text-gray-600 hover:text-cyan-600 transition">현실</a>
+                <a href="#strategy" class="text-gray-600 hover:text-cyan-600 transition">전략</a>
+                <a href="#conclusion" class="text-gray-600 hover:text-cyan-600 transition">결론</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-16 md:py-24">
+
+        <!-- Hero Section -->
+        <section class="text-center mb-24 md:mb-32 fade-in">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4">생성형 AI와 생산성 혁명</h1>
+            <p class="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto mb-8">
+                OpenAI의 2025년 7월 보고서는 생성형 AI가 핵심 지식 산업에서 유의미한 생산성 향상을 이끌고 있음을 보여줍니다. 하지만 그 이면의 'AI 생산성 역설'과 '들쭉날쭉한 경계'라는 복잡한 현실을 이해해야만 진정한 잠재력을 실현할 수 있습니다.
+            </p>
+            <a href="https://github.com/regpath/regpath.github.io/raw/main/AI/OpenAI/OpenAI_Productivity-Note_Jul-2025.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                원본 보고서 다운로드
+            </a>
+        </section>
+
+        <!-- Section 1: Vision -->
+        <section id="vision" class="mb-24 md:mb-32 fade-in">
+            <h2 class="section-title">제 1장: 지능 시대의 서막</h2>
+            <p class="section-subtitle">OpenAI의 보고서는 단순한 데이터 나열이 아닌, AI를 통해 새로운 경제 시대를 열려는 거대한 비전을 담은 선언문입니다. AI를 '범용 기술'로 규정하고, 이를 통해 경제 시스템의 근본적 재편과 전례 없는 번영을 가져올 수 있다고 주장합니다.</p>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="card">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">생산성 보고서: The 'Why'</h3>
+                    <p class="text-gray-600 mb-4">보고서는 AI가 인간 지능의 '승수(multiplier)'로서, 법률, 컨설팅 등 핵심 산업에서 창출하는 구체적인 경제적 가치를 입증합니다. 이는 AI가 단순한 기술적 호기심을 넘어 실질적 가치를 창출하며, 대규모 투자의 당위성을 확보하는 핵심 근거가 됩니다.</p>
+                    <span class="tag">가치 입증 및 비전 제시</span>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">경제 청사진: The 'How'</h3>
+                    <p class="text-gray-600 mb-4">생산성 보고서가 제시하는 경제적 효용은 더 큰 그림인 '경제 청사진'으로 이어집니다. AI 패권을 위해 필요한 국가 전략, 즉 **칩(Chips), 데이터(Data), 에너지(Energy)** 인프라에 대한 막대한 공공-민간 투자를 촉구하며 기술 발전을 뒷받침할 구체적인 행동 계획을 제시합니다.</p>
+                    <span class="tag">국가 전략 및 정책 제안</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Evidence -->
+        <section id="evidence" class="mb-24 md:mb-32 fade-in">
+            <h2 class="section-title">제 2장: 변화의 증거</h2>
+            <p class="section-subtitle">AI는 다양한 산업 현장에서 측정 가능한 성과를 내고 있습니다. 아래 요약표와 각 분야별 심층 분석을 통해 AI의 실질적인 영향력을 확인하세요.</p>
+            
+            <div class="card mb-12 overflow-x-auto">
+                <h3 class="text-2xl font-bold text-gray-900 mb-4 text-center">주요 산업별 AI 기반 생산성 향상 요약</h3>
+                <table class="min-w-full">
+                    <thead>
+                        <tr>
+                            <th>산업 분야</th>
+                            <th>핵심 생산성 지표</th>
+                            <th>핵심 품질 지표</th>
+                            <th>주요 시사점</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-semibold">법률 서비스</td>
+                            <td>생산성 34% ~ 140% 증가</td>
+                            <td>복잡한 분석/설득적 글쓰기 품질 향상</td>
+                            <td>추론(Reasoning) 모델이 고차원적 법률 분석의 질적 향상을 주도</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">고객 지원</td>
+                            <td>생산성 평균 14% 증가</td>
+                            <td>고객 응대 시 공감 능력 향상</td>
+                            <td>저숙련·신입 직원의 성과 향상에 특히 효과적, 기술 격차 완화</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">컨설팅</td>
+                            <td>작업 효율 25% 증가</td>
+                            <td>결과물 품질 40% 향상</td>
+                            <td>창의적 과업에 강점, 분석적 과업에서는 정확도 저하 위험 존재</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">정부 서비스</td>
+                            <td>일일 평균 95분 시간 절약</td>
+                            <td>긍정적 업무 경험(85%), 소통 개선</td>
+                            <td>인간의 전문성과 판단력이 AI 활용의 핵심 요소임을 재확인</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">교육</td>
+                            <td>주당 약 6시간 절약</td>
+                            <td>절약된 시간을 학생 피드백, 맞춤형 수업에 재투자</td>
+                            <td>교사의 행정 부담을 줄여 교육의 질적 향상에 기여</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="w-full max-w-5xl mx-auto">
+                <!-- Tabs -->
+                <div class="border-b border-gray-200 mb-8 flex justify-center flex-wrap">
+                    <button class="tab-btn active" data-tab="legal">법률</button>
+                    <button class="tab-btn" data-tab="support">고객 지원</button>
+                    <button class="tab-btn" data-tab="consulting">컨설팅</button>
+                    <button class="tab-btn" data-tab="government">정부</button>
+                    <button class="tab-btn" data-tab="education">교육</button>
+                </div>
+
+                <!-- Tab Content -->
+                <div id="tab-contents">
+                    <div id="legal" class="tab-content active card">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">법률 서비스: 추론 능력의 강화</h3>
+                        <p class="text-gray-600 mb-4">법률 분야는 AI의 질적 향상 잠재력이 가장 두드러지는 영역입니다. 차세대 추론 모델인 **o1**은 6가지 법률 워크플로우에서 변호사의 생산성을 34%에서 최대 140%까지 향상시켰습니다. 특히 단순 반복 업무가 아닌, 설득력 있는 글쓰기나 복잡한 법률 분석 같은 고차원적 작업에서 효과가 뚜렷했습니다. o1 모델은 다단계 논리 추론 능력이 뛰어나, 법률가의 핵심 역량인 분석과 추론 능력 자체를 보강하는 단계로 진화하고 있음을 보여줍니다.</p>
+                    </div>
+                    <div id="support" class="tab-content card">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">고객 지원: 기술 압축 엔진</h3>
+                        <p class="text-gray-600 mb-4">고객 지원 분야에서 AI는 생산성 향상과 함께 인력의 상향 평준화를 이끕니다. AI 지원을 받은 상담원은 평균 14% 더 높은 생산성을 보였으며, 이 혜택은 **신입 및 저숙련 직원**에게 집중되었습니다. AI의 지원을 받은 경력 2개월차 상담원은 AI 없는 6개월차 상담원과 동등한 성과를 냈습니다. 이는 AI가 전문가의 노하우를 학습해 실시간 가이드라인으로 제공하는 **'기술 압축 엔진(Skill-Compression Engine)'** 역할을 수행하며, 조직 전체의 기술 격차를 완화함을 의미합니다.</p>
+                    </div>
+                    <div id="consulting" class="tab-content card">
+                         <h3 class="text-2xl font-bold text-gray-900 mb-3">컨설팅: 창의성과 위험성의 공존</h3>
+                        <p class="text-gray-600 mb-4">고도의 지식 노동인 컨설팅 분야에서 GPT-4를 사용한 컨설턴트들은 작업을 25% 더 효율적으로 완료하고, 결과물 품질은 40% 더 높았습니다. 특히 창의적인 아이디어 발상 같은 과업에서 강력한 성능을 보였고, 하위 성과 그룹의 성과를 43%나 향상시켜 기술 격차 완화 효과도 입증했습니다. 하지만, 정량/정성 데이터를 복합 분석하는 과업에서는 오히려 AI를 사용한 그룹의 성과가 저조해, AI 역량의 한계와 맹목적 의존의 위험성을 명확히 보여주었습니다.</p>
+                    </div>
+                    <div id="government" class="tab-content card">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">정부 서비스: 인간 전문성의 가치 증대</h3>
+                        <p class="text-gray-600 mb-4">공공 부문에서도 AI는 상당한 효율성 증대를 가져왔습니다. 펜실베이니아 주 정부 파일럿 프로그램에서 ChatGPT를 활용한 직원들은 문서 초안 작성, 연구 등에서 하루 평균 95분을 절약했습니다. 이는 주당 약 8시간에 해당합니다. AI가 행정 업무 부담을 줄여주자, 직원들은 인간의 전문성과 판단력이 더 중요한 복잡한 정책 분석이나 대민 소통에 집중할 수 있었습니다. 이는 AI가 인간을 대체하는 것이 아니라 보강하는 도구임을 보여주는 성공 사례입니다.</p>
+                    </div>
+                    <div id="education" class="tab-content card">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">교육: 교육 본질로의 회귀</h3>
+                        <p class="text-gray-600 mb-4">교육 현장에서 AI는 교사들의 과도한 행정 업무 부담을 덜어주는 해결사입니다. 미국 K-12 교사들은 AI를 사용해 수업 계획, 과제 피드백 등에서 주당 약 6시간을 절약했습니다. 이렇게 확보된 시간은 학생 개별 피드백, 맞춤형 수업 설계, 학부모 소통 등 교육의 본질에 더 가까운 활동에 재투자되었습니다. 이는 AI가 교사의 업무 효율성을 넘어, 궁극적으로 교육의 질적 향상에 기여할 수 있음을 시사합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Reality -->
+        <section id="reality" class="mb-24 md:mb-32 fade-in">
+            <h2 class="section-title">제 3장: 들쭉날쭉한 경계 탐색</h2>
+            <p class="section-subtitle">AI의 인상적인 성과 이면에는 복잡한 현실이 존재합니다. 개별 과업의 효율성 증대가 왜 거시 경제 성장으로 즉각 이어지지 않는지('생산성 역설'), 그리고 AI의 예측 불가능한 성능 편차가 어떤 위험을 초래하는지('들쭉날쭉한 경계')를 이해해야 합니다.</p>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="card">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">AI 생산성 역설 (Productivity J-Curve)</h3>
+                    <p class="text-gray-600">개별 업무 효율 증대가 거시 경제 성장으로 즉각 이어지지 않는 현상입니다. 이는 새로운 기술의 잠재력을 완전히 끌어내기 위해 필요한 **보완적 투자(워크플로우 재설계, 직원 재교육 등)**에 시간이 걸리기 때문입니다. 초기 도입 단계에서는 투자 비용으로 인해 오히려 생산성이 정체되거나 하락하는 'J-커브' 현상이 나타날 수 있습니다.</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">들쭉날쭉한 경계 (Jagged Frontier)</h3>
+                    <p class="text-gray-600">AI는 특정 과업에선 인간을 능가하지만, 유사해 보이는 다른 과업에선 예측 불가능하게 실패할 수 있습니다. 이 불균일한 역량 분포를 '들쭉날쭉한 경계'라고 합니다. 맹목적인 의존은 오히려 성과 저하를 유발하며, 주어진 과업이 AI의 역량 경계 안팎 중 어디에 있는지 분별하는 새로운 '메타-작업'이 중요해집니다.</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-gray-900 text-center mb-8">운영 리스크 프레임워크</h3>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div class="bg-gray-100 p-4 rounded-lg border border-gray-200">
+                    <h4 class="font-bold text-gray-800">환각 (Hallucination)</h4>
+                    <p class="text-sm text-gray-600">그럴듯한 거짓 정보 생성</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg border border-gray-200">
+                    <h4 class="font-bold text-gray-800">데이터 보안</h4>
+                    <p class="text-sm text-gray-600">기밀 정보 유출 위험</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg border border-gray-200">
+                    <h4 class="font-bold text-gray-800">지적 재산권 (IP)</h4>
+                    <p class="text-sm text-gray-600">저작권 침해 분쟁 가능성</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg border border-gray-200">
+                    <h4 class="font-bold text-gray-800">모델 편향성</h4>
+                    <p class="text-sm text-gray-600">차별적 결과 생성</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg border border-gray-200">
+                    <h4 class="font-bold text-gray-800">기술 저하 (De-skilling)</h4>
+                    <p class="text-sm text-gray-600">과잉 의존으로 인한 역량 퇴화</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg border border-gray-200">
+                    <h4 class="font-bold text-gray-800">설명가능성 부족</h4>
+                    <p class="text-sm text-gray-600">'블랙박스'로 인한 신뢰도 문제</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Strategy -->
+        <section id="strategy" class="mb-24 md:mb-32 fade-in">
+            <h2 class="section-title">제 4장: 통찰에서 행동으로</h2>
+            <p class="section-subtitle">AI 시대의 진정한 경쟁력은 기술 자체가 아니라, 기술을 효과적으로 활용하고 통제하는 조직의 역량에서 나옵니다. 비즈니스 리더와 정책 입안자들은 다음과 같은 전략적 과제를 해결해야 합니다.</p>
+
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center lg:text-left">비즈니스 리더를 위한 제언</h3>
+                    <div class="space-y-6">
+                        <div class="card">
+                            <h4 class="font-bold text-gray-800 mb-2">프로세스 재설계</h4>
+                            <p class="text-gray-600">기존 워크플로우에 AI를 덧붙이지 말고, AI 중심으로 업무를 근본적으로 재구성하여 인간이 더 높은 가치를 창출하는 활동(전략적 판단, 공감적 소통 등)에 집중하게 하세요.</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="font-bold text-gray-800 mb-2">새로운 협업 모델 수용</h4>
+                            <p class="text-gray-600">'켄타우로스'(역할 분담)와 '사이보그'(긴밀한 통합) 모델을 통해 인간과 AI의 시너지를 극대화하고, '경계 탐색' 역량(고급 프롬프팅, 비판적 평가 등)에 투자하세요.</p>
+                        </div>
+                         <div class="card">
+                            <h4 class="font-bold text-gray-800 mb-2">리스크 거버넌스 구축</h4>
+                            <p class="text-gray-600">데이터 처리, 사용 가이드라인, 편향성 감사 등 명확한 정책을 수립하고 전사적으로 실행하여 운영 리스크를 체계적으로 관리하세요.</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center lg:text-left">정책 입안자를 위한 제언</h3>
+                     <div class="space-y-6">
+                        <div class="card">
+                            <h4 class="font-bold text-gray-800 mb-2">혁신과 규제의 균형</h4>
+                            <p class="text-gray-600">혁신을 저해하지 않으면서도 구체적인 피해로부터 시민을 보호하는 명확하고 유연한 규제 프레임워크를 만드세요. 과도한 사전 규제보다 위험 수준에 따른 차등적 접근이 필요합니다.</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="font-bold text-gray-800 mb-2">노동 시장 전환 지원</h4>
+                            <p class="text-gray-600">직업 훈련 강화, 사회 안전망 현대화, 디지털 격차 해소 등을 통해 노동자들이 변화에 적응하도록 적극 지원하고, 전환 과정에서 소외되지 않도록 보호해야 합니다.</p>
+                        </div>
+                         <div class="card">
+                            <h4 class="font-bold text-gray-800 mb-2">사회적 대화 촉진</h4>
+                            <p class="text-gray-600">모든 이해관계자가 참여하는 대화의 장을 마련하여 AI 시대의 이익 분배와 사회 계약에 대한 새로운 합의를 모색하고, 공유된 번영의 길을 찾아야 합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Conclusion Section -->
+        <section id="conclusion" class="fade-in">
+            <h2 class="section-title">결론: 공유된 번영으로 가는 길</h2>
+            <p class="section-subtitle">OpenAI의 보고서는 AI가 과업 단위의 생산성을 획기적으로 향상시킬 수 있다는 강력한 증거를 제시했습니다. 그러나 이러한 미시적 잠재력을 거시 경제 전체의 번영으로 전환하는 것은 우리 시대의 중심 과제입니다. 이는 자동적으로 이루어지는 과정이 아니라, '들쭉날쭉한 경계'의 복잡성을 탐색하고 '생산성 역설'의 함정을 극복하기 위한 현명하고 보완적인 투자를 통해 달성되는 의식적인 과정입니다. 지능 시대의 진정한 약속은 기계가 인간을 대체하는 것이 아니라, 인간의 잠재력을 증강시켜 이전에는 상상할 수 없었던 문제들을 해결하는 데 있습니다. 오늘 우리가 내리는 선택이 그 약속이 실현되는 미래를 결정할 것입니다.</p>
+        </section>
+
+    </main>
+    
+    <footer class="border-t border-gray-200 mt-16 md:mt-24">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-500">
+            <p>본 페이지는 OpenAI 생산성 보고서(2025년 7월)의 심층 분석을 기반으로 제작되었습니다.</p>
+            <p class="text-sm mt-2">Interactive Analysis by Gemini</p>
+        </div>
+    </footer>
+
+<script>
+    // Fade-in animation on scroll
+    const faders = document.querySelectorAll('.fade-in');
+    const appearOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) {
+                return;
+            } else {
+                entry.target.classList.add('visible');
+                appearOnScroll.unobserve(entry.target);
+            }
+        });
+    }, appearOptions);
+
+    faders.forEach(fader => {
+        appearOnScroll.observe(fader);
+    });
+
+    // Tab functionality
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabId = button.dataset.tab;
+
+            // Update button styles
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+
+            // Show/hide content
+            tabContents.forEach(content => {
+                if (content.id === tabId) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
