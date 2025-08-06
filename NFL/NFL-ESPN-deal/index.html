@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFL-ESPN 거래 심층 분석</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .tab-active {
+            border-color: #1D4ED8; /* blue-700 */
+            color: #1D4ED8;
+            background-color: #EFF6FF; /* blue-50 */
+        }
+        .tab-inactive {
+            border-color: transparent;
+            color: #4B5563; /* gray-600 */
+        }
+        .content-section {
+            display: none;
+        }
+        .content-active {
+            display: block;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .reference-link {
+            color: #2563EB; /* blue-600 */
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .reference-link:hover {
+            text-decoration: underline;
+        }
+        #references-section {
+            scroll-margin-top: 20px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">새로운 플레이북: NFL-ESPN 파트너십 심층 분석</h1>
+            <p class="mt-2 text-md md:text-lg text-gray-600">스포츠 미디어 지형을 재편하는 기념비적 계약</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="border-b border-gray-200 mb-8">
+            <nav class="-mb-px flex flex-wrap justify-center space-x-2 md:space-x-4" aria-label="Tabs">
+                <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base tab-active" data-tab="summary">요약</button>
+                <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base tab-inactive" data-tab="chapter1">계약의 해부</button>
+                <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base tab-inactive" data-tab="chapter2">주역들의 서사</button>
+                <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base tab-inactive" data-tab="chapter3">외부의 시선</button>
+                <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base tab-inactive" data-tab="chapter4">전략적 공생</button>
+                <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base tab-inactive" data-tab="chapter5">파급 효과</button>
+                <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm md:text-base tab-inactive" data-tab="conclusion">결론</button>
+            </nav>
+        </div>
+
+        <!-- Content Sections -->
+        <main id="tab-content">
+            <!-- Summary Section -->
+            <section id="summary" class="content-section content-active space-y-6">
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-blue-600 pl-4">요약</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <p class="leading-relaxed">
+                        본 보고서는 NFL과 ESPN의 미디어 자산 및 지분 교환 계약을 심층 분석합니다. 이 계약은 NFL이 NFL 네트워크, 레드존 채널 배포권 등 핵심 미디어 자산을 ESPN에 넘기고, 그 대가로 ESPN 지분 10%를 취득하는 구조입니다. 이는 단순한 자산 매각을 넘어, 콘텐츠 생산자와 배급사의 관계를 재정의하는 스포츠 미디어 산업의 패러다임 전환을 의미합니다.
+                    </p>
+                    <p class="mt-4 leading-relaxed">
+                        계약의 동인은 양측의 전략적 필요에 있습니다. ESPN은 코드 커팅 시대에 대응해 구독형 스트리밍 서비스(DTC)를 강화할 콘텐츠가 절실했고, NFL은 비용 부담이 큰 케이블 채널 운영에서 벗어나 미디어 파트너의 지분을 보유한 전략적 투자자로의 전환을 모색했습니다. 본 보고서는 계약 구조, 양측의 공식 발표, 제3자의 보도 관점을 비교 분석하고, 이 계약이 산업 전반에 미칠 광범위한 파급 효과를 탐색합니다. 이 파트너십은 강력한 시너지를 통해 산업 지배력을 높일 잠재력을 지녔지만, 공정 경쟁과 저널리즘 독립성에 대한 중대한 질문도 제기합니다.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Chapter 1 Section -->
+            <section id="chapter1" class="content-section space-y-6">
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-blue-600 pl-4">제1장: 기념비적 계약의 해부</h2>
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">1.1 핵심 거래: 자산과 지분의 교환</h3>
+                        <p>이번 계약의 핵심은 NFL 미디어 자산과 ESPN 지분을 맞교환하는 구조입니다.<a href="#ref1" class="reference-link">[1]</a><a href="#ref2" class="reference-link">[2]</a><a href="#ref3" class="reference-link">[3]</a> ESPN은 NFL로부터 미디어 자산 포트폴리오를 인수하고, NFL은 그 대가로 ESPN 지분 10%를 받습니다. 분석가들은 ESPN의 기업 가치를 약 250억~300억 달러로 추산하며, 이에 따라 NFL이 취득하는 지분 가치는 22억~30억 달러에 이를 것으로 평가됩니다.<a href="#ref4" class="reference-link">[4]</a><a href="#ref5" class="reference-link">[5]</a><a href="#ref6" class="reference-link">[6]</a><a href="#ref7" class="reference-link">[7]</a><a href="#ref8" class="reference-link">[8]</a></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">1.2 ESPN이 확보한 자산: DTC 요새 구축</h3>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>NFL 네트워크:</strong> 약 5,000만 구독자를 보유한 NFL 네트워크의 소유 및 운영권을 완전히 인수하며, ESPN의 DTC 서비스에 통합될 예정입니다.<a href="#ref1" class="reference-link">[1]</a><a href="#ref3" class="reference-link">[3]</a><a href="#ref9" class="reference-link">[9]</a><a href="#ref10" class="reference-link">[10]</a></li>
+                            <li><strong>NFL 레드존:</strong> 선형 배포권과 함께 '레드존' 브랜드 자체에 대한 광범위한 권리를 확보했습니다.<a href="#ref2" class="reference-link">[2]</a><a href="#ref11" class="reference-link">[11]</a><a href="#ref12" class="reference-link">[12]</a><a href="#ref13" class="reference-link">[13]</a></li>
+                            <li><strong>NFL 판타지:</strong> NFL의 공식 판타지 풋볼 플랫폼을 인수하여 자사의 ESPN 판타지와 통합, 단일 플랫폼을 구축합니다.<a href="#ref2" class="reference-link">[2]</a><a href="#ref3" class="reference-link">[3]</a><a href="#ref11" class="reference-link">[11]</a><a href="#ref14" class="reference-link">[14]</a></li>
+                            <li><strong>경기 중계권:</strong> NFL 네트워크에서 방영될 추가 정규 시즌 3경기를 라이선스하고, 기존 ESPN 중계 4경기를 이동시켜 NFL 네트워크의 연간 총 7경기 독점 편성을 유지합니다.<a href="#ref2" class="reference-link">[2]</a><a href="#ref3" class="reference-link">[3]</a><a href="#ref11" class="reference-link">[11]</a><a href="#ref15" class="reference-link">[15]</a></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">1.3 NFL이 유지하는 자산: 핵심 정체성 보존</h3>
+                        <p>NFL은 리그 정체성과 직결된 핵심 자산인 NFL 필름(NFL Films), NFL+, NFL.com 등은 계속 직접 운영합니다.<a href="#ref1" class="reference-link">[1]</a><a href="#ref3" class="reference-link">[3]</a><a href="#ref9" class="reference-link">[9]</a><a href="#ref16" class="reference-link">[16]</a> 특히 레드존 채널의 소유, 운영, 제작 및 디지털 배포권(NFL+)은 NFL이 그대로 보유합니다.<a href="#ref2" class="reference-link">[2]</a><a href="#ref3" class="reference-link">[3]</a><a href="#ref11" class="reference-link">[11]</a><a href="#ref12" class="reference-link">[12]</a> 이 구조는 NFL이 레드존의 품질을 통제하며 NFL+의 가치를 유지하고, ESPN은 레드존 브랜드를 다른 스포츠에 복제할 잠재력을 얻는 '윈-윈' 전략입니다.<a href="#ref4" class="reference-link">[4]</a><a href="#ref10" class="reference-link">[10]</a><a href="#ref15" class="reference-link">[15]</a><a href="#ref17" class="reference-link">[17]</a></p>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">1.4 ESPN의 새로운 소유 구조</h3>
+                        <p>거래 완료 후 ESPN의 소유 구조는 ABC Inc. (디즈니) 72%, 허스트 18%, NFL 10%로 변경됩니다.<a href="#ref4" class="reference-link">[4]</a><a href="#ref5" class="reference-link">[5]</a><a href="#ref18" class="reference-link">[18]</a> NFL은 가치가 하락할 수 있는 케이블 채널 자산을 ESPN의 미래 전체에 대한 지분으로 전환함으로써, 운영자에서 주주로 변모하며 리스크를 효과적으로 분산시켰습니다.<a href="#ref19" class="reference-link">[19]</a><a href="#ref20" class="reference-link">[20]</a></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 2 Section -->
+            <section id="chapter2" class="content-section space-y-6">
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-blue-600 pl-4">제2장: 주역들의 서사: 공식 발표 분석</h2>
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">2.1 공동 전선: '윈-윈-윈' 서사</h3>
+                        <p>NFL과 ESPN은 공동 보도자료에서 이번 계약이 "팬들을 위한 새로운 표준을 설정"하기 위한 것이라고 강조하며, 기업 통합보다는 소비자 이익을 위한 진화라는 긍정적 이미지를 구축했습니다.<a href="#ref3" class="reference-link">[3]</a><a href="#ref11" class="reference-link">[11]</a><a href="#ref21" class="reference-link">[21]</a></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">2.2 디즈니/ESPN의 메시지: '디지털 미래'를 위한 동력</h3>
+                        <p>디즈니 CEO 밥 아이거는 "디즈니 스트리밍 생태계의 가치 제안 확장"을, ESPN 회장 지미 피타로는 "ESPN의 디지털 미래에 동력 공급"을 강조했습니다.<a href="#ref3" class="reference-link">[3]</a><a href="#ref11" class="reference-link">[11]</a><a href="#ref22" class="reference-link">[22]</a> 이는 월스트리트 투자자들에게 디즈니의 스트리밍 전환 전략의 핵심임을 알리고, 소비자에게는 새로운 DTC 서비스의 가치를 약속하는 메시지입니다.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">2.3 NFL의 메시지: 유산, 도달 범위, 그리고 '안전한 손'</h3>
+                        <p>NFL 커미셔너 로저 구델은 NFL 네트워크의 "유산 계승"을, 뉴잉글랜드 패트리어츠 구단주 로버트 크래프트는 "관객 증대와 샐러리캡 성장"을 언급했습니다.<a href="#ref3" class="reference-link">[3]</a><a href="#ref23" class="reference-link">[23]</a> 이는 팬, 구단주, 선수 노조 등 내부 이해관계자들에게 거래의 재정적 이점을 알리는 핵심 메시지입니다. 양측은 팬, 월스트리트, 내부자라는 세 청중을 겨냥한 다층적 커뮤니케이션 전략을 구사했습니다.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 3 Section -->
+            <section id="chapter3" class="content-section space-y-6">
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-blue-600 pl-4">제3장: 외부의 시선: 제3자 미디어 보도 비교</h2>
+                 <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">3.1 경쟁사의 관점: Fox Sports</h3>
+                        <p>경쟁사인 Fox Sports는 "거의 5년 만에" 합의에 도달했다며 길고 험난했던 협상 과정을 강조했습니다.<a href="#ref24" class="reference-link">[24]</a> 이는 양측의 결합이 복잡한 이해관계의 산물임을 부각해 시너지를 평가절하하려는 의도로 해석됩니다.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">3.2 경제적 관점: 금융 및 비즈니스 미디어</h3>
+                        <p>월스트리트 저널 등 금융 매체들은 거래의 경제적 구조에 집중했습니다. 이들은 NFL 콘텐츠 확보가 월 29.99달러의 ESPN 신규 스트리밍 서비스를 '필수재'로 만들기 위한 전략적 투자라고 분석했습니다.<a href="#ref6" class="reference-link">[6]</a><a href="#ref16" class="reference-link">[16]</a><a href="#ref19" class="reference-link">[19]</a><a href="#ref26" class="reference-link">[26]</a></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">3.3 비판적 관점: 미디어 분석가와 저널리즘</h3>
+                        <p>스포츠 미디어 워치 등 비평 매체들은 저널리즘 독립성 훼손과 이해상충 가능성을 날카롭게 비판했습니다.<a href="#ref27" class="reference-link">[27]</a><a href="#ref28" class="reference-link">[28]</a> 이들은 NFL이 ESPN의 주주가 됨으로써, ESPN이 리그의 민감한 사안에 대해 독립적이고 공격적인 보도를 수행할 능력이 근본적으로 약화될 것이라고 우려했습니다.</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">3.4 일반 스포츠 미디어의 관점</h3>
+                        <p>CBS Sports 등은 사실 관계 전달에 집중하며, 레드존 진행자 스캇 핸슨의 유임 여부 등 팬들의 직접적인 관심사에 초점을 맞췄습니다.<a href="#ref2" class="reference-link">[2]</a></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 4 Section -->
+            <section id="chapter4" class="content-section space-y-6">
+                 <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-blue-600 pl-4">제4장: 전략적 공생 관계: 이해관계 분석</h2>
+                 <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">4.1 ESPN의 DTC 지배 전략</h3>
+                        <p>ESPN에게 이번 계약은 스트리밍 전환을 위한 결정적 한 수입니다. NFL이라는 독보적 콘텐츠를 통해 경쟁자들이 모방할 수 없는 강력한 콘텐츠 '해자(moat)'를 구축하고, 프리미엄 가격을 정당화하는 것이 목표입니다.<a href="#ref29" class="reference-link">[29]</a><a href="#ref30" class="reference-link">[30]</a><a href="#ref31" class="reference-link">[31]</a> 특히 통합 판타지 플랫폼은 사용자 데이터를 확보하고 스포츠 베팅과의 연계를 강화하는 핵심 전략 자산이 될 것입니다.<a href="#ref14" class="reference-link">[14]</a><a href="#ref19" class="reference-link">[19]</a><a href="#ref32" class="reference-link">[32]</a></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">4.2 NFL의 전략적 출구</h3>
+                        <p>NFL은 비용과 리스크가 큰 케이블 채널 운영에서 벗어나, 미디어 전문 기업인 ESPN에 운영을 이전했습니다. 그 대가로 가치가 하락할 수 있는 유형 자산을 미래 지향적인 ESPN 전체에 대한 금융 자산(지분)으로 전환했습니다.<a href="#ref4" class="reference-link">[4]</a><a href="#ref5" class="reference-link">[5]</a> 이는 향후 미디어 중계권 협상에서 ESPN에 '유리한 고지'를 제공할 수 있습니다.<a href="#ref19" class="reference-link">[19]</a></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">4.3 선수들의 몫: NFLPA의 질문</h3>
+                        <p>이 거래는 선수 노조(NFLPA)에게 중대한 문제를 안겨줍니다. 단체 교섭 협약(CBA)에 따라 선수들은 리그 수익의 약 48%를 분배받는데, 현금이 아닌 비상장 지분을 받는 이번 거래는 샐러리캡 산정을 위한 '수익' 계산에 대한 거대한 난제를 야기합니다.<a href="#ref33" class="reference-link">[33]</a><a href="#ref34" class="reference-link">[34]</a> 이는 향후 노사 협상의 최대 쟁점이 될 수 있습니다.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 5 Section -->
+            <section id="chapter5" class="content-section space-y-6">
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-blue-600 pl-4">제5장: 파급 효과: 스포츠 미디어 생태계</h2>
+                 <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">5.1 중계권 계약의 새로운 모델</h3>
+                        <p>이번 거래는 순수한 중계권료 모델에서 지분 파트너십 모델로의 전환을 의미하며, 다른 메이저 리그(NBA, MLB 등)에도 매력적인 선례가 될 수 있습니다.<a href="#ref19" class="reference-link">[19]</a><a href="#ref20" class="reference-link">[20]</a><a href="#ref28" class="reference-link">[28]</a><a href="#ref35" class="reference-link">[35]</a><a href="#ref36" class="reference-link">[36]</a></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">5.2 스트리밍 전쟁과 대학 스포츠</h3>
+                        <p>이번 인수는 스트리밍 전쟁에서 ESPN의 입지를 크게 강화하며, 다른 스트리밍 합작 투자(예: Venu Sports)의 필요성을 감소시킬 수 있습니다.<a href="#ref37" class="reference-link">[37]</a><a href="#ref38" class="reference-link">[38]</a><a href="#ref39" class="reference-link">[39]</a><a href="#ref40" class="reference-link">[40]</a><a href="#ref41" class="reference-link">[41]</a> 또한, ESPN의 전략적 우선순위가 NFL과 SEC에 집중되면서, 다른 대학 컨퍼런스들은 후순위로 밀려날 수 있습니다.<a href="#ref42" class="reference-link">[42]</a></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">5.3 규제 문제와 스포츠 저널리즘</h3>
+                        <p>이 계약은 연방 당국의 규제 승인을 거쳐야 하며, 이 과정에서 반독점 문제가 제기될 수 있습니다.<a href="#ref9" class="reference-link">[9]</a><a href="#ref43" class="reference-link">[43]</a><a href="#ref44" class="reference-link">[44]</a><a href="#ref45" class="reference-link">[45]</a><a href="#ref46" class="reference-link">[46]</a> 더불어, 리그가 뉴스룸의 주주가 되는 구조는 스포츠 저널리즘의 감시 기능을 약화시킬 수 있다는 심각한 우려를 낳습니다.<a href="#ref27" class="reference-link">[27]</a></p>
+                    </div>
+                </div>
+            </section>
+
+             <!-- Conclusion Section -->
+            <section id="conclusion" class="content-section space-y-6">
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-blue-600 pl-4">결론: 그들만의 리그</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <p class="leading-relaxed">
+                        NFL과 ESPN의 계약은 단순한 미디어 자산 거래를 넘어, 메이저 스포츠 리그를 위한 새로운 비즈니스 모델의 공식화를 의미합니다. 이는 콘텐츠 생산자와 배급사 간의 전통적 관계의 종말이자, 깊이 통합된 지분 파트너십 시대의 서막입니다.
+                    </p>
+                    <p class="mt-4 leading-relaxed">
+                        이 공생 관계는 양측에 막대한 이점을 제공하며 DTC 시대를 지배할 미디어 강자의 탄생을 예고합니다. 하지만 동시에 선수들과의 수익 분배, 규제 당국의 심사, 그리고 스포츠 저널리즘의 역할 재정의라는 심오한 도전을 제기합니다. '새로운 플레이북'은 이제 막 쓰이기 시작했으며, 그 규칙들은 향후 10년간 스포츠 미디어 산업을 지배하게 될 것입니다.
+                    </p>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- References Section -->
+        <footer id="references-section" class="mt-12 pt-8 border-t border-gray-300">
+            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">참고 문헌</h2>
+            <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow">
+                <ol class="list-decimal list-inside space-y-3 text-sm text-gray-700">
+                    <li id="ref1"><a href="https://www.nfl.com/news/espn-acquiring-nfl-network-other-nfl-media-assets-in-exchange-for-10-percent-equity-stake-in-espn" target="_blank" class="hover:underline text-blue-700">ESPN acquiring NFL Network, other NFL Media assets in exchange for 10 percent equity stake in ESPN (NFL.com)</a></li>
+                    <li id="ref2"><a href="https://www.cbssports.com/nfl/news/nfl-obtains-10-stake-in-espn-as-part-of-deal-for-nfl-network-redzone-other-media-properties/" target="_blank" class="hover:underline text-blue-700">NFL obtains 10% stake in ESPN as part of deal for NFL Network, RedZone, other media properties (CBS Sports)</a></li>
+                    <li id="ref3"><a href="https://www.espn.com/espn/story/_/id/45910378/espn-get-nfl-network-rights-redzone-nfl-equity-stake" target="_blank" class="hover:underline text-blue-700">ESPN to get NFL Network, rights to RedZone as part of NFL equity stake (ESPN)</a></li>
+                    <li id="ref4"><a href="https://www.latimes.com/entertainment-arts/business/story/2025-08-05/nfl-takes-10-stake-in-disneys-espn-nfl-network" target="_blank" class="hover:underline text-blue-700">NFL takes 10% stake in Disney’s ESPN, which will absorb NFL Network (Los Angeles Times)</a></li>
+                    <li id="ref5"><a href="https://www.nbcnews.com/business/media/disneys-espn-acquire-nfl-media-assets-tv-distribution-redzone-rcna223291" target="_blank" class="hover:underline text-blue-700">Disney’s ESPN to acquire NFL media assets including TV distribution of RedZone (NBC News)</a></li>
+                    <li id="ref6"><a href="https://www.nytimes.com/2025/08/05/business/media/nfl-espn-disney-deal.html" target="_blank" class="hover:underline text-blue-700">N.F.L. to Take 10 Percent Stake in ESPN (The New York Times)</a></li>
+                    <li id="ref7"><a href="https://edition.cnn.com/2025/08/05/sport/espn-nfl-media-rights-deal-spt" target="_blank" class="hover:underline text-blue-700">ESPN to acquire NFL Network and other media assets from the NFL in exchange for a 10% equity stake in ESPN (CNN)</a></li>
+                    <li id="ref8"><a href="https://abcnews.go.com/US/espn-acquires-nfl-network-landmark-agreement/story?id=124396057" target="_blank" class="hover:underline text-blue-700">ESPN acquires NFL Network in landmark agreement (ABC News)</a></li>
+                    <li id="ref9">... (Reference 9 source not provided in the prompt)</li>
+                    <li id="ref10"><a href="https://www.usatoday.com/story/sports/nfl/columnist/nate-davis/2025/08/05/espn-buys-nfl-network-redzone-channel-equity-viewer-benefits/85534452007/" target="_blank" class="hover:underline text-blue-700">ESPN buys NFL Network, RedZone Channel. What it means for you, the viewer (USA TODAY)</a></li>
+                    <li id="ref11"><a href="https://espnpressroom.com/us/press-releases/2025/08/espn-to-acquire-nfl-network-and-other-media-assets-from-the-nfl-in-exchange-for-a-10-equity-stake-in-espn/" target="_blank" class="hover:underline text-blue-700">ESPN to Acquire NFL Network and Other Media Assets from the NFL in Exchange for a 10% Equity Stake in ESPN (ESPN Press Room)</a></li>
+                    <li id="ref12">... (Reference 12 source not provided in the prompt)</li>
+                    <li id="ref13">... (Reference 13 source not provided in the prompt)</li>
+                    <li id="ref14">... (Reference 14 source not provided in the prompt)</li>
+                    <li id="ref15">... (Reference 15 source not provided in the prompt)</li>
+                    <li id="ref16">... (Reference 16 source not provided in the prompt)</li>
+                    <li id="ref17">... (Reference 17 source not provided in the prompt)</li>
+                    <li id="ref18">... (Reference 18 source not provided in the prompt)</li>
+                    <li id="ref19">... (Reference 19 source not provided in the prompt)</li>
+                    <li id="ref20">... (Reference 20 source not provided in the prompt)</li>
+                    <li id="ref21">... (Reference 21 source not provided in the prompt)</li>
+                    <li id="ref22">... (Reference 22 source not provided in the prompt)</li>
+                    <li id="ref23">... (Reference 23 source not provided in the prompt)</li>
+                    <li id="ref24"><a href="https://www.foxsports.com/articles/nfl/nfl-and-espn-reach-nonbinding-agreement-for-sale-of-nfl-network-and-other-media-assets" target="_blank" class="hover:underline text-blue-700">NFL and ESPN reach nonbinding agreement for sale of NFL Network and other media assets (Fox Sports)</a></li>
+                    <li id="ref25">... (Reference 25 source not provided in the prompt)</li>
+                    <li id="ref26">... (Reference 26 source not provided in the prompt)</li>
+                    <li id="ref27">... (Reference 27 source not provided in the prompt)</li>
+                    <li id="ref28">... (Reference 28 source not provided in the prompt)</li>
+                    <li id="ref29">... (Reference 29 source not provided in the prompt)</li>
+                    <li id="ref30">... (Reference 30 source not provided in the prompt)</li>
+                    <li id="ref31">... (Reference 31 source not provided in the prompt)</li>
+                    <li id="ref32">... (Reference 32 source not provided in the prompt)</li>
+                    <li id="ref33">... (Reference 33 source not provided in the prompt)</li>
+                    <li id="ref34">... (Reference 34 source not provided in the prompt)</li>
+                    <li id="ref35">... (Reference 35 source not provided in the prompt)</li>
+                    <li id="ref36">... (Reference 36 source not provided in the prompt)</li>
+                    <li id="ref37">... (Reference 37 source not provided in the prompt)</li>
+                    <li id="ref38">... (Reference 38 source not provided in the prompt)</li>
+                    <li id="ref39">... (Reference 39 source not provided in the prompt)</li>
+                    <li id="ref40">... (Reference 40 source not provided in the prompt)</li>
+                    <li id="ref41">... (Reference 41 source not provided in the prompt)</li>
+                    <li id="ref42">... (Reference 42 source not provided in the prompt)</li>
+                    <li id="ref43">... (Reference 43 source not provided in the prompt)</li>
+                    <li id="ref44">... (Reference 44 source not provided in the prompt)</li>
+                    <li id="ref45">... (Reference 45 source not provided in the prompt)</li>
+                    <li id="ref46">... (Reference 46 source not provided in the prompt)</li>
+                </ol>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // JavaScript for tab functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.dataset.tab;
+
+                // Update button styles
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('tab-inactive');
+                });
+                button.classList.add('tab-active');
+                button.classList.remove('tab-inactive');
+
+                // Update content visibility
+                contentSections.forEach(section => {
+                    if (section.id === tabId) {
+                        section.classList.add('content-active');
+                    } else {
+                        section.classList.remove('content-active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
