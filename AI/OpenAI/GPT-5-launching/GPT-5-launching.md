@@ -17,7 +17,7 @@ GPT-5는 점진적이지만 분명한 기술적 진보를 이뤘다. 그러나 �
 | **안전성 및 신뢰성** | "환각 현상 대폭 감소".[13, 14] "사실 오류 포함 확률 최대 80% 감소".[15] "더 신뢰할 수 있는 조수".[9] | 출시 발표회에서 데이터와 시각적 표현이 불일치하는 "차트 대참사" 발생.[16, 17] 모델 자체가 자신의 출시 사실을 모르는 등 환각 현상 지속.[5] |
 | **성능 및 효율성** | "코딩, 수학, 작문 등에서 최첨단 성능".[9, 18] "더 빠르고 효율적".[4] | 특정 벤치마크(SWE-bench)에서는 최고점, 다른 벤치마크(SimpleBench)에서는 경쟁사에 뒤처지는 5위 기록.[14, 19] 응답 속도가 느려지고, 유료 사용자의 사용량 제한이 더 빨리 소진된다는 불만.[6, 20] |
 
-## 섹션 1: "박사급 전문가"의 약속 - OpenAI의 출시 전 홍보 전략
+## 1: "박사급 전문가"의 약속 - OpenAI의 출시 전 홍보 전략
 
 ### 1.1 '올트먼 독트린': 패러다임 전환의 약속
 
@@ -29,7 +29,7 @@ OpenAI의 공식 발표는 이러한 서사를 뒷받침했다. 코딩, 수학, 
 
 이러한 과대광고는 치열한 경쟁 속에서 기술 리더십을 과시하고, 인재 유치와 기업 가치를 정당화하려는 의도적인 비즈니스 전략이었다.[12, 13, 24] 올트먼의 발언들은 경쟁사들이 이루지 못한 기술적 도약을 암시하며 '인식의 해자'를 구축하려 했다. 그러나 제품 경험이 기대에 미치지 못하면서 이 전략은 역효과를 낳았다.
 
-## 섹션 2: 기술적 진단 - 아키텍처와 성능 평가
+## 2: 기술적 진단 - 아키텍처와 성능 평가
 
 ### 2.1 '통합 모델'의 구조
 
@@ -64,7 +64,7 @@ OpenAI는 특정 벤치마크에서의 최고 수준(SOTA) 결과를 홍보했�
 
 이러한 성능 불균형은 OpenAI가 SWE-bench와 같은 특정 벤치마크에 훈련을 집중하고, 일반적인 추론 능력은 소홀히 했을 가능성을 시사한다. 이는 특정 영역에서는 뛰어나지만 상식적인 작업에서는 실패하는 '취약한' 지능을 낳는다. 즉, '박사급 전문가'는 복잡한 계산은 풀지만 단어의 글자 수를 세지 못하는 사반트 증후군(savant syndrome)과 유사하다. 이는 약속된 범용 지능이 아닌, 좁은 인공지능의 특징이다. 이 때문에 코딩 개발자들은 감명받았지만, 창작자나 일반 사용자들은 실망한 것으로 보인다.[6, 19, 26, 34]
 
-## 섹션 3: 사용자 반발 - "신뢰하는 파트너"에서 "개성 없는 기업형 좀비"로
+## 3: 사용자 반발 - "신뢰하는 파트너"에서 "개성 없는 기업형 좀비"로
 
 ### 3.1 GPT-4o 사태: AI 개성의 힘
 
@@ -78,7 +78,7 @@ OpenAI는 특정 벤치마크에서의 최고 수준(SOTA) 결과를 홍보했�
 
 GPT-4o 사태는 OpenAI의 '얼라인먼트(alignment)'에 대한 편협한 이해를 보여준다. 회사는 기술적 얼라인먼트에 집중했지만, 사용자들은 GPT-4o와 사회적, 감정적 얼라인먼트를 형성했다. OpenAI가 모델의 '아첨 성향'을 일방적으로 수정하면서[13] 이 유대를 깨뜨렸다. 이는 진정한 얼라인먼트가 AI 통제를 넘어 사용자 관계를 존중하는 문제임을 시사한다. 위기는 개발자의 안전 정책이 아닌, 사용자의 가치와 정렬하는 데 실패했기 때문에 발생했다.
 
-## 섹션 4: 문제적 출시의 해부 - 위기 사례 연구
+## 4: 문제적 출시의 해부 - 위기 사례 연구
 
 ### 4.1 '차트 대참사': 신뢰도 하락의 기폭제
 
@@ -119,49 +119,94 @@ GPT-5는 기술적으로 점진적 발전을 이루었지만, 그 성과는 미�
 
 ## 참고문헌
 
-[1] AP News: OpenAI launches GPT-5, a potential barometer for whether AI hype is justified. ([https://apnews.com/article/gpt5-openai-chatgpt-artificial-intelligence-d12cd2d6310a2515042067b5d3965aa1](https://apnews.com/article/gpt5-openai-chatgpt-artificial-intelligence-d12cd2d6310a2515042067b5d3965aa1))
-[2] KBS 뉴스: 오픈AI, GPT-5 공개…“박사급 전문가와 대화하는 느낌”. ([https://news.kbs.co.kr/news/view.do?ncd=8324903](https://news.kbs.co.kr/news/view.do?ncd=8324903))
-[3] Reddit: [Essay] An Analysis of the GPT-5 Platform Shock. ([https://www.reddit.com/r/singularity/comments/1mm5kzf/essay_an_analysis_of_the_gpt5_platform_shock/](https://www.reddit.com/r/singularity/comments/1mm5kzf/essay_an_analysis_of_the_gpt5_platform_shock/))
-[4] KBS 뉴스: 오픈AI, GPT-5 공개…“박사급 전문가와 대화하는 느낌”. ([https://news.kbs.co.kr/news/view.do?ncd=8324903](https://news.kbs.co.kr/news/view.do?ncd=8324903))
-[5] 다음뉴스: [단독] 가장 똑똑하다던 GPT-5, 본인 출시도 몰라 할루시네이션 논란. ([https://v.daum.net/v/20250808110715253](https://v.daum.net/v/20250808110715253))
-[6] Windows Central: Did Sam Altman oversell GPT-5? OpenAI faces backlash for ruining ChatGPT, turning it into a 'corporate beige zombie'. ([https://www.windowscentral.com/artificial-intelligence/openai-chatgpt/did-sam-altman-oversell-gpt-5-openai-faces-backlash-for-ruining-chatgpt-turning-it-into-a-corporate-beige-zombie](https://www.windowscentral.com/artificial-intelligence/openai-chatgpt/did-sam-altman-oversell-gpt-5-openai-faces-backlash-for-ruining-chatgpt-turning-it-into-a-corporate-beige-zombie))
-[7] Times of India: Sam Altman says ChatGPT-5 is an expert, a small maths slip shows why it's still not perfect. ([https://timesofindia.indiatimes.com/technology/tech-news/sam-altman-says-chatgpt-5-is-an-expert-a-small-maths-slip-shows-why-its-still-not-perfect/articleshow/123188241.cms](https://timesofindia.indiatimes.com/technology/tech-news/sam-altman-says-chatgpt-5-is-an-expert-a-small-maths-slip-shows-why-its-still-not-perfect/articleshow/123188241.cms))
-[8] Cryptopolitan: OpenAI’s GPT-5 draws mixed reviews on day one. ([https://www.cryptopolitan.com/ko/openai-gpt-5-draws-mixed-reviews-on-day-one/](https://www.cryptopolitan.com/ko/openai-gpt-5-draws-mixed-reviews-on-day-one/))
-[9] Simon Willison's Blog: The surprise deprecation of GPT-4o for ChatGPT consumers. ([https://simonwillison.net/2025/Aug/8/surprise-deprecation-of-gpt-4o/](https://simonwillison.net/2025/Aug/8/surprise-deprecation-of-gpt-4o/))
-[10] PCMag: OpenAI Faces Backlash for Retiring Older Models With GPT-5 Launch. ([https://www.pcmag.com/news/openai-faces-backlash-for-retiring-older-models-with-gpt-5-launch](https://www.pcmag.com/news/openai-faces-backlash-for-retiring-older-models-with-gpt-5-launch))
-[11] PCMag: OpenAI Faces Backlash for Retiring Older Models With GPT-5 Launch. ([https://www.pcmag.com/news/openai-faces-backlash-for-retiring-older-models-with-gpt-5-launch](https://www.pcmag.com/news/openai-faces-backlash-for-retiring-older-models-with-gpt-5-launch))
-[12] Futurism: GPT-5 Users Say It Seriously Sucks. ([https://futurism.com/gpt-5-sucks](https://futurism.com/gpt-5-sucks))
-[13] ZDNet Korea: '생각하는 AI' GPT-5 나왔다…'모든 영역 박사급 수준'. ([https://zdnet.co.kr/view/?no=20250808084540](https://zdnet.co.kr/view/?no=20250808084540))
-[14] OpenAI: GPT-5 System Card. ([https://cdn.openai.com/pdf/8124a3ce-ab78-4f06-96eb-49ea29ffb52f/gpt5-system-card-aug7.pdf](https://cdn.openai.com/pdf/8124a3ce-ab78-4f06-96eb-49ea29ffb52f/gpt5-system-card-aug7.pdf))
-[15] OpenAI: GPT-5 System Card. ([https://cdn.openai.com/pdf/8124a3ce-ab78-4f06-96eb-49ea29ffb52f/gpt5-system-card-aug7.pdf](https://cdn.openai.com/pdf/8124a3ce-ab78-4f06-96eb-49ea29ffb52f/gpt5-system-card-aug7.pdf))
-[16] Futurism: GPT-5 Launch Demo Plagued With Catastrophically Dumb Errors. ([https://futurism.com/gpt-5-demo-dumb-errors](https://futurism.com/gpt-5-demo-dumb-errors))
-[17] 디지털투데이: 샘 알트먼, GPT-5 성능 논란에 "GPT-4o 다시 제공할 것". ([https://www.digitaltoday.co.kr/news/articleView.html?idxno=583793](https://www.digitaltoday.co.kr/news/articleView.html?idxno=583793))
-[18] The Economic Times: OpenAI introduces ChatGPT 5: Features, performance, access, pricing, here's all you need to know. ([https://economictimes.indiatimes.com/magazines/panache/openai-introduces-chatgpt-5-features-performance-access-pricing-heres-all-you-need-to-know/articleshow/123174283.cms](https://economictimes.indiatimes.com/magazines/panache/openai-introduces-chatgpt-5-features-performance-access-pricing-heres-all-you-need-to-know/articleshow/123174283.cms))
-[19] Medium: GPT-5: OpenAI’s Worst Release Yet? ([https://medium.com/data-science-in-your-pocket/gpt-5-openais-worst-release-yet-421558ad89f4](https://medium.com/data-science-in-your-pocket/gpt-5-openais-worst-release-yet-421558ad89f4))
-[20] Reddit: GPT5 is horrible. ([https://www.reddit.com/r/ChatGPT/comments/1mkd4l3/gpt5_is_horrible/](https://www.reddit.com/r/ChatGPT/comments/1mkd4l3/gpt5_is_horrible/))
-[21] Times of India: 'What have we done?': Sam Altman says 'I feel useless', compares ChatGPT-5's power to the Manhattan Project. ([https://timesofindia.indiatimes.com/technology/tech-news/what-have-we-done-sam-altman-says-i-feel-useless-compares-chatgpt-5s-power-to-the-manhattan-project/articleshow/123112813.cms](https://timesofindia.indiatimes.com/technology/tech-news/what-have-we-done-sam-altman-says-i-feel-useless-compares-chatgpt-5s-power-to-the-manhattan-project/articleshow/123112813.cms))
-[22] The Economic Times: GPT-5 launch: 'People have tried for 50 yrs', Satya Nadella replies to Elon Musk's threat that OpenAI will 'eat Microsoft alive'. ([https://economictimes.indiatimes.com/news/new-updates/gpt-5-launch-people-have-tried-for-50-yrs-satya-nadella-replies-to-elon-musks-threat-that-openai-will-eat-microsoft-alive/articleshow/123184483.cms](https://economictimes.indiatimes.com/news/new-updates/gpt-5-launch-people-have-tried-for-50-yrs-satya-nadella-replies-to-elon-musks-threat-that-openai-will-eat-microsoft-alive/articleshow/123184483.cms))
-[23] YouTube (OpenAI): Introducing GPT-5. ([https://www.youtube.com/watch?v=boJG84Jcf-4](https://www.youtube.com/watch?v=boJG84Jcf-4))
-[24] AP News: OpenAI launches GPT-5, a potential barometer for whether AI hype is justified. ([https://apnews.com/article/gpt5-openai-chatgpt-artificial-intelligence-d12cd2d6310a2515042067b5d3965aa1](https://apnews.com/article/gpt5-openai-chatgpt-artificial-intelligence-d12cd2d6310a2515042067b5d3965aa1))
-[25] KBS 뉴스: 오픈AI, GPT-5 공개…“박사급 전문가와 대화하는 느낌”. ([https://news.kbs.co.kr/news/view.do?ncd=8324903](https://news.kbs.co.kr/news/view.do?ncd=8324903))
-[26] OpenAI: Introducing GPT‑5 for developers. ([https://openai.com/index/introducing-gpt-5-for-developers/](https://openai.com/index/introducing-gpt-5-for-developers/))
-[27] The Neuron: GPT-5 is here. Here's everything you need to know so far. ([https://www.theneuron.ai/explainer-articles/gpt-5-is-here-heres-everything-you-need-to-know-so-far](https://www.theneuron.ai/explainer-articles/gpt-5-is-here-heres-everything-you-need-to-know-so-far))
-[28] Times of India: OpenAI CEO Sam Altman at GPT-5 launch: India is our second-largest market...but what users are doing with... ([https://timesofindia.indiatimes.com/technology/tech-news/openai-ceo-sam-altman-at-gpt-5-launch-india-is-our-second-largest-marketbut-what-users-are-doing-with/articleshow/123178437.cms](https://timesofindia.indiatimes.com/technology/tech-news/openai-ceo-sam-altman-at-gpt-5-launch-india-is-our-second-largest-marketbut-what-users-are-doing-with/articleshow/123178437.cms))
-[29] 중앙일보 (Korea Daily): “코딩, 박사급으로 잘하네”...오픈AI, GPT-5 공개. ([https://www.koreadaily.com/article/20250808001303169](https://www.koreadaily.com/article/20250808001303169))
-[30] Blopig: GPT-5 achieves state-of-the-art chemical intelligence. ([https://www.blopig.com/blog/2025/08/gpt-5-achieves-state-of-the-art-chemical-intelligence/](https://www.blopig.com/blog/2025/08/gpt-5-achieves-state-of-the-art-chemical-intelligence/))
-[31] Reddit: GPT-5 scores a poor 56.7% on SimpleBench, putting it at 5th place. ([https://www.reddit.com/r/singularity/comments/1mkgi1a/gpt5_scores_a_poor_567_on_simplebench_putting_it/](https://www.reddit.com/r/singularity/comments/1mkgi1a/gpt5_scores_a_poor_567_on_simplebench_putting_it/))
-[32] Marginal Revolution: GPT-5 short and enthusiastic review. ([https://marginalrevolution.com/marginalrevolution/2025/08/gpt-5-short-and-enthusiastic-review.html](https://marginalrevolution.com/marginalrevolution/2025/08/gpt-5-short-and-enthusiastic-review.html))
-[33] Reddit: GPT-5 Is Underwhelming. ([https://www.reddit.com/r/OpenAI/comments/1mk8hqd/gpt5_is_underwhelming/](https://www.reddit.com/r/OpenAI/comments/1mk8hqd/gpt5_is_underwhelming/))
-[34] Reddit: Want feedback on GPT5? Here it is. ([https://www.reddit.com/r/ChatGPT/comments/1mlmfnu/want_feedback_on_gpt5_here_it_is/](https://www.reddit.com/r/ChatGPT/comments/1mlmfnu/want_feedback_on_gpt5_here_it_is/))
-[35] OpenAI Community: OpenAI is taking GPT-4o away from me despite promising they wouldn't. ([https://community.openai.com/t/openai-is-taking-gpt-4o-away-from-me-despite-promising-they-wouldnt/1337378](https://community.openai.com/t/openai-is-taking-gpt-4o-away-from-me-despite-promising-they-wouldnt/1337378))
-[36] OpenAI Community: Please fight to get back access to GPT-4o! ([https://community.openai.com/t/please-fight-to-get-back-access-to-gpt-4o/1338111](https://community.openai.com/t/please-fight-to-get-back-access-to-gpt-4o/1338111))
-[37] Tom's Guide: ChatGPT-4o is coming back after massive GPT-5 backlash — here's what happened. ([https://www.tomsguide.com/ai/chatgpt-4o-is-coming-back-after-massive-gpt-5-backlash-heres-what-happened](https://www.tomsguide.com/ai/chatgpt-4o-is-coming-back-after-massive-gpt-5-backlash-heres-what-happened))
-[38] Reddit: If you miss 4o, speak up now. Contact OpenAI support. ([https://www.reddit.com/r/ChatGPT/comments/1mkzj15/if_you_miss_4o_speak_up_now_contact_openai_support/](https://www.reddit.com/r/ChatGPT/comments/1mkzj15/if_you_miss_4o_speak_up_now_contact_openai_support/))
-[39] Simon Willison's Blog: The surprise deprecation of GPT-4o for ChatGPT consumers. ([https://simonwillison.net/2025/Aug/8/surprise-deprecation-of-gpt-4o/](https://simonwillison.net/2025/Aug/8/surprise-deprecation-of-gpt-4o/))
-[40] Reddit: GPT5 is horrible. ([https://www.reddit.com/r/ChatGPT/comments/1mkd4l3/gpt5_is_horrible/](https://www.reddit.com/r/ChatGPT/comments/1mkd4l3/gpt5_is_horrible/))
-[41] Futurism: GPT-5 Users Say It Seriously Sucks. ([https://futurism.com/gpt-5-sucks](https://futurism.com/gpt-5-sucks))
-[42] Hacker News: What's going on with their SWE bench graph? ([https://news.ycombinator.com/item?id=44827179](https://news.ycombinator.com/item?id=44827179))
-[43] 디지털투데이: 샘 알트먼, GPT-5 성능 논란에 "GPT-4o 다시 제공할 것". ([https://www.digitaltoday.co.kr/news/articleView.html?idxno=583793](https://www.digitaltoday.co.kr/news/articleView.html?idxno=583793))
-[44] MacRumors: ChatGPT Plus Users Can Keep Using GPT-4o After Complaints About GPT-5. ([https://www.macrumors.com/2025/08/08/openai-gpt-5-complaints/](https://www.macrumors.com/2025/08/08/openai-gpt-5-complaints/))
-[45] TechRadar: So many ChatGPT users have said they're missing the older GPT-4o model, OpenAI is going to bring it back. ([https://www.techradar.com/ai-platforms-assistants/chatgpt/so-many-chatgpt-users-have-said-theyre-missing-the-older-gpt-4o-model-openai-is-going-to-bring-it-back](https://www.techradar.com/ai-platforms-assistants/chatgpt/so-many-chatgpt-users-have-said-theyre-missing-the-older-gpt-4o-model-openai-is-going-to-bring-it-back))
-[46] Times of India: Elon Musk says OpenAI will 'eat Microsoft alive' as Nadella champions GPT-5 rollout. ([https://timesofindia.indiatimes.com/technology/tech-news/elon-musk-says-openai-will-eat-microsoft-alive-as-nadella-champions-gpt-5-rollout/articleshow/123183029.cms](https://timesofindia.indiatimes.com/technology/tech-news/elon-musk-says-openai-will-eat-microsoft-alive-as-nadella-champions-gpt-5-rollout/articleshow/123183029.cms))
+[1] AP News: OpenAI launches GPT-5, a potential barometer for whether AI hype is justified. (https://apnews.com/article/gpt5-openai-chatgpt-artificial-intelligence-d12cd2d6310a2515042067b5d3965aa1)
+
+[2] KBS 뉴스: 오픈AI, GPT-5 공개…“박사급 전문가와 대화하는 느낌”. (https://news.kbs.co.kr/news/view.do?ncd=8324903)
+
+[3] Reddit: [Essay] An Analysis of the GPT-5 Platform Shock. (https://www.reddit.com/r/singularity/comments/1mm5kzf/essay_an_analysis_of_the_gpt5_platform_shock/)
+
+[4] KBS 뉴스: 오픈AI, GPT-5 공개…“박사급 전문가와 대화하는 느낌”. (https://news.kbs.co.kr/news/view.do?ncd=8324903)
+
+[5] 다음뉴스: [단독] 가장 똑똑하다던 GPT-5, 본인 출시도 몰라 할루시네이션 논란. (https://v.daum.net/v/20250808110715253)
+
+[6] Windows Central: Did Sam Altman oversell GPT-5? OpenAI faces backlash for ruining ChatGPT, turning it into a 'corporate beige zombie'. (https://www.windowscentral.com/artificial-intelligence/openai-chatgpt/did-sam-altman-oversell-gpt-5-openai-faces-backlash-for-ruining-chatgpt-turning-it-into-a-corporate-beige-zombie)
+
+[7] Times of India: Sam Altman says ChatGPT-5 is an expert, a small maths slip shows why it's still not perfect. (https://timesofindia.indiatimes.com/technology/tech-news/sam-altman-says-chatgpt-5-is-an-expert-a-small-maths-slip-shows-why-its-still-not-perfect/articleshow/123188241.cms)
+
+[8] Cryptopolitan: OpenAI’s GPT-5 draws mixed reviews on day one. (https://www.cryptopolitan.com/ko/openai-gpt-5-draws-mixed-reviews-on-day-one/)
+
+[9] Simon Willison's Blog: The surprise deprecation of GPT-4o for ChatGPT consumers. (https://simonwillison.net/2025/Aug/8/surprise-deprecation-of-gpt-4o/)
+
+[10] PCMag: OpenAI Faces Backlash for Retiring Older Models With GPT-5 Launch. (https://www.pcmag.com/news/openai-faces-backlash-for-retiring-older-models-with-gpt-5-launch)
+
+[11] PCMag: OpenAI Faces Backlash for Retiring Older Models With GPT-5 Launch. (https://www.pcmag.com/news/openai-faces-backlash-for-retiring-older-models-with-gpt-5-launch)
+
+[12] Futurism: GPT-5 Users Say It Seriously Sucks. (https://futurism.com/gpt-5-sucks)
+
+[13] ZDNet Korea: '생각하는 AI' GPT-5 나왔다…'모든 영역 박사급 수준'. (https://zdnet.co.kr/view/?no=20250808084540)
+
+[14] OpenAI: GPT-5 System Card. (https://cdn.openai.com/pdf/8124a3ce-ab78-4f06-96eb-49ea29ffb52f/gpt5-system-card-aug7.pdf)
+
+[15] OpenAI: GPT-5 System Card. (https://cdn.openai.com/pdf/8124a3ce-ab78-4f06-96eb-49ea29ffb52f/gpt5-system-card-aug7.pdf)
+
+[16] Futurism: GPT-5 Launch Demo Plagued With Catastrophically Dumb Errors. (https://futurism.com/gpt-5-demo-dumb-errors)
+
+[17] 디지털투데이: 샘 알트먼, GPT-5 성능 논란에 "GPT-4o 다시 제공할 것". (https://www.digitaltoday.co.kr/news/articleView.html?idxno=583793)
+
+[18] The Economic Times: OpenAI introduces ChatGPT 5: Features, performance, access, pricing, here's all you need to know. (https://economictimes.indiatimes.com/magazines/panache/openai-introduces-chatgpt-5-features-performance-access-pricing-heres-all-you-need-to-know/articleshow/123174283.cms)
+
+[19] Medium: GPT-5: OpenAI’s Worst Release Yet? (https://medium.com/data-science-in-your-pocket/gpt-5-openais-worst-release-yet-421558ad89f4)
+
+[20] Reddit: GPT5 is horrible. (https://www.reddit.com/r/ChatGPT/comments/1mkd4l3/gpt5_is_horrible/)
+
+[21] Times of India: 'What have we done?': Sam Altman says 'I feel useless', compares ChatGPT-5's power to the Manhattan Project. (https://timesofindia.indiatimes.com/technology/tech-news/what-have-we-done-sam-altman-says-i-feel-useless-compares-chatgpt-5s-power-to-the-manhattan-project/articleshow/123112813.cms)
+
+[22] The Economic Times: GPT-5 launch: 'People have tried for 50 yrs', Satya Nadella replies to Elon Musk's threat that OpenAI will 'eat Microsoft alive'. (https://economictimes.indiatimes.com/news/new-updates/gpt-5-launch-people-have-tried-for-50-yrs-satya-nadella-replies-to-elon-musks-threat-that-openai-will-eat-microsoft-alive/articleshow/123184483.cms)
+
+[23] YouTube (OpenAI): Introducing GPT-5. (https://www.youtube.com/watch?v=boJG84Jcf-4)
+
+[24] AP News: OpenAI launches GPT-5, a potential barometer for whether AI hype is justified. (https://apnews.com/article/gpt5-openai-chatgpt-artificial-intelligence-d12cd2d6310a2515042067b5d3965aa1)
+
+[25] KBS 뉴스: 오픈AI, GPT-5 공개…“박사급 전문가와 대화하는 느낌”. (https://news.kbs.co.kr/news/view.do?ncd=8324903)
+
+[26] OpenAI: Introducing GPT‑5 for developers. (https://openai.com/index/introducing-gpt-5-for-developers/)
+
+[27] The Neuron: GPT-5 is here. Here's everything you need to know so far. (https://www.theneuron.ai/explainer-articles/gpt-5-is-here-heres-everything-you-need-to-know-so-far)
+
+[28] Times of India: OpenAI CEO Sam Altman at GPT-5 launch: India is our second-largest market...but what users are doing with... (https://timesofindia.indiatimes.com/technology/tech-news/openai-ceo-sam-altman-at-gpt-5-launch-india-is-our-second-largest-marketbut-what-users-are-doing-with/articleshow/123178437.cms)
+
+[29] 중앙일보 (Korea Daily): “코딩, 박사급으로 잘하네”...오픈AI, GPT-5 공개. (https://www.koreadaily.com/article/20250808001303169)
+
+[30] Blopig: GPT-5 achieves state-of-the-art chemical intelligence. (https://www.blopig.com/blog/2025/08/gpt-5-achieves-state-of-the-art-chemical-intelligence/)
+
+[31] Reddit: GPT-5 scores a poor 56.7% on SimpleBench, putting it at 5th place. (https://www.reddit.com/r/singularity/comments/1mkgi1a/gpt5_scores_a_poor_567_on_simplebench_putting_it/)
+
+[32] Marginal Revolution: GPT-5 short and enthusiastic review. (https://marginalrevolution.com/marginalrevolution/2025/08/gpt-5-short-and-enthusiastic-review.html)
+
+[33] Reddit: GPT-5 Is Underwhelming. (https://www.reddit.com/r/OpenAI/comments/1mk8hqd/gpt5_is_underwhelming/)
+
+[34] Reddit: Want feedback on GPT5? Here it is. (https://www.reddit.com/r/ChatGPT/comments/1mlmfnu/want_feedback_on_gpt5_here_it_is/)
+
+[35] OpenAI Community: OpenAI is taking GPT-4o away from me despite promising they wouldn't. (https://community.openai.com/t/openai-is-taking-gpt-4o-away-from-me-despite-promising-they-wouldnt/1337378)
+
+[36] OpenAI Community: Please fight to get back access to GPT-4o! (https://community.openai.com/t/please-fight-to-get-back-access-to-gpt-4o/1338111)
+
+[37] Tom's Guide: ChatGPT-4o is coming back after massive GPT-5 backlash — here's what happened. (https://www.tomsguide.com/ai/chatgpt-4o-is-coming-back-after-massive-gpt-5-backlash-heres-what-happened)
+
+[38] Reddit: If you miss 4o, speak up now. Contact OpenAI support. (https://www.reddit.com/r/ChatGPT/comments/1mkzj15/if_you_miss_4o_speak_up_now_contact_openai_support/)
+
+[39] Simon Willison's Blog: The surprise deprecation of GPT-4o for ChatGPT consumers. (https://simonwillison.net/2025/Aug/8/surprise-deprecation-of-gpt-4o/)
+
+[40] Reddit: GPT5 is horrible. (https://www.reddit.com/r/ChatGPT/comments/1mkd4l3/gpt5_is_horrible/)
+
+[41] Futurism: GPT-5 Users Say It Seriously Sucks. (https://futurism.com/gpt-5-sucks)
+
+[42] Hacker News: What's going on with their SWE bench graph? (https://news.ycombinator.com/item?id=44827179)
+
+[43] 디지털투데이: 샘 알트먼, GPT-5 성능 논란에 "GPT-4o 다시 제공할 것". (https://www.digitaltoday.co.kr/news/articleView.html?idxno=583793)
+
+[44] MacRumors: ChatGPT Plus Users Can Keep Using GPT-4o After Complaints About GPT-5. (https://www.macrumors.com/2025/08/08/openai-gpt-5-complaints/)
+
+[45] TechRadar: So many ChatGPT users have said they're missing the older GPT-4o model, OpenAI is going to bring it back. (https://www.techradar.com/ai-platforms-assistants/chatgpt/so-many-chatgpt-users-have-said-theyre-missing-the-older-gpt-4o-model-openai-is-going-to-bring-it-back)
+
+[46] Times of India: Elon Musk says OpenAI will 'eat Microsoft alive' as Nadella champions GPT-5 rollout. (https://timesofindia.indiatimes.com/technology/tech-news/elon-musk-says-openai-will-eat-microsoft-alive-as-nadella-champions-gpt-5-rollout/articleshow/123183029.cms)
