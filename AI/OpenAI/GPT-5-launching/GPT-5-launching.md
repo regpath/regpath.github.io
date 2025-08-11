@@ -1,4 +1,3 @@
-'''
 # 플랫폼 쇼크: GPT-5 출시, 기술적 현실과 사용자 신뢰의 균열
 
 ## 서론: 높은 기대, 혼란스러운 현실
@@ -205,4 +204,3 @@ GPT-5는 기술적으로 점진적 발전을 이루었지만, 그 성과는 미�
 <a id="ref-35"></a>[35] TechRadar: So many ChatGPT users have said they're missing the older GPT-4o model, OpenAI is going to bring it back. (https://www.techradar.com/ai-platforms-assistants/chatgpt/so-many-chatgpt-users-have-said-theyre-missing-the-older-gpt-4o-model-openai-is-going-to-bring-it-back)
 
 <a id="ref-36"></a>[36] Times of India: Elon Musk says OpenAI will 'eat Microsoft alive' as Nadella champions GPT-5 rollout. (https://timesofindia.indiatimes.com/technology/tech-news/elon-musk-says-openai-will-eat-microsoft-alive-as-nadella-champions-gpt-5-rollout/articleshow/123183029.cms)
-'''
