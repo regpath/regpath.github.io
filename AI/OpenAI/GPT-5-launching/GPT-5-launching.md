@@ -78,12 +78,16 @@ OpenAI는 특정 벤치마크에서의 최고 수준(SOTA) 결과를 홍보했�
 
 ### 표 3: GPT-5 출시 전후 요금제별 모델 사용량 제한 비교 (수정)
 
-| 요금제 (Plan) | 출시 전 (2025년 8월 7일 이전) | 출시 후 (2025년 8월 7일 이후) |
-| :--- | :--- | :--- |
-| **Free** | **GPT-4o:** 3시간마다 10개 메시지 | **GPT-5 (main):** 5시간마다 10개 메시지 |
-| **Plus** | **GPT-4o:** 3시간마다 80개 메시지 | **GPT-5 (main):** 3시간마다 50개 메시지<br>**GPT-5 (thinking):** 3시간마다 15개 메시지 |
-| **Pro & Team** | **GPT-4o:** 3시간마다 200개 메시지 | **GPT-5 (main):** 3시간마다 120개 메시지<br>**GPT-5 (thinking):** 3시간마다 40개 메시지 |
-| **Deep Research**| - | Pro/Team 요금제 한도 내에서 사용. 1회 검색 시 `thinking` 모델 메시지 2~5개 분량 차감. |
+| 요금제 (Plan) | 모델 유형 | 출시 전 (2025년 8월 7일 이전) | 출시 후 (2025년 8월 7일 이후) |
+| :--- | :--- | :--- | :--- |
+| **Free** | 빠른 모델 | **GPT-4o:** 3시간마다 10개 메시지 | **GPT-5 (main):** 5시간마다 10개 메시지 |
+| | 추론/리서치 | - | 사용 불가 |
+| **Plus** | 빠른 모델 | **GPT-4o/o3 통합:** 3시간마다 80개 | **GPT-5 (main):** 3시간마다 50개 메시지 |
+| | 추론 모델 | | **GPT-5 (thinking):** 3시간마다 15개 메시지 |
+| | 딥 리서치 | - | 3시간마다 5회 |
+| **Pro & Team** | 빠른 모델 | **GPT-4o/o3 통합:** 3시간마다 200개 | **GPT-5 (main):** 3시간마다 120개 메시지 |
+| | 추론 모델 | | **GPT-5 (thinking):** 3시간마다 40개 메시지 |
+| | 딥 리서치 | - | 3시간마다 20회 |
 
 GPT-4o 사태는 OpenAI의 '얼라인먼트(alignment)'에 대한 편협한 이해를 보여준다. 회사는 기술적 얼라인먼트에 집중했지만, 사용자들은 GPT-4o와 사회적, 감정적 얼라인먼트를 형성했다. OpenAI가 모델의 '아첨 성향'을 일방적으로 수정하면서<sup><a href="#ref-11">[11]</a></sup> 이 유대를 깨뜨렸다. 이는 진정한 얼라인먼트가 AI 통제를 넘어 사용자 관계를 존중하는 문제임을 시사한다. 위기는 개발자의 안전 정책이 아닌, 사용자의 가치와 정렬하는 데 실패했기 때문에 발생했다.
 
@@ -150,7 +154,7 @@ GPT-5는 기술적으로 점진적 발전을 이루었지만, 그 성과는 미�
 
 <a id="ref-11"></a>[11] ZDNet Korea: '생각하는 AI' GPT-5 나왔다…'모든 영역 박사급 수준'. (https://zdnet.co.kr/view/?no=20250808084540)
 
-<a id="ref-12"></a>[12] OpenAI: GPT-5 System Card. (https://cdn.openai.com/pdf/8124a3ce-ab78-4f06-96eb-49ea29ffb52f/gpt5-system-card-aug7.pdf)
+<a id="ref-12"></a>[12] OpenAI: GPT-5 System Card. (https://cdn.openai.com/pdf/8124a3ce-ab78-4f06-96eb-49ea2dffb52f/gpt5-system-card-aug7.pdf)
 
 <a id="ref-13"></a>[13] Futurism: GPT-5 Launch Demo Plagued With Catastrophically Dumb Errors. (https://futurism.com/gpt-5-demo-dumb-errors)
 
@@ -176,7 +180,7 @@ GPT-5는 기술적으로 점진적 발전을 이루었지만, 그 성과는 미�
 
 <a id="ref-24"></a>[24] Blopig: GPT-5 achieves state-of-the-art chemical intelligence. (https://www.blopig.com/blog/2025/08/gpt-5-achieves-state-of-the-art-chemical-intelligence/)
 
-<a id="ref-25"></a>[25] Reddit: GPT-5 scores a poor 56.7% on SimpleBench, putting it at 5th place. (https://www.reddit.com/r/singularity/comments/1mkgi1a/gpt5_scores_a_poor_567_on_simplebench_putting_it/)
+<a id="ref-25"></a>[25] Reddit: GPT-5 scores a poor 56.7% on SimpleBench, putting it at 5th place. (https://www.reddit.com/r/singularity/comments/1mkgi1a/gpt5_scores_a_poor_56.7_on_simplebench_putting_it/)
 
 <a id="ref-26"></a>[26] Marginal Revolution: GPT-5 short and enthusiastic review. (https://marginalrevolution.com/marginalrevolution/2025/08/gpt-5-short-and-enthusiastic-review.html)
 
